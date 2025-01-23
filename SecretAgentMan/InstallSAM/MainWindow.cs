@@ -70,7 +70,7 @@ namespace InstallSAM
 
         private void lblUrl_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(lblUrl.Text);
+            Process.Start(lblUrl.Text);
         }
     }
 }
