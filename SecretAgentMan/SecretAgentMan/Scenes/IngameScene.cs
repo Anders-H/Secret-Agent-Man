@@ -13,12 +13,16 @@ public class IngameScene : Scene
     private readonly TextBlock _textBlock;
     private bool _askQuitMode;
     private KeyboardStateChecker Keyboard { get; }
-    
+    private int _currentRoomIndex;
+    private readonly Player _player;
+
     public IngameScene(RetroGame.RetroGame parent) : base(parent)
     {
         Keyboard = new KeyboardStateChecker();
         _textBlock = new TextBlock(CharacterSet.Uppercase);
         _askQuitMode = false;
+        _currentRoomIndex = 0;
+        _player = new Player();
         AddToAutoUpdate(Keyboard);
     }
 
@@ -31,7 +35,8 @@ public class IngameScene : Scene
                 Parent.CurrentScene = new StartScene(Parent);
                 return;
             }
-            else if (Keyboard.IsKeyPressed(Keys.F7))
+
+            if (Keyboard.IsKeyPressed(Keys.F7))
             {
                 _askQuitMode = false;
             }
@@ -40,6 +45,38 @@ public class IngameScene : Scene
         {
             if (Keyboard.IsKeyPressed(Keys.Escape))
                 _askQuitMode = true;
+
+            var changeAnimationCells = false;
+            var isMoving = false;
+
+            if (Keyboard.IsKeyDown(Keys.Right))
+            {
+                if (!_player.FaceRight)
+                {
+                    _player.FaceRight = true;
+                    changeAnimationCells = true;
+                }
+
+                isMoving = true;
+                _player.X += 2;
+            }
+            else if (Keyboard.IsKeyDown(Keys.Left))
+            {
+                if (_player.FaceRight)
+                {
+                    _player.FaceRight = false;
+                    changeAnimationCells = true;
+                }
+
+                isMoving = true;
+                _player.X -= 2;
+            }
+
+            if (changeAnimationCells)
+                _player.ChangeAnimationCells();
+
+            if (isMoving)
+                _player.Tick(ticks);
         }
 
         base.Update(gameTime, ticks);
@@ -53,7 +90,11 @@ public class IngameScene : Scene
             var quitX = 320 - ((quitText.Length * 8) / 2);
             _textBlock.DirectDraw(spriteBatch, quitX, 100, quitText, ColorPalette.White);
         }
-
+        else
+        {
+            _player.Draw(spriteBatch, Game1.CharactersTexture, _player.CellIndex, Color.White);
+        }
+        
         base.Draw(gameTime, ticks, spriteBatch);
     }
 }

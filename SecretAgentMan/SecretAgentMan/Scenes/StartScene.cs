@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using RetroGame;
 using RetroGame.Input;
-using RetroGame.RetroTextures;
 using RetroGame.Scene;
 using RetroGame.Text;
 using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
