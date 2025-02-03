@@ -57,82 +57,20 @@ public class IngameScene : Scene
             if (Keyboard.IsKeyPressed(Keys.Escape))
                 _askQuitMode = true;
 
-            var changeAnimationCells = false;
-            var isMoving = false;
+            _player.PlayerControl(ticks, Keyboard, _currentRoomIndex, out var nextRoom, out var previousRoom);
 
-            if (Keyboard.IsKeyDown(Keys.Right))
+            if (nextRoom)
             {
-                if (!_player.FaceRight)
-                {
-                    _player.FaceRight = true;
-                    changeAnimationCells = true;
-                }
-
-                isMoving = true;
-                _player.X += 2;
-
-                if (_player.X > 615)
-                {
-                    if (_currentRoomIndex < 4)
-                    {
-                        _currentRoomIndex++;
-                        _player.X = 0;
-                        UpdateRoomName();
-                    }
-                    else
-                    {
-                        _player.X = 615;
-                    }
-                }
+                _currentRoomIndex++;
+                UpdateRoomName();
             }
-            else if (Keyboard.IsKeyDown(Keys.Left))
+            else if (previousRoom)
             {
-                if (_player.FaceRight)
-                {
-                    _player.FaceRight = false;
-                    changeAnimationCells = true;
-                }
-
-                isMoving = true;
-                _player.X -= 2;
-
-                if (_player.X < 0)
-                {
-                    if (_currentRoomIndex > 0)
-                    {
-                        _currentRoomIndex--;
-                        _player.X = 615;
-                        UpdateRoomName();
-                    }
-                    else
-                    {
-                        _player.X = 0;
-                    }
-                }
+                _currentRoomIndex--;
+                UpdateRoomName();
             }
 
-            if (Keyboard.IsKeyDown(Keys.Up))
-            {
-                isMoving = true;
-                _player.Y -= 2;
-
-                if (_player.Y < 50)
-                    _player.Y = 50;
-            }
-            else if (Keyboard.IsKeyDown(Keys.Down))
-            {
-                isMoving = true;
-                _player.Y += 2;
-
-                if (_player.Y > 335)
-                    _player.Y = 335;
-            }
-
-            if (changeAnimationCells)
-                _player.ChangeAnimationCells();
-
-            if (isMoving)
-                _player.Tick(ticks);
+            _roomList[_currentRoomIndex].Act(ticks);
         }
 
         base.Update(gameTime, ticks);
@@ -149,10 +87,10 @@ public class IngameScene : Scene
         else
         {
             _player.Draw(spriteBatch, Game1.CharactersTexture, _player.CellIndex, Color.White);
+            _roomList[_currentRoomIndex].Draw(spriteBatch, _textBlock);
         }
 
         _textBlock.DirectDraw(spriteBatch, 0, 0, _currentRoomName, Color.White);
-
         base.Draw(gameTime, ticks, spriteBatch);
     }
 }

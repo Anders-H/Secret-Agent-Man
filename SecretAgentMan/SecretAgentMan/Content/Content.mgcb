@@ -25,6 +25,12 @@
 /processorParam:TextureFormat=Color
 /build:c64font.png
 
+#begin intro_song.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:intro_song.mp3
+
 #begin player25x25.png
 /importer:TextureImporter
 /processor:TextureProcessor

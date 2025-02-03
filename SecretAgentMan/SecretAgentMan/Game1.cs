@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RetroGame;
 using RetroGame.RetroTextures;
@@ -14,6 +15,13 @@ public class Game1 : RetroGame.RetroGame
     private const RetroDisplayMode DisplayMode = RetroDisplayMode.Fullscreen;
 #endif
     public static RetroTexture CharactersTexture { get; set; }
+    public static Random Random;
+    public const bool CHEAT = true;
+
+    static Game1()
+    {
+        Random = new Random();
+    }
 
     public Game1() : base(640, 360, DisplayMode)
     {
