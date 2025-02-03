@@ -7,17 +7,19 @@ namespace SecretAgentMan;
 public class Npc : Sprite, IRetroActor
 {
     private int _ticksSinceDirectionChange;
+    private int _ticksSinceGunToggle;
     private readonly int[] _walkRight = [24, 25, 26, 27];
     private readonly int[] _walkLeft = [28, 29, 30, 31];
     private readonly int[] _walkRightWithGun = [8, 9, 10, 11];
     private readonly int[] _walkLeftWithGun = [12, 13, 14, 15];
     private int[] _currentAnimation;
     private int _currentAnimationIndex;
+    private bool _gunUp;
     private bool _faceRight;
     private bool _isMovingUp;
     private bool _isMovingDown;
     private readonly ulong _speed;
-    public int Status { get; }
+    public int Status { get; private set; }
     public int CellIndex { get; set; }
 
     public const int STATUS_INNOCENT = 0;
@@ -28,7 +30,9 @@ public class Npc : Sprite, IRetroActor
     {
         Status = status;
         _ticksSinceDirectionChange = 0;
+        _ticksSinceGunToggle = 0;
         _currentAnimationIndex = 0;
+        _gunUp = false;
         _speed = (ulong)Game1.Random.Next(1, 8);
 
         if (Game1.Random.Next(0, 2) == 0)
@@ -55,6 +59,26 @@ public class Npc : Sprite, IRetroActor
 
         if (ticks % _speed == 0)
         {
+            _ticksSinceGunToggle++;
+
+            if (Status != STATUS_INNOCENT & _ticksSinceGunToggle > 50)
+            {
+                if (Game1.Random.Next(500) == 100)
+                {
+                    _gunUp = !_gunUp;
+
+                    if (_gunUp)
+                    {
+                        Status = STATUS_SPY_DETECTED;
+                        _currentAnimation = _faceRight ? _walkRightWithGun : _walkLeftWithGun;
+                    }
+                    else
+                    {
+                        _currentAnimation = _faceRight ? _walkRight : _walkLeft;
+                    }
+                }
+            }
+
             if (_faceRight)
             {
                 X += 1;
@@ -63,6 +87,7 @@ public class Npc : Sprite, IRetroActor
                 {
                     _ticksSinceDirectionChange = 0;
                     _faceRight = false;
+                    _currentAnimation = _gunUp ? _walkLeftWithGun : _walkLeft;
                 }
             }
             else
@@ -73,6 +98,7 @@ public class Npc : Sprite, IRetroActor
                 {
                     _ticksSinceDirectionChange = 0;
                     _faceRight = true;
+                    _currentAnimation = _gunUp ? _walkRightWithGun : _walkRight;
                 }
             }
 
@@ -139,6 +165,7 @@ public class Npc : Sprite, IRetroActor
                     if (_faceRight)
                     {
                         _faceRight = false;
+                        _currentAnimation = _gunUp ? _walkLeftWithGun : _walkLeft;
                         _ticksSinceDirectionChange = 0;
                     }
                     break;
@@ -146,6 +173,7 @@ public class Npc : Sprite, IRetroActor
                     if (!_faceRight)
                     {
                         _faceRight = true;
+                        _currentAnimation = _gunUp ? _walkRightWithGun : _walkRight;
                         _ticksSinceDirectionChange = 0;
                     }
                     break;

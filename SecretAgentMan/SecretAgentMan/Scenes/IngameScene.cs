@@ -57,6 +57,9 @@ public class IngameScene : Scene
             if (Keyboard.IsKeyPressed(Keys.Escape))
                 _askQuitMode = true;
 
+            if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F9))
+                Game1.Cheat = !Game1.Cheat;
+
             _player.PlayerControl(ticks, Keyboard, _currentRoomIndex, out var nextRoom, out var previousRoom);
 
             if (nextRoom)

@@ -32,7 +32,7 @@ public class Room
             npc.Draw(spriteBatch, Game1.CharactersTexture, npc.CellIndex, Color.White);
         }
 
-        if (Game1.CHEAT)
+        if (Game1.Cheat)
         {
             foreach (var npc in Npcs)
             {

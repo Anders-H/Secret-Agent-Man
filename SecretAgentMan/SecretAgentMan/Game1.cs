@@ -16,7 +16,7 @@ public class Game1 : RetroGame.RetroGame
 #endif
     public static RetroTexture CharactersTexture { get; set; }
     public static Random Random;
-    public const bool CHEAT = true;
+    public static bool Cheat = false;
 
     static Game1()
     {
