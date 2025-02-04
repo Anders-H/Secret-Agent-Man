@@ -26,10 +26,10 @@ public class IngameScene : Scene
         _textBlock = new TextBlock(CharacterSet.Uppercase);
         _askQuitMode = false;
         _currentRoomIndex = 0;
-        _player = new Player();
         _roomList = [];
         UpdateRoomName();
         AddToAutoUpdate(Keyboard);
+        _player = new Player();
     }
 
     private void UpdateRoomName()
@@ -71,6 +71,11 @@ public class IngameScene : Scene
             {
                 _currentRoomIndex--;
                 UpdateRoomName();
+            }
+
+            if (Keyboard.IsFirePressed())
+            {
+                
             }
 
             _roomList[_currentRoomIndex].Act(ticks);

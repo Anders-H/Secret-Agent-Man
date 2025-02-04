@@ -96,6 +96,9 @@ public class Player : Sprite
                 Y = 335;
         }
 
+        if (keyboard.IsFirePressed())
+            Fire();
+
         if (changeAnimationCells)
             ChangeAnimationCells();
 
@@ -121,5 +124,10 @@ public class Player : Sprite
         }
 
         CellIndex = _currentAnimation[_currentAnimationIndex];
+    }
+
+    private void Fire()
+    {
+
     }
 }
