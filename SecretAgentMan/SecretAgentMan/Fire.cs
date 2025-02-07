@@ -44,5 +44,4 @@ public class Fire : Sprite, IRetroActor
 
     public bool IsDead =>
         X < -25 || X > 639;
-
 }

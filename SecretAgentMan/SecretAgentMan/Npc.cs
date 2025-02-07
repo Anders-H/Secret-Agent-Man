@@ -1,5 +1,6 @@
 ﻿using RetroGame.Scene;
 using RetroGame.Sprites;
+using SecretAgentMan.Scenes;
 
 namespace SecretAgentMan;
 
@@ -47,7 +48,7 @@ public class Npc : Sprite, IRetroActor
             X = 639 + Game1.Random.Next(100);
         }
 
-        Y = Game1.Random.Next(50, 336);
+        Y = Game1.Random.Next(IngameScene.SpriteUpperLimit, 336);
         CellIndex = _currentAnimation[_currentAnimationIndex];
     }
 
@@ -105,8 +106,8 @@ public class Npc : Sprite, IRetroActor
             {
                 Y -= 1;
 
-                if (Y < 50)
-                    Y = 50;
+                if (Y < IngameScene.SpriteUpperLimit)
+                    Y = IngameScene.SpriteUpperLimit;
             }
             else if (_isMovingDown)
             {

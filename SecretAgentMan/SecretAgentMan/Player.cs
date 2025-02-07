@@ -1,6 +1,7 @@
 ﻿using RetroGame.Input;
 using RetroGame.Sprites;
 using Microsoft.Xna.Framework.Input;
+using SecretAgentMan.Scenes;
 
 namespace SecretAgentMan;
 
@@ -84,8 +85,8 @@ public class Player : Sprite
             isMoving = true;
             Y -= 2;
 
-            if (Y < 50)
-                Y = 50;
+            if (Y < IngameScene.SpriteUpperLimit)
+                Y = IngameScene.SpriteUpperLimit;
         }
         else if (keyboard.IsKeyDown(Keys.Down))
         {

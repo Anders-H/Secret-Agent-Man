@@ -15,6 +15,7 @@ public class Game1 : RetroGame.RetroGame
     private const RetroDisplayMode DisplayMode = RetroDisplayMode.Fullscreen;
 #endif
     public static RetroTexture CharactersTexture { get; set; }
+    public static RetroTexture BackgroundTempTexture { get; set; }
     public static Random Random;
     public static bool Cheat = false;
 
@@ -30,9 +31,14 @@ public class Game1 : RetroGame.RetroGame
     protected override void LoadContent()
     {
         BackColor = Color.Black;
-        CurrentScene = new StartScene(this);
+
         CharactersTexture = new CollisionTexture(GraphicsDevice, 25, 25, 32);
         CharactersTexture.SetData(Content.Load<Texture2D>("player25x25"));
+
+        BackgroundTempTexture = new CollisionTexture(GraphicsDevice, 640, 360, 1);
+        BackgroundTempTexture.SetData(Content.Load<Texture2D>("skylinetest"));
+
+        CurrentScene = new StartScene(this);
         base.LoadContent();
     }
 }

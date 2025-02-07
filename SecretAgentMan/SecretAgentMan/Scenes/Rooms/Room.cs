@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RetroGame;
@@ -25,12 +26,25 @@ public class Room
         }
     }
 
-    public void Draw(SpriteBatch spriteBatch, TextBlock textBlock)
+    public void Draw(SpriteBatch spriteBatch, TextBlock textBlock, Player player)
     {
-        foreach (var npc in Npcs)
+        var playerIsDrawn = false;
+        var lastY = IngameScene.SpriteUpperLimit - 1;
+
+        foreach (var npc in Npcs.OrderBy(x => x.Y))
         {
+            if (!playerIsDrawn && player.Y >= lastY && player.Y <= npc.Y)
+            {
+                player.Draw(spriteBatch, Game1.CharactersTexture, player.CellIndex, Color.White);
+                playerIsDrawn = true;
+            }
+
             npc.Draw(spriteBatch, Game1.CharactersTexture, npc.CellIndex, Color.White);
+            lastY = (int)npc.Y;
         }
+
+        if (!playerIsDrawn)
+            player.Draw(spriteBatch, Game1.CharactersTexture, player.CellIndex, Color.White);
 
         if (Game1.Cheat)
         {
