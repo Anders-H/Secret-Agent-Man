@@ -21,7 +21,8 @@ public class IngameScene : Scene
     // ReSharper disable once CollectionNeverUpdated.Local
     private readonly RoomList _roomList;
     private string _currentRoomName;
-    private List<Fire> _fireList;
+    private readonly List<Fire> _fireList;
+    private readonly List<Fire> _enemyFireList;
 
     public IngameScene(RetroGame.RetroGame parent) : base(parent)
     {
@@ -31,9 +32,10 @@ public class IngameScene : Scene
         _currentRoomIndex = 0;
         _roomList = [];
         _fireList = [];
+        _enemyFireList = [];
         UpdateRoomName();
         AddToAutoUpdate(Keyboard);
-        _player = new Player();
+        _player = new Player(_fireList);
     }
 
     private void UpdateRoomName()
@@ -69,17 +71,14 @@ public class IngameScene : Scene
             if (nextRoom)
             {
                 _currentRoomIndex++;
+                _fireList.Clear();
                 UpdateRoomName();
             }
             else if (previousRoom)
             {
                 _currentRoomIndex--;
+                _fireList.Clear();
                 UpdateRoomName();
-            }
-
-            if (Keyboard.IsFirePressed())
-            {
-                
             }
 
             _roomList[_currentRoomIndex].Act(ticks);
@@ -87,6 +86,49 @@ public class IngameScene : Scene
 
         foreach (var fire in _fireList)
             fire.Act(ticks);
+
+        foreach (var npc in _roomList[_currentRoomIndex].Npcs)
+        {
+            foreach (var fire in _fireList)
+            {
+                if (npc.Hit(fire))
+                {
+                    npc.Die();
+                    _fireList.Remove(fire);
+                    break;
+                }
+            }
+        }
+
+        foreach (var fire in _fireList)
+        {
+            if (!fire.IsDead)
+                continue;
+
+            _fireList.Remove(fire);
+            return;
+        }
+
+        foreach (var fire in _enemyFireList)
+            fire.Act(ticks);
+
+        foreach (var fire in _enemyFireList)
+        {
+            if (!fire.IsDead)
+                continue;
+
+            _enemyFireList.Remove(fire);
+            return;
+        }
+
+        foreach (var npc in _roomList[_currentRoomIndex].Npcs)
+        {
+            if (npc.AliveStatus == Npc.StatusDead)
+            {
+                _roomList[_currentRoomIndex].Npcs.Remove(npc);
+                break;
+            }
+        }
 
         base.Update(gameTime, ticks);
     }
@@ -106,6 +148,9 @@ public class IngameScene : Scene
             _roomList[_currentRoomIndex].Draw(spriteBatch, _textBlock, _player);
 
             foreach (var fire in _fireList)
+                fire.Draw(spriteBatch);
+
+            foreach (var fire in _enemyFireList)
                 fire.Draw(spriteBatch);
         }
 

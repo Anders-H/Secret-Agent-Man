@@ -1,4 +1,5 @@
-﻿using RetroGame.Input;
+﻿using System.Collections.Generic;
+using RetroGame.Input;
 using RetroGame.Sprites;
 using Microsoft.Xna.Framework.Input;
 using SecretAgentMan.Scenes;
@@ -7,15 +8,23 @@ namespace SecretAgentMan;
 
 public class Player : Sprite
 {
+    private readonly List<Fire> _fireList;
     private readonly int[] _walkRight = [0, 1, 2, 3];
     private readonly int[] _walkLeft = [4, 5, 6, 7];
+    private readonly int[] _die = [20, 21, 20, 21];
     private int[] _currentAnimation;
     private int _currentAnimationIndex;
     private bool _faceRight;
     public int CellIndex { get; set; }
+    public int AliveStatus { get; set; }
+    public const int StatusAlive = 0;
+    public const int StatusDying = 1;
+    public const int StatusDead = 2;
 
-    public Player()
+    public Player(List<Fire> fireList)
     {
+        AliveStatus = StatusAlive;
+        _fireList = fireList;
         _faceRight = true;
         _currentAnimation = _walkRight;
         _currentAnimationIndex = 0;
@@ -97,8 +106,13 @@ public class Player : Sprite
                 Y = 335;
         }
 
-        if (keyboard.IsFirePressed())
-            Fire();
+        if (keyboard.IsFirePressed() && ticks > 3)
+        {
+            if (_faceRight)
+                _fireList.Add(new Fire(true, false, IntX + 11, IntY - 5));
+            else
+                _fireList.Add(new Fire(false, false, IntX - 10, IntY - 5));
+        }
 
         if (changeAnimationCells)
             ChangeAnimationCells();
@@ -125,10 +139,5 @@ public class Player : Sprite
         }
 
         CellIndex = _currentAnimation[_currentAnimationIndex];
-    }
-
-    private void Fire()
-    {
-
     }
 }

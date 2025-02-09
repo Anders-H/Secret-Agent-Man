@@ -40,7 +40,7 @@ public class Room
             }
 
             npc.Draw(spriteBatch, Game1.CharactersTexture, npc.CellIndex, Color.White);
-            lastY = (int)npc.Y;
+            lastY = npc.IntY;
         }
 
         if (!playerIsDrawn)
@@ -52,14 +52,14 @@ public class Room
             {
                 switch (npc.Status)
                 {
-                    case Npc.STATUS_INNOCENT:
-                        textBlock.DirectDraw(spriteBatch, (int)npc.X - 10, (int)npc.Y + 20, "innocent", ColorPalette.White);
+                    case Npc.StatusInnocent:
+                        textBlock.DirectDraw(spriteBatch, npc.IntX - 10, npc.IntY + 20, "innocent", ColorPalette.White);
                         break;
-                    case Npc.STATUS_SPY_UNDETECTED:
-                        textBlock.DirectDraw(spriteBatch, (int)npc.X - 10, (int)npc.Y + 20, "undetected", ColorPalette.White);
+                    case Npc.StatusSpyUndetected:
+                        textBlock.DirectDraw(spriteBatch, npc.IntX - 10, npc.IntY + 20, "undetected", ColorPalette.White);
                         break;
-                    case Npc.STATUS_SPY_DETECTED:
-                        textBlock.DirectDraw(spriteBatch, (int)npc.X - 10, (int)npc.Y + 20, "spy!!!", ColorPalette.White);
+                    case Npc.StatusSpyDetected:
+                        textBlock.DirectDraw(spriteBatch, npc.IntX - 10, npc.IntY + 20, "spy!!!", ColorPalette.White);
                         break;
                 }
             }

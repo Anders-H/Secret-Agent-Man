@@ -7,15 +7,17 @@ namespace SecretAgentMan;
 
 public class Fire : Sprite, IRetroActor
 {
-    private const int Speed = 1;
+    private const int Speed = 3;
     private readonly int[] _player = [16, 17];
     private readonly int[] _enemy = [18, 19];
     private readonly int[] _currentAnimation;
     private int _currentAnimationIndex;
     private readonly bool _faceRight;
 
-    public Fire(bool faceRight, bool isEnemy)
+    public Fire(bool faceRight, bool isEnemy, int x, int y)
     {
+        X = x;
+        Y = y;
         _faceRight = faceRight;
         _currentAnimation = isEnemy ? _enemy : _player;
         _currentAnimationIndex = 0;
@@ -23,7 +25,7 @@ public class Fire : Sprite, IRetroActor
 
     public void Act(ulong ticks)
     {
-        if (ticks % 2 == 0)
+        if (ticks % 4 == 0)
         {
             _currentAnimationIndex++;
 
@@ -39,7 +41,7 @@ public class Fire : Sprite, IRetroActor
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        Game1.CharactersTexture.Draw(spriteBatch, _currentAnimation[_currentAnimationIndex], (int)X, (int)Y, ColorPalette.White);
+        Game1.CharactersTexture.Draw(spriteBatch, _currentAnimation[_currentAnimationIndex], IntX, IntY, ColorPalette.White);
     }
 
     public bool IsDead =>
