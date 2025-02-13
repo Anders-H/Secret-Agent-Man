@@ -4,7 +4,7 @@ namespace SecretAgentMan.Scenes.Rooms;
 
 public class RoomList : List<Room>
 {
-    public RoomList()
+    public RoomList(Player player)
     {
         var room0 = new Room("brooklyn");
 
@@ -12,7 +12,7 @@ public class RoomList : List<Room>
             room0.Npcs.Add(Npc.CreateInnocent());
 
         for (var i = 0; i < 2; i++)
-            room0.Npcs.Add(Npc.CreateSpy());
+            room0.Npcs.Add(Npc.CreateSpy(player));
 
         var room1 = new Room("queens");
 
@@ -20,7 +20,7 @@ public class RoomList : List<Room>
             room1.Npcs.Add(Npc.CreateInnocent());
 
         for (var i = 0; i < 4; i++)
-            room1.Npcs.Add(Npc.CreateSpy());
+            room1.Npcs.Add(Npc.CreateSpy(player));
 
         var room2 = new Room("the bronx");
 
@@ -28,7 +28,7 @@ public class RoomList : List<Room>
             room2.Npcs.Add(Npc.CreateInnocent());
 
         for (var i = 0; i < 6; i++)
-            room2.Npcs.Add(Npc.CreateSpy());
+            room2.Npcs.Add(Npc.CreateSpy(player));
 
         var room3 = new Room("manhattan");
 
@@ -36,7 +36,7 @@ public class RoomList : List<Room>
             room3.Npcs.Add(Npc.CreateInnocent());
 
         for (var i = 0; i < 8; i++)
-            room3.Npcs.Add(Npc.CreateSpy());
+            room3.Npcs.Add(Npc.CreateSpy(player));
 
         var room4 = new Room("harlem");
 
@@ -44,7 +44,7 @@ public class RoomList : List<Room>
             room4.Npcs.Add(Npc.CreateInnocent());
 
         for (var i = 0; i < 10; i++)
-            room4.Npcs.Add(Npc.CreateSpy());
+            room4.Npcs.Add(Npc.CreateSpy(player));
 
         Add(room0);
         Add(room1);

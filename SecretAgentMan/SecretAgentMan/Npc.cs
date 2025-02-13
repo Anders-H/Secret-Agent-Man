@@ -1,4 +1,5 @@
-﻿using RetroGame.Scene;
+﻿using Microsoft.Xna.Framework;
+using RetroGame.Scene;
 using RetroGame.Sprites;
 using SecretAgentMan.Scenes;
 
@@ -6,6 +7,7 @@ namespace SecretAgentMan;
 
 public class Npc : Sprite, IRetroActor
 {
+    private readonly Player? _player;
     private int _ticksSinceDirectionChange;
     private int _ticksSinceGunToggle;
     private readonly int[] _walkRight = [24, 25, 26, 27];
@@ -30,8 +32,9 @@ public class Npc : Sprite, IRetroActor
     public const int StatusDying = 1;
     public const int StatusDead = 2;
 
-    public Npc(int status)
+    public Npc(int status, Player? player)
     {
+        _player = player;
         Status = status;
         AliveStatus = StatusAlive;
         _ticksSinceDirectionChange = 0;
@@ -122,6 +125,11 @@ public class Npc : Sprite, IRetroActor
 
                     if (Y > 335)
                         Y = 335;
+                }
+
+                if (_gunUp)
+                {
+                    // TODO: Perhaps fire, depending on where the player is.
                 }
 
                 if (ticks % 7 == 0)
@@ -228,13 +236,13 @@ public class Npc : Sprite, IRetroActor
 
     public static Npc CreateInnocent()
     {
-        var n = new Npc(StatusInnocent);
+        var n = new Npc(StatusInnocent, null);
         return n;
     }
 
-    public static Npc CreateSpy()
+    public static Npc CreateSpy(Player player)
     {
-        var n = new Npc(StatusSpyUndetected);
+        var n = new Npc(StatusSpyUndetected, player);
         return n;
     }
 }

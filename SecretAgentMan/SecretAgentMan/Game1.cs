@@ -16,6 +16,7 @@ public class Game1 : RetroGame.RetroGame
 #endif
     public static RetroTexture CharactersTexture { get; set; }
     public static RetroTexture BackgroundTempTexture { get; set; }
+    public static RetroTextureVertical WaterTexture { get; set; }
     public static Random Random;
     public static bool Cheat = false;
 
@@ -32,11 +33,14 @@ public class Game1 : RetroGame.RetroGame
     {
         BackColor = Color.Black;
 
-        CharactersTexture = new CollisionTexture(GraphicsDevice, 25, 25, 32);
+        CharactersTexture = new RetroTexture(GraphicsDevice, 25, 25, 32);
         CharactersTexture.SetData(Content.Load<Texture2D>("player25x25"));
 
-        BackgroundTempTexture = new CollisionTexture(GraphicsDevice, 640, 360, 1);
+        BackgroundTempTexture = new RetroTexture(GraphicsDevice, 640, 360, 1);
         BackgroundTempTexture.SetData(Content.Load<Texture2D>("skylinetest"));
+
+        WaterTexture = new RetroTextureVertical(GraphicsDevice, 640, 30, 18);
+        WaterTexture.SetData(Content.Load<Texture2D>("water640x30"));
 
         CurrentScene = new StartScene(this);
         base.LoadContent();

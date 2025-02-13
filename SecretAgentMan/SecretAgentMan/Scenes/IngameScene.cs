@@ -12,7 +12,7 @@ namespace SecretAgentMan.Scenes;
 
 public class IngameScene : Scene
 {
-    public const int SpriteUpperLimit = 100;
+    private readonly MessageSystem _messageSystem;
     private readonly TextBlock _textBlock;
     private bool _askQuitMode;
     private KeyboardStateChecker Keyboard { get; }
@@ -23,19 +23,23 @@ public class IngameScene : Scene
     private string _currentRoomName;
     private readonly List<Fire> _fireList;
     private readonly List<Fire> _enemyFireList;
+    private int _waterFrameIndex;
+    public const int SpriteUpperLimit = 100;
 
     public IngameScene(RetroGame.RetroGame parent) : base(parent)
     {
+        _waterFrameIndex = 0;
+        _messageSystem = new MessageSystem();
         Keyboard = new KeyboardStateChecker();
         _textBlock = new TextBlock(CharacterSet.Uppercase);
         _askQuitMode = false;
         _currentRoomIndex = 0;
-        _roomList = [];
         _fireList = [];
         _enemyFireList = [];
+        _player = new Player(_fireList);
+        _roomList = new RoomList(_player);
         UpdateRoomName();
         AddToAutoUpdate(Keyboard);
-        _player = new Player(_fireList);
     }
 
     private void UpdateRoomName()
@@ -66,6 +70,14 @@ public class IngameScene : Scene
             if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F9))
                 Game1.Cheat = !Game1.Cheat;
 
+            if (ticks % 7 == 0)
+            {
+                _waterFrameIndex++;
+
+                if (_waterFrameIndex > 17)
+                    _waterFrameIndex = 0;
+            }
+
             _player.PlayerControl(ticks, Keyboard, _currentRoomIndex, out var nextRoom, out var previousRoom);
 
             if (nextRoom)
@@ -82,6 +94,11 @@ public class IngameScene : Scene
             }
 
             _roomList[_currentRoomIndex].Act(ticks);
+
+            if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F10))
+                _messageSystem.AddMessage("you have added text to the message system! thank you!");
+
+            _messageSystem.Act(ticks);
         }
 
         foreach (var fire in _fireList)
@@ -136,6 +153,7 @@ public class IngameScene : Scene
     public override void Draw(GameTime gameTime, ulong ticks, SpriteBatch spriteBatch)
     {
         Game1.BackgroundTempTexture.Draw(spriteBatch, 0, 0, 0, ColorPalette.White);
+        Game1.WaterTexture.Draw(spriteBatch, _waterFrameIndex, 0, 91, ColorPalette.White);
 
         if (_askQuitMode)
         {
@@ -155,6 +173,7 @@ public class IngameScene : Scene
         }
 
         _textBlock.DirectDraw(spriteBatch, 0, 0, _currentRoomName, Color.White);
+        _messageSystem.Draw(spriteBatch);
         base.Draw(gameTime, ticks, spriteBatch);
     }
 }
