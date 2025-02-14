@@ -37,7 +37,8 @@ public class IngameScene : Scene
         _fireList = [];
         _enemyFireList = [];
         _player = new Player(_fireList);
-        _roomList = new RoomList(_player);
+        _roomList = new RoomList(_player, _enemyFireList);
+        _currentRoomName = "";
         UpdateRoomName();
         AddToAutoUpdate(Keyboard);
     }
@@ -110,7 +111,7 @@ public class IngameScene : Scene
             {
                 if (npc.Hit(fire))
                 {
-                    npc.Die();
+                    npc.Die(ticks);
                     _fireList.Remove(fire);
                     break;
                 }
@@ -140,7 +141,7 @@ public class IngameScene : Scene
 
         foreach (var npc in _roomList[_currentRoomIndex].Npcs)
         {
-            if (npc.AliveStatus == Npc.StatusDead)
+            if (npc.AliveStatus == Character.StatusDead)
             {
                 _roomList[_currentRoomIndex].Npcs.Remove(npc);
                 break;

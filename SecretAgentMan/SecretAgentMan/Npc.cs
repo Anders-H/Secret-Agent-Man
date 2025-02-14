@@ -1,63 +1,55 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
 using RetroGame.Scene;
-using RetroGame.Sprites;
 using SecretAgentMan.Scenes;
 
 namespace SecretAgentMan;
 
-public class Npc : Sprite, IRetroActor
+public class Npc : Character, IRetroActor
 {
-    private readonly Player? _player;
+    private readonly Player _player;
     private int _ticksSinceDirectionChange;
     private int _ticksSinceGunToggle;
+    private int _ticksSinceLastFire;
     private readonly int[] _walkRight = [24, 25, 26, 27];
     private readonly int[] _walkLeft = [28, 29, 30, 31];
     private readonly int[] _die = [22, 23, 22, 23];
     private readonly int[] _walkRightWithGun = [8, 9, 10, 11];
     private readonly int[] _walkLeftWithGun = [12, 13, 14, 15];
-    private int[] _currentAnimation;
-    private int _currentAnimationIndex;
     private bool _gunUp;
-    private bool _faceRight;
     private bool _isMovingUp;
     private bool _isMovingDown;
     private readonly ulong _speed;
+    private ulong _dieAtTicks;
     public int Status { get; private set; }
-    public int CellIndex { get; set; }
     public const int StatusInnocent = 0;
     public const int StatusSpyUndetected = 1;
     public const int StatusSpyDetected = 2;
-    public int AliveStatus { get; set; }
-    public const int StatusAlive = 0;
-    public const int StatusDying = 1;
-    public const int StatusDead = 2;
 
-    public Npc(int status, Player? player)
+    public Npc(int status, Player player, List<Fire> enemyFireList) : base(enemyFireList)
     {
         _player = player;
         Status = status;
-        AliveStatus = StatusAlive;
         _ticksSinceDirectionChange = 0;
         _ticksSinceGunToggle = 0;
-        _currentAnimationIndex = 0;
+        _ticksSinceLastFire = 0;
         _gunUp = false;
         _speed = (ulong)Game1.Random.Next(1, 8);
 
         if (Game1.Random.Next(0, 2) == 0)
         {
-            _faceRight = true;
-            _currentAnimation = _walkRight;
+            FaceRight = true;
+            CurrentAnimation = _walkRight;
             X = 0 - Game1.Random.Next(100);
         }
         else
         {
-            _faceRight = false;
-            _currentAnimation = _walkLeft;
+            FaceRight = false;
+            CurrentAnimation = _walkLeft;
             X = 639 + Game1.Random.Next(100);
         }
 
         Y = Game1.Random.Next(IngameScene.SpriteUpperLimit, 336);
-        CellIndex = _currentAnimation[_currentAnimationIndex];
     }
 
     public void Act(ulong ticks)
@@ -80,24 +72,25 @@ public class Npc : Sprite, IRetroActor
                         if (_gunUp)
                         {
                             Status = StatusSpyDetected;
-                            _currentAnimation = _faceRight ? _walkRightWithGun : _walkLeftWithGun;
+                            CurrentAnimation = FaceRight ? _walkRightWithGun : _walkLeftWithGun;
+                            _ticksSinceLastFire = 0;
                         }
                         else
                         {
-                            _currentAnimation = _faceRight ? _walkRight : _walkLeft;
+                            CurrentAnimation = FaceRight ? _walkRight : _walkLeft;
                         }
                     }
                 }
 
-                if (_faceRight)
+                if (FaceRight)
                 {
                     X += 1;
 
                     if (X > 615)
                     {
                         _ticksSinceDirectionChange = 0;
-                        _faceRight = false;
-                        _currentAnimation = _gunUp ? _walkLeftWithGun : _walkLeft;
+                        FaceRight = false;
+                        CurrentAnimation = _gunUp ? _walkLeftWithGun : _walkLeft;
                     }
                 }
                 else
@@ -107,8 +100,8 @@ public class Npc : Sprite, IRetroActor
                     if (X < 0)
                     {
                         _ticksSinceDirectionChange = 0;
-                        _faceRight = true;
-                        _currentAnimation = _gunUp ? _walkRightWithGun : _walkRight;
+                        FaceRight = true;
+                        CurrentAnimation = _gunUp ? _walkRightWithGun : _walkRight;
                     }
                 }
 
@@ -129,18 +122,19 @@ public class Npc : Sprite, IRetroActor
 
                 if (_gunUp)
                 {
-                    // TODO: Perhaps fire, depending on where the player is.
+                    if (_ticksSinceLastFire > 7 && Game1.Random.Next(6) == 4 && InPositionToShootPlayer())
+                    {
+                        Fire(true);
+                        _ticksSinceLastFire = 0;
+                    }
+                    else
+                    {
+                        _ticksSinceLastFire++;
+                    }
                 }
 
                 if (ticks % 7 == 0)
-                {
-                    _currentAnimationIndex++;
-
-                    if (_currentAnimationIndex >= _currentAnimation.Length)
-                        _currentAnimationIndex = 0;
-                }
-
-                CellIndex = _currentAnimation[_currentAnimationIndex];
+                    CurrentAnimationIndex++;
             }
 
             if (_ticksSinceDirectionChange > 40)
@@ -177,18 +171,18 @@ public class Npc : Sprite, IRetroActor
                         }
                         break;
                     case 12:
-                        if (_faceRight)
+                        if (FaceRight)
                         {
-                            _faceRight = false;
-                            _currentAnimation = _gunUp ? _walkLeftWithGun : _walkLeft;
+                            FaceRight = false;
+                            CurrentAnimation = _gunUp ? _walkLeftWithGun : _walkLeft;
                             _ticksSinceDirectionChange = 0;
                         }
                         break;
                     case 13:
-                        if (!_faceRight)
+                        if (!FaceRight)
                         {
-                            _faceRight = true;
-                            _currentAnimation = _gunUp ? _walkRightWithGun : _walkRight;
+                            FaceRight = true;
+                            CurrentAnimation = _gunUp ? _walkRightWithGun : _walkRight;
                             _ticksSinceDirectionChange = 0;
                         }
                         break;
@@ -199,14 +193,31 @@ public class Npc : Sprite, IRetroActor
         {
             if (ticks % 10 == 0)
             {
-                _currentAnimationIndex++;
-
-                if (_currentAnimationIndex >= _currentAnimation.Length)
+                CurrentAnimationIndex++;
+                
+                if (ticks - _dieAtTicks > 40)
                     AliveStatus = StatusDead;
-                else
-                    CellIndex = _currentAnimation[_currentAnimationIndex];
             }
         }
+    }
+
+    private bool InPositionToShootPlayer()
+    {
+        if (FaceRight)
+        {
+            if (_player.X - X < 45)
+                return false;
+        }
+        else
+        {
+            if (X - _player.X < 25)
+                return false;
+        }
+
+        if (Math.Abs(_player.X - X) > 200)
+            return false;
+
+        return true;
     }
 
     public bool Hit(Fire fire)
@@ -223,26 +234,25 @@ public class Npc : Sprite, IRetroActor
         return true;
     }
 
-    public void Die()
+    public void Die(ulong ticks)
     {
-        _currentAnimation = _die;
-        _currentAnimationIndex = 0;
-        CellIndex = _currentAnimation[_currentAnimationIndex];
+        CurrentAnimation = _die;
         AliveStatus = StatusDying;
+        _dieAtTicks = ticks;
     }
 
     private bool InFullView =>
         X >= 0 && X <= 615;
 
-    public static Npc CreateInnocent()
+    public static Npc CreateInnocent(List<Fire> enemyFireList)
     {
-        var n = new Npc(StatusInnocent, null);
+        var n = new Npc(StatusInnocent, null, enemyFireList);
         return n;
     }
 
-    public static Npc CreateSpy(Player player)
+    public static Npc CreateSpy(Player player, List<Fire> enemyFireList)
     {
-        var n = new Npc(StatusSpyUndetected, player);
+        var n = new Npc(StatusSpyUndetected, player, enemyFireList);
         return n;
     }
 }

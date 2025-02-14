@@ -1,34 +1,19 @@
 ﻿using System.Collections.Generic;
 using RetroGame.Input;
-using RetroGame.Sprites;
 using Microsoft.Xna.Framework.Input;
 using SecretAgentMan.Scenes;
 
 namespace SecretAgentMan;
 
-public class Player : Sprite
+public class Player : Character
 {
-    private readonly List<Fire> _fireList;
     private readonly int[] _walkRight = [0, 1, 2, 3];
     private readonly int[] _walkLeft = [4, 5, 6, 7];
     private readonly int[] _die = [20, 21, 20, 21];
-    private int[] _currentAnimation;
-    private int _currentAnimationIndex;
-    private bool _faceRight;
-    public int CellIndex { get; set; }
-    public int AliveStatus { get; set; }
-    public const int StatusAlive = 0;
-    public const int StatusDying = 1;
-    public const int StatusDead = 2;
 
-    public Player(List<Fire> fireList)
+    public Player(List<Fire> fireList) : base(fireList)
     {
-        AliveStatus = StatusAlive;
-        _fireList = fireList;
-        _faceRight = true;
-        _currentAnimation = _walkRight;
-        _currentAnimationIndex = 0;
-        CellIndex = 1;
+        CurrentAnimation = _walkRight;
         X = 30;
         Y = 250;
     }
@@ -42,9 +27,9 @@ public class Player : Sprite
 
         if (keyboard.IsKeyDown(Keys.Right))
         {
-            if (!_faceRight)
+            if (!FaceRight)
             {
-                _faceRight = true;
+                FaceRight = true;
                 changeAnimationCells = true;
             }
 
@@ -66,9 +51,9 @@ public class Player : Sprite
         }
         else if (keyboard.IsKeyDown(Keys.Left))
         {
-            if (_faceRight)
+            if (FaceRight)
             {
-                _faceRight = false;
+                FaceRight = false;
                 changeAnimationCells = true;
             }
 
@@ -107,37 +92,18 @@ public class Player : Sprite
         }
 
         if (keyboard.IsFirePressed() && ticks > 3)
-        {
-            if (_faceRight)
-                _fireList.Add(new Fire(true, false, IntX + 11, IntY - 5));
-            else
-                _fireList.Add(new Fire(false, false, IntX - 10, IntY - 5));
-        }
+            Fire(false);
 
         if (changeAnimationCells)
-            ChangeAnimationCells();
+            CurrentAnimation = FaceRight ? _walkRight : _walkLeft;
 
         if (isMoving)
             Tick(ticks);
     }
 
-    private void ChangeAnimationCells()
-    {
-        _currentAnimation = _faceRight ? _walkRight : _walkLeft;
-        _currentAnimationIndex = 0;
-        CellIndex = _currentAnimation[_currentAnimationIndex];
-    }
-
     public void Tick(ulong ticks)
     {
         if (ticks % 7 == 0)
-        {
-            _currentAnimationIndex++;
-
-            if (_currentAnimationIndex >= _currentAnimation.Length)
-                _currentAnimationIndex = 0;
-        }
-
-        CellIndex = _currentAnimation[_currentAnimationIndex];
+            CurrentAnimationIndex++;
     }
 }

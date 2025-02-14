@@ -16,6 +16,7 @@ namespace InstallSAM
         private void MainWindow_Shown(object sender, EventArgs e)
         {
             Refresh();
+            MessageBox.Show(this, @"Secret Agent Man is successfully installed on your computer.", @"Secret Agent Man", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             if (HasDotNet8())
             {
@@ -23,11 +24,10 @@ namespace InstallSAM
                 Refresh();
                 System.Threading.Thread.Sleep(1000);
                 Close();
-                return;
             }
             else
             {
-                lblMessage.Text = @"You need to install .NET Desktop Runtime 8. Find the section called "".NET Desktop Runtime"", and click on the installer link to the correct version. If you are unsure, it might be x64 you are looking for.";
+                lblMessage.Text = @"You need to install .NET Desktop Runtime 8. Find the section called "".NET Desktop Runtime"", and click on the installer link for the correct system. If you are unsure, it might be x64 you are looking for.";
                 lblUrl.Visible = true;
                 btnClose.Enabled = true;
             }

@@ -4,47 +4,47 @@ namespace SecretAgentMan.Scenes.Rooms;
 
 public class RoomList : List<Room>
 {
-    public RoomList(Player player)
+    public RoomList(Player player, List<Fire> enemyFireList)
     {
         var room0 = new Room("brooklyn");
 
         for (var i = 0; i < 3; i++)
-            room0.Npcs.Add(Npc.CreateInnocent());
+            room0.Npcs.Add(Npc.CreateInnocent(enemyFireList));
 
         for (var i = 0; i < 2; i++)
-            room0.Npcs.Add(Npc.CreateSpy(player));
+            room0.Npcs.Add(Npc.CreateSpy(player, enemyFireList));
 
         var room1 = new Room("queens");
 
         for (var i = 0; i < 6; i++)
-            room1.Npcs.Add(Npc.CreateInnocent());
+            room1.Npcs.Add(Npc.CreateInnocent(enemyFireList));
 
         for (var i = 0; i < 4; i++)
-            room1.Npcs.Add(Npc.CreateSpy(player));
+            room1.Npcs.Add(Npc.CreateSpy(player, enemyFireList));
 
         var room2 = new Room("the bronx");
 
         for (var i = 0; i < 9; i++)
-            room2.Npcs.Add(Npc.CreateInnocent());
+            room2.Npcs.Add(Npc.CreateInnocent(enemyFireList));
 
         for (var i = 0; i < 6; i++)
-            room2.Npcs.Add(Npc.CreateSpy(player));
+            room2.Npcs.Add(Npc.CreateSpy(player, enemyFireList));
 
         var room3 = new Room("manhattan");
 
         for (var i = 0; i < 12; i++)
-            room3.Npcs.Add(Npc.CreateInnocent());
+            room3.Npcs.Add(Npc.CreateInnocent(enemyFireList));
 
         for (var i = 0; i < 8; i++)
-            room3.Npcs.Add(Npc.CreateSpy(player));
+            room3.Npcs.Add(Npc.CreateSpy(player, enemyFireList));
 
         var room4 = new Room("harlem");
 
         for (var i = 0; i < 15; i++)
-            room4.Npcs.Add(Npc.CreateInnocent());
+            room4.Npcs.Add(Npc.CreateInnocent(enemyFireList));
 
         for (var i = 0; i < 10; i++)
-            room4.Npcs.Add(Npc.CreateSpy(player));
+            room4.Npcs.Add(Npc.CreateSpy(player, enemyFireList));
 
         Add(room0);
         Add(room1);
