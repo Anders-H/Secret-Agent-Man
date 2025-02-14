@@ -12,6 +12,9 @@ namespace SecretAgentMan.Scenes;
 
 public class IngameScene : Scene
 {
+    private int _messageDebug;
+    private string _scoreString;
+    private int _score;
     private readonly MessageSystem _messageSystem;
     private readonly TextBlock _textBlock;
     private bool _askQuitMode;
@@ -28,8 +31,10 @@ public class IngameScene : Scene
 
     public IngameScene(RetroGame.RetroGame parent) : base(parent)
     {
+        _scoreString = "score: 0";
         _waterFrameIndex = 0;
         _messageSystem = new MessageSystem();
+        _messageDebug = 0;
         Keyboard = new KeyboardStateChecker();
         _textBlock = new TextBlock(CharacterSet.Uppercase);
         _askQuitMode = false;
@@ -41,6 +46,19 @@ public class IngameScene : Scene
         _currentRoomName = "";
         UpdateRoomName();
         AddToAutoUpdate(Keyboard);
+    }
+
+    public int Score
+    {
+        get => _score;
+        set
+        {
+            if (value != _score)
+            {
+                _score = value;
+                _scoreString = $"score: {_score}";
+            }
+        }
     }
 
     private void UpdateRoomName()
@@ -97,7 +115,10 @@ public class IngameScene : Scene
             _roomList[_currentRoomIndex].Act(ticks);
 
             if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F10))
-                _messageSystem.AddMessage("you have added text to the message system! thank you!");
+            {
+                _messageDebug++;
+                _messageSystem.AddMessage($"you have added text {_messageDebug} to the {(Game1.Random.Next(2) == 0 ? "message " : "")}system!{(Game1.Random.Next(2) == 0 ? " thank you!" : "")}");
+            }
 
             _messageSystem.Act(ticks);
         }
@@ -174,6 +195,7 @@ public class IngameScene : Scene
         }
 
         _textBlock.DirectDraw(spriteBatch, 0, 0, _currentRoomName, Color.White);
+        _textBlock.DirectDraw(spriteBatch, 480, 0, _scoreString, Color.White);
         _messageSystem.Draw(spriteBatch);
         base.Draw(gameTime, ticks, spriteBatch);
     }
