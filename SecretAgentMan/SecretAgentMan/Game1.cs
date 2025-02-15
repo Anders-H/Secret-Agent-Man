@@ -19,10 +19,14 @@ public class Game1 : RetroGame.RetroGame
     public static RetroTextureVertical WaterTexture { get; set; }
     public static Random Random;
     public static bool Cheat = false;
+    public static int LastScore;
+    public static int TodaysBestScore;
 
     static Game1()
     {
         Random = new Random();
+        LastScore = 0;
+        TodaysBestScore = 0;
     }
 
     public Game1() : base(640, 360, DisplayMode)
@@ -42,7 +46,7 @@ public class Game1 : RetroGame.RetroGame
         WaterTexture = new RetroTextureVertical(GraphicsDevice, 640, 30, 18);
         WaterTexture.SetData(Content.Load<Texture2D>("water640x30"));
 
-        CurrentScene = new StartScene(this);
+        CurrentScene = new StartScene(this, LastScore, TodaysBestScore);
         base.LoadContent();
     }
 }

@@ -66,13 +66,20 @@ public class IngameScene : Scene
         _currentRoomName = $"{_roomList[_currentRoomIndex].DistrictName}, new york";
     }
 
+    public void UpdateScores()
+    {
+        Game1.LastScore = _score;
+
+    }
+
     public override void Update(GameTime gameTime, ulong ticks)
     {
         if (_askQuitMode)
         {
             if (Keyboard.IsKeyPressed(Keys.F3))
             {
-                Parent.CurrentScene = new StartScene(Parent);
+                UpdateScores();
+                Parent.CurrentScene = new StartScene(Parent, Game1.LastScore, Game1.TodaysBestScore);
                 return;
             }
 
@@ -167,6 +174,21 @@ public class IngameScene : Scene
                 _roomList[_currentRoomIndex].Npcs.Remove(npc);
                 break;
             }
+        }
+
+        foreach (var fire in _enemyFireList)
+        {
+            if (_player.Hit(fire))
+            {
+                _player.Die(ticks);
+                break;
+            }
+        }
+
+        if (_player.AliveStatus == Character.StatusDead)
+        {
+            UpdateScores();
+            Parent.CurrentScene = new StartScene(Parent, Game1.LastScore, Game1.TodaysBestScore);
         }
 
         base.Update(gameTime, ticks);

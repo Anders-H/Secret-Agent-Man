@@ -101,6 +101,13 @@ public class Player : Character
             Tick(ticks);
     }
 
+    public void Die(ulong ticks)
+    {
+        CurrentAnimation = _die;
+        AliveStatus = StatusDying;
+        DieAtTicks = ticks;
+    }
+
     public void Tick(ulong ticks)
     {
         if (ticks % 7 == 0)

@@ -20,7 +20,6 @@ public class Npc : Character, IRetroActor
     private bool _isMovingUp;
     private bool _isMovingDown;
     private readonly ulong _speed;
-    private ulong _dieAtTicks;
     public int Status { get; private set; }
     public const int StatusInnocent = 0;
     public const int StatusSpyUndetected = 1;
@@ -195,7 +194,7 @@ public class Npc : Character, IRetroActor
             {
                 CurrentAnimationIndex++;
                 
-                if (ticks - _dieAtTicks > 40)
+                if (ticks - DieAtTicks > 40)
                     AliveStatus = StatusDead;
             }
         }
@@ -220,25 +219,11 @@ public class Npc : Character, IRetroActor
         return true;
     }
 
-    public bool Hit(Fire fire)
-    {
-        var fireX = fire.X + 12;
-        var fireY = fire.Y + 12;
-
-        if (fireX < IntX || fireX > IntX + 25)
-            return false;
-
-        if (fireY < IntY || fireY > IntY + 25)
-            return false;
-
-        return true;
-    }
-
     public void Die(ulong ticks)
     {
         CurrentAnimation = _die;
         AliveStatus = StatusDying;
-        _dieAtTicks = ticks;
+        DieAtTicks = ticks;
     }
 
     private bool InFullView =>

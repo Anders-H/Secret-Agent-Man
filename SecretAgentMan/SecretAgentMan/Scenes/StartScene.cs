@@ -19,9 +19,13 @@ public class StartScene : Scene
     private int _creditsX;
     private readonly TextBlock _textBlock;
     private KeyboardStateChecker Keyboard { get; }
+    private string _lastScoreString;
+    private string _todaysBestScoreString;
 
-    public StartScene(RetroGame.RetroGame parent) : base(parent)
+    public StartScene(RetroGame.RetroGame parent, int lastScore, int todaysBest) : base(parent)
     {
+        _lastScoreString = $"last score: {lastScore}";
+        _todaysBestScoreString = $"best today: {todaysBest}";
         _creditsX = 700;
         Keyboard = new KeyboardStateChecker();
         _textBlock = new TextBlock(CharacterSet.Uppercase);
@@ -62,6 +66,8 @@ public class StartScene : Scene
     {
         _textBlock.DirectDraw(spriteBatch, _logoX, _logoY, LogoText, ColorPalette.White);
         _textBlock.DirectDraw(spriteBatch, _creditsX, 352, CreditsText, ColorPalette.Green);
+        _textBlock.DirectDraw(spriteBatch, 0, 344, _todaysBestScoreString, ColorPalette.LightGrey);
+        _textBlock.DirectDraw(spriteBatch, 0, 336, _lastScoreString, ColorPalette.LightGrey);
         base.Draw(gameTime, ticks, spriteBatch);
     }
 }

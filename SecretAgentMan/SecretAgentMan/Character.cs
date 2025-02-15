@@ -9,14 +9,16 @@ public abstract class Character : Sprite
     private int _currentAnimationIndex;
     protected readonly List<Fire> FireList;
     protected bool FaceRight;
+    protected ulong DieAtTicks;
     public const int StatusAlive = 0;
     public const int StatusDying = 1;
     public const int StatusDead = 2;
     public int CellIndex { get; private set; }
     public int AliveStatus { get; set; }
-
+    
     protected Character(List<Fire> fireList)
     {
+        DieAtTicks = 0;
         FireList = fireList;
         AliveStatus = StatusAlive;
         FaceRight = true;
@@ -55,5 +57,19 @@ public abstract class Character : Sprite
             FireList.Add(new Fire(true, isEnemy, IntX + 11, IntY - 5));
         else
             FireList.Add(new Fire(false, isEnemy, IntX - 10, IntY - 5));
+    }
+
+    public bool Hit(Fire fire)
+    {
+        var fireX = fire.X + 12;
+        var fireY = fire.Y + 12;
+
+        if (fireX < IntX || fireX > IntX + 25)
+            return false;
+
+        if (fireY < IntY || fireY > IntY + 25)
+            return false;
+
+        return true;
     }
 }
