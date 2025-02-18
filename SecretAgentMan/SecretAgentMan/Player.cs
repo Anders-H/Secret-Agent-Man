@@ -112,5 +112,8 @@ public class Player : Character
     {
         if (ticks % 7 == 0)
             CurrentAnimationIndex++;
+
+        if (AliveStatus == StatusDying && ticks > DieAtTicks + 60)
+            AliveStatus = StatusDead;
     }
 }

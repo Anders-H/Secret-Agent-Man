@@ -46,7 +46,7 @@ public class Game1 : RetroGame.RetroGame
         WaterTexture = new RetroTextureVertical(GraphicsDevice, 640, 30, 18);
         WaterTexture.SetData(Content.Load<Texture2D>("water640x30"));
 
-        CurrentScene = new StartScene(this, LastScore, TodaysBestScore);
+        CurrentScene = new StartScene(this, LastScore, TodaysBestScore, false, false);
         base.LoadContent();
     }
 }

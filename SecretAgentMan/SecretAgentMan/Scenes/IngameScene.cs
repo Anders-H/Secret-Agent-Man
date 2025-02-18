@@ -27,10 +27,16 @@ public class IngameScene : Scene
     private readonly List<Fire> _fireList;
     private readonly List<Fire> _enemyFireList;
     private int _waterFrameIndex;
+    private int _killedSpyCount;
+    private bool _gameCompleted;
+    private ulong _gameCompletedAt;
     public const int SpriteUpperLimit = 100;
 
     public IngameScene(RetroGame.RetroGame parent) : base(parent)
     {
+        _gameCompleted = false;
+        _gameCompletedAt = 0;
+        _killedSpyCount = 0;
         _scoreString = "score: 0";
         _waterFrameIndex = 0;
         _messageSystem = new MessageSystem();
@@ -66,129 +72,189 @@ public class IngameScene : Scene
         _currentRoomName = $"{_roomList[_currentRoomIndex].DistrictName}, new york";
     }
 
-    public void UpdateScores()
-    {
-        Game1.LastScore = _score;
-
-    }
-
     public override void Update(GameTime gameTime, ulong ticks)
     {
-        if (_askQuitMode)
+        if (_player.AliveStatus == Character.StatusAlive)
         {
-            if (Keyboard.IsKeyPressed(Keys.F3))
+            if (_askQuitMode)
             {
-                UpdateScores();
-                Parent.CurrentScene = new StartScene(Parent, Game1.LastScore, Game1.TodaysBestScore);
+                if (Keyboard.IsKeyPressed(Keys.F3))
+                {
+                    Parent.CurrentScene = new StartScene(Parent, Game1.LastScore, Game1.TodaysBestScore, false, false);
+                    return;
+                }
+
+                if (Keyboard.IsKeyPressed(Keys.F7))
+                {
+                    _askQuitMode = false;
+                }
+            }
+            else
+            {
+                if (Keyboard.IsKeyPressed(Keys.Escape))
+                    _askQuitMode = true;
+
+                if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F9))
+                    Game1.Cheat = !Game1.Cheat;
+
+                if (ticks % 7 == 0)
+                {
+                    _waterFrameIndex++;
+
+                    if (_waterFrameIndex > 17)
+                        _waterFrameIndex = 0;
+                }
+
+                _player.PlayerControl(ticks, Keyboard, _currentRoomIndex, out var nextRoom, out var previousRoom);
+
+                if (nextRoom)
+                {
+                    _currentRoomIndex++;
+                    _fireList.Clear();
+                    UpdateRoomName();
+                }
+                else if (previousRoom)
+                {
+                    _currentRoomIndex--;
+                    _fireList.Clear();
+                    UpdateRoomName();
+                }
+
+                _roomList[_currentRoomIndex].Act(ticks);
+
+                if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F10))
+                {
+                    _messageDebug++;
+                    _messageSystem.AddMessage($"you have added text {_messageDebug} to the {(Game1.Random.Next(2) == 0 ? "message " : "")}system!{(Game1.Random.Next(2) == 0 ? " thank you!" : "")}");
+                }
+
+                _messageSystem.Act(ticks);
+            }
+
+            foreach (var fire in _fireList)
+                fire.Act(ticks);
+
+            foreach (var npc in _roomList[_currentRoomIndex].Npcs)
+            {
+                foreach (var fire in _fireList)
+                {
+                    if (npc.Hit(fire))
+                    {
+                        _fireList.Remove(fire);
+
+                        if (npc.Status == Npc.StatusInnocent || npc.Status == Npc.StatusSpyUndetected)
+                        {
+                            if (npc.AliveStatus == Character.StatusAlive)
+                                npc.Die(ticks);
+                        }
+                        else if (npc.Status == Npc.StatusSpyDetected && npc.AliveStatus == Character.StatusAlive)
+                        {
+                            npc.Die(ticks);
+                            _killedSpyCount++;
+                            var scoreAdded = _killedSpyCount * 5;
+                            Score += scoreAdded;
+
+                            if (_killedSpyCount >= _roomList.SpyCount)
+                            {
+                                _messageSystem.AddMessage($"all spies eliminated! {scoreAdded} points! well done!");
+                                _fireList.Clear();
+                                _enemyFireList.Clear();
+                                _gameCompleted = true;
+                                _gameCompletedAt = ticks;
+                            }
+                            else
+                            {
+                                switch (_killedSpyCount)
+                                {
+                                    case 1:
+                                        _messageSystem.AddMessage($"first spy eliminated! {scoreAdded} points!");
+                                        break;
+                                    case 2:
+                                        _messageSystem.AddMessage($"second spy eliminated! {scoreAdded} points!");
+                                        break;
+                                    case 3:
+                                        _messageSystem.AddMessage($"third spy eliminated! {scoreAdded} points!");
+                                        break;
+                                    case 4:
+                                        _messageSystem.AddMessage($"fourth spy eliminated! {scoreAdded} points!");
+                                        break;
+                                    case 5:
+                                        _messageSystem.AddMessage($"fifth spy eliminated! {scoreAdded} points!");
+                                        break;
+                                    default:
+                                        _messageSystem.AddMessage($"spy number {_killedSpyCount} eliminated! {scoreAdded} points!");
+                                        break;
+
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+
+            if (_gameCompleted && ticks > _gameCompletedAt + 500)
+            {
+                Parent.CurrentScene = new StartScene(Parent, Game1.LastScore, Game1.TodaysBestScore, false, true);
                 return;
             }
 
-            if (Keyboard.IsKeyPressed(Keys.F7))
+            if (!_gameCompleted)
             {
-                _askQuitMode = false;
-            }
-        }
-        else
-        {
-            if (Keyboard.IsKeyPressed(Keys.Escape))
-                _askQuitMode = true;
-
-            if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F9))
-                Game1.Cheat = !Game1.Cheat;
-
-            if (ticks % 7 == 0)
-            {
-                _waterFrameIndex++;
-
-                if (_waterFrameIndex > 17)
-                    _waterFrameIndex = 0;
-            }
-
-            _player.PlayerControl(ticks, Keyboard, _currentRoomIndex, out var nextRoom, out var previousRoom);
-
-            if (nextRoom)
-            {
-                _currentRoomIndex++;
-                _fireList.Clear();
-                UpdateRoomName();
-            }
-            else if (previousRoom)
-            {
-                _currentRoomIndex--;
-                _fireList.Clear();
-                UpdateRoomName();
-            }
-
-            _roomList[_currentRoomIndex].Act(ticks);
-
-            if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F10))
-            {
-                _messageDebug++;
-                _messageSystem.AddMessage($"you have added text {_messageDebug} to the {(Game1.Random.Next(2) == 0 ? "message " : "")}system!{(Game1.Random.Next(2) == 0 ? " thank you!" : "")}");
-            }
-
-            _messageSystem.Act(ticks);
-        }
-
-        foreach (var fire in _fireList)
-            fire.Act(ticks);
-
-        foreach (var npc in _roomList[_currentRoomIndex].Npcs)
-        {
-            foreach (var fire in _fireList)
-            {
-                if (npc.Hit(fire))
+                foreach (var fire in _fireList)
                 {
-                    npc.Die(ticks);
+                    if (!fire.IsDead)
+                        continue;
+
                     _fireList.Remove(fire);
-                    break;
+                    return;
+                }
+
+                foreach (var fire in _enemyFireList)
+                    fire.Act(ticks);
+
+                foreach (var fire in _enemyFireList)
+                {
+                    if (!fire.IsDead)
+                        continue;
+
+                    _enemyFireList.Remove(fire);
+                    return;
+                }
+
+                foreach (var npc in _roomList[_currentRoomIndex].Npcs)
+                {
+                    if (npc.AliveStatus == Character.StatusDead)
+                    {
+                        _roomList[_currentRoomIndex].Npcs.Remove(npc);
+                        break;
+                    }
+                }
+
+                foreach (var fire in _enemyFireList)
+                {
+                    if (_player.Hit(fire))
+                    {
+                        _player.Die(ticks);
+                        break;
+                    }
                 }
             }
         }
 
-        foreach (var fire in _fireList)
+        if (_player.AliveStatus == Character.StatusDying)
         {
-            if (!fire.IsDead)
-                continue;
-
-            _fireList.Remove(fire);
-            return;
-        }
-
-        foreach (var fire in _enemyFireList)
-            fire.Act(ticks);
-
-        foreach (var fire in _enemyFireList)
-        {
-            if (!fire.IsDead)
-                continue;
-
-            _enemyFireList.Remove(fire);
-            return;
-        }
-
-        foreach (var npc in _roomList[_currentRoomIndex].Npcs)
-        {
-            if (npc.AliveStatus == Character.StatusDead)
-            {
-                _roomList[_currentRoomIndex].Npcs.Remove(npc);
-                break;
-            }
-        }
-
-        foreach (var fire in _enemyFireList)
-        {
-            if (_player.Hit(fire))
-            {
-                _player.Die(ticks);
-                break;
-            }
+            _player.Tick(ticks);
         }
 
         if (_player.AliveStatus == Character.StatusDead)
         {
-            UpdateScores();
-            Parent.CurrentScene = new StartScene(Parent, Game1.LastScore, Game1.TodaysBestScore);
+            Game1.LastScore = Score;
+
+            if (Game1.TodaysBestScore < Game1.LastScore)
+                Game1.TodaysBestScore = Game1.LastScore;
+
+            Parent.CurrentScene = new StartScene(Parent, Game1.LastScore, Game1.TodaysBestScore, true, false);
         }
 
         base.Update(gameTime, ticks);
@@ -219,6 +285,10 @@ public class IngameScene : Scene
         _textBlock.DirectDraw(spriteBatch, 0, 0, _currentRoomName, Color.White);
         _textBlock.DirectDraw(spriteBatch, 480, 0, _scoreString, Color.White);
         _messageSystem.Draw(spriteBatch);
+
+        if (_gameCompleted)
+            _textBlock.DirectDraw(spriteBatch, StartScene.GameClearX, 150, StartScene.GameClearText, ColorPalette.Green);
+
         base.Draw(gameTime, ticks, spriteBatch);
     }
 }
