@@ -11,11 +11,18 @@ public class Room
 {
     public string DistrictName { get; }
     public List<Npc> Npcs { get; }
+    private List<Airplane> _airplanes;
 
     public Room(string districtName)
     {
+        _airplanes = [];
         DistrictName = districtName;
         Npcs = [];
+    }
+
+    public void AddAirplane()
+    {
+        _airplanes.Add(new Airplane());
     }
 
     public void Act(ulong ticks)
@@ -23,6 +30,14 @@ public class Room
         foreach (var npc in Npcs)
         {
             npc.Act(ticks);
+        }
+    }
+
+    public void ActDecorations(ulong ticks)
+    {
+        foreach (var airplane in _airplanes)
+        {
+            airplane.Act(ticks);
         }
     }
 
@@ -63,6 +78,14 @@ public class Room
                         break;
                 }
             }
+        }
+    }
+
+    public void DrawAirPlanes(SpriteBatch spriteBatch)
+    {
+        foreach (var airplane in _airplanes)
+        {
+            airplane.Draw(spriteBatch);
         }
     }
 }

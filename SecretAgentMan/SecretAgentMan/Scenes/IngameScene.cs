@@ -69,7 +69,7 @@ public class IngameScene : Scene
 
     private void UpdateRoomName()
     {
-        _currentRoomName = $"{_roomList[_currentRoomIndex].DistrictName}, new york";
+        _currentRoomName = _roomList[_currentRoomIndex].DistrictName;
     }
 
     public override void Update(GameTime gameTime, ulong ticks)
@@ -257,6 +257,7 @@ public class IngameScene : Scene
             Parent.CurrentScene = new StartScene(Parent, Game1.LastScore, Game1.TodaysBestScore, true, false);
         }
 
+        _roomList[_currentRoomIndex].ActDecorations(ticks);
         base.Update(gameTime, ticks);
     }
 
@@ -280,6 +281,8 @@ public class IngameScene : Scene
 
             foreach (var fire in _enemyFireList)
                 fire.Draw(spriteBatch);
+
+            _roomList[_currentRoomIndex].DrawAirPlanes(spriteBatch);
         }
 
         _textBlock.DirectDraw(spriteBatch, 0, 0, _currentRoomName, Color.White);
