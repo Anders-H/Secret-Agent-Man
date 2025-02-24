@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
 using RetroGame;
 using RetroGame.Scene;
@@ -12,9 +13,11 @@ public class MessageSystem : IRetroActor
     private readonly TextBlock _textBlock;
     private const int YStart = 8;
     private readonly List<Message> _messages;
+    private int _currentMayorCell;
 
     public MessageSystem()
     {
+        _currentMayorCell = 0;
         _textBlock = new TextBlock(CharacterSet.Uppercase);
         _messages = new List<Message>();
     }
@@ -37,6 +40,9 @@ public class MessageSystem : IRetroActor
         {
             message.X--;
         }
+
+        if (ticks % 20 == 0)
+            _currentMayorCell = _currentMayorCell == 0 ? 1 : 0;
     }
 
     public void Draw(SpriteBatch spriteBatch)
@@ -48,7 +54,13 @@ public class MessageSystem : IRetroActor
             _textBlock.DirectDraw(spriteBatch, message.X, y, message.Text, ColorPalette.White);
             y += 8;
         }
+
+        if (MayorVisible())
+            Game1.Mayor.Draw(spriteBatch, _currentMayorCell, 590, 8, ColorPalette.White);
     }
+
+    private bool MayorVisible() =>
+        _messages.Any(x => x.X > 100);
 }
 
 public class Message

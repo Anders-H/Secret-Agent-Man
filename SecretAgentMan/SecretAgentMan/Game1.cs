@@ -19,6 +19,7 @@ public class Game1 : RetroGame.RetroGame
     public static RetroTextureVertical WaterTexture { get; set; }
     public static RetroTexture AirplaneRightTexture { get; set; }
     public static RetroTexture AirplaneLeftTexture { get; set; }
+    public static RetroTexture Mayor { get; set; }
     public static Random Random;
     public static bool Cheat = false;
     public static int LastScore;
@@ -53,6 +54,9 @@ public class Game1 : RetroGame.RetroGame
 
         AirplaneLeftTexture = new RetroTexture(GraphicsDevice, 5, 3, 25);
         AirplaneLeftTexture.SetData(Content.Load<Texture2D>("planeflipped5x3"));
+
+        Mayor = new RetroTexture(GraphicsDevice, 50, 50, 2);
+        Mayor.SetData(Content.Load<Texture2D>("mayor50x50"));
 
         CurrentScene = new StartScene(this, LastScore, TodaysBestScore, false, false);
         base.LoadContent();
