@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using RetroGame;
 using RetroGame.Scene;
 using RetroGame.Text;
-using SharpDX.X3DAudio;
 
 namespace SecretAgentMan;
 
@@ -56,7 +55,7 @@ public class MessageSystem : IRetroActor
         }
 
         if (MayorVisible())
-            Game1.Mayor.Draw(spriteBatch, _currentMayorCell, 590, 8, ColorPalette.White);
+            Game1.Mayor?.Draw(spriteBatch, _currentMayorCell, 590, 8, ColorPalette.White);
     }
 
     private bool MayorVisible() =>

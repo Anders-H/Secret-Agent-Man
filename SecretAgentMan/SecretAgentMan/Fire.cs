@@ -41,7 +41,7 @@ public class Fire : Sprite, IRetroActor
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        Game1.CharactersTexture.Draw(spriteBatch, _currentAnimation[_currentAnimationIndex], IntX, IntY, ColorPalette.White);
+        Game1.CharactersTexture?.Draw(spriteBatch, _currentAnimation[_currentAnimationIndex], IntX, IntY, ColorPalette.White);
     }
 
     public bool IsDead =>

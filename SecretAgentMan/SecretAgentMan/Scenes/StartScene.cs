@@ -47,7 +47,7 @@ public class StartScene : Scene
             Exit();
             return;
         }
-        if (Keyboard.IsFirePressed() && !_gameOverAnimation && !_gameClearAnimation)
+        if (Keyboard.IsFirePressed() && !_gameOverAnimation && !_gameClearAnimation && ticks > 40)
         {
             Parent.CurrentScene = new IngameScene(Parent);
             return;

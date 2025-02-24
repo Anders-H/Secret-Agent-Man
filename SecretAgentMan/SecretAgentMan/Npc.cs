@@ -7,7 +7,7 @@ namespace SecretAgentMan;
 
 public class Npc : Character, IRetroActor
 {
-    private readonly Player _player;
+    private readonly Player? _player;
     private int _ticksSinceDirectionChange;
     private int _ticksSinceGunToggle;
     private int _ticksSinceLastFire;
@@ -25,7 +25,7 @@ public class Npc : Character, IRetroActor
     public const int StatusSpyUndetected = 1;
     public const int StatusSpyDetected = 2;
 
-    public Npc(int status, Player player, List<Fire> enemyFireList) : base(enemyFireList)
+    public Npc(int status, Player? player, List<Fire> enemyFireList) : base(enemyFireList)
     {
         _player = player;
         Status = status;
@@ -202,6 +202,9 @@ public class Npc : Character, IRetroActor
 
     private bool InPositionToShootPlayer()
     {
+        if (_player == null)
+            return false;
+
         if (FaceRight)
         {
             if (_player.X - X < 45)

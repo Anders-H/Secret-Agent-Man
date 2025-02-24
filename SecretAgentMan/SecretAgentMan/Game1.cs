@@ -14,12 +14,13 @@ public class Game1 : RetroGame.RetroGame
 #else
     private const RetroDisplayMode DisplayMode = RetroDisplayMode.Fullscreen;
 #endif
-    public static RetroTexture CharactersTexture { get; set; }
-    public static RetroTexture BackgroundTempTexture { get; set; }
-    public static RetroTextureVertical WaterTexture { get; set; }
-    public static RetroTexture AirplaneRightTexture { get; set; }
-    public static RetroTexture AirplaneLeftTexture { get; set; }
-    public static RetroTexture Mayor { get; set; }
+    public static RetroTexture? CharactersTexture { get; set; }
+    public static RetroTexture? BackgroundTempTexture { get; set; }
+    public static RetroTextureVertical? WaterTexture { get; set; }
+    public static RetroTexture? AirplaneRightTexture { get; set; }
+    public static RetroTexture? AirplaneLeftTexture { get; set; }
+    public static RetroTexture? Mayor { get; set; }
+    public static RetroTexture IntroGraphics { get; set; }
     public static Random Random;
     public static bool Cheat = false;
     public static int LastScore;
@@ -58,7 +59,10 @@ public class Game1 : RetroGame.RetroGame
         Mayor = new RetroTexture(GraphicsDevice, 50, 50, 2);
         Mayor.SetData(Content.Load<Texture2D>("mayor50x50"));
 
-        CurrentScene = new StartScene(this, LastScore, TodaysBestScore, false, false);
+        IntroGraphics = new RetroTexture(GraphicsDevice, 640, 360, 1);
+        IntroGraphics.SetData(Content.Load<Texture2D>("load-screen-360p-nofilter"));
+
+        CurrentScene = new IntroScene(this);
         base.LoadContent();
     }
 }
