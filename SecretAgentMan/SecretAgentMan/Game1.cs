@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RetroGame;
+using RetroGame.Audio;
 using RetroGame.RetroTextures;
 using SecretAgentMan.Scenes;
 
@@ -9,18 +10,16 @@ namespace SecretAgentMan;
 
 public class Game1 : RetroGame.RetroGame
 {
-#if DEBUG
     private const RetroDisplayMode DisplayMode = RetroDisplayMode.Fullscreen;
-#else
-    private const RetroDisplayMode DisplayMode = RetroDisplayMode.Fullscreen;
-#endif
     public static RetroTexture? CharactersTexture { get; set; }
     public static RetroTexture? BackgroundTempTexture { get; set; }
     public static RetroTextureVertical? WaterTexture { get; set; }
     public static RetroTexture? AirplaneRightTexture { get; set; }
     public static RetroTexture? AirplaneLeftTexture { get; set; }
     public static RetroTexture? Mayor { get; set; }
-    public static RetroTexture IntroGraphics { get; set; }
+    public static RetroTexture? IntroGraphics { get; set; }
+    public static SoundEffect? EnemyFire { get; set; }
+    public static SoundEffect? PlayerFire { get; set; }
     public static Random Random;
     public static bool Cheat = false;
     public static int LastScore;
@@ -35,6 +34,8 @@ public class Game1 : RetroGame.RetroGame
 
     public Game1() : base(640, 360, DisplayMode)
     {
+        EnemyFire = new SoundEffect(this);
+        PlayerFire = new SoundEffect(this);
     }
 
     protected override void LoadContent()
@@ -61,6 +62,9 @@ public class Game1 : RetroGame.RetroGame
 
         IntroGraphics = new RetroTexture(GraphicsDevice, 640, 360, 1);
         IntroGraphics.SetData(Content.Load<Texture2D>("load-screen-360p-nofilter"));
+
+        EnemyFire!.Initialize("sfx_gun1", "sfx_gun2", "sfx_gun3", "sfx_gun4", "sfx_gun5", "sfx_gun6");
+        PlayerFire!.Initialize("sfx_gun7", "sfx_gun8", "sfx_gun9", "sfx_gun10");
 
         CurrentScene = new IntroScene(this);
         base.LoadContent();

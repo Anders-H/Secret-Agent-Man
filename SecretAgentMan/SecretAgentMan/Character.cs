@@ -53,6 +53,8 @@ public abstract class Character : Sprite
 
     protected void Fire(bool isEnemy)
     {
+        Game1.PlayerFire!.PlayRandom();
+
         if (FaceRight)
             FireList.Add(new Fire(true, isEnemy, IntX + 11, IntY - 5));
         else

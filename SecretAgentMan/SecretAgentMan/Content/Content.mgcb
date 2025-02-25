@@ -85,6 +85,84 @@
 /processorParam:TextureFormat=Color
 /build:player25x25.png
 
+#begin sfx_enemydeath1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx_enemydeath1.wav
+
+#begin sfx_enemydeath2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx_enemydeath2.wav
+
+#begin sfx_enemydeath3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx_enemydeath3.wav
+
+#begin sfx_gun1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx_gun1.wav
+
+#begin sfx_gun10.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx_gun10.wav
+
+#begin sfx_gun2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx_gun2.wav
+
+#begin sfx_gun3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx_gun3.wav
+
+#begin sfx_gun4.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx_gun4.wav
+
+#begin sfx_gun5.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx_gun5.wav
+
+#begin sfx_gun6.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx_gun6.wav
+
+#begin sfx_gun7.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx_gun7.wav
+
+#begin sfx_gun8.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx_gun8.wav
+
+#begin sfx_gun9.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx_gun9.wav
+
 #begin skylinetest.png
 /importer:TextureImporter
 /processor:TextureProcessor
