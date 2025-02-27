@@ -88,4 +88,7 @@ public class Room
             airplane.Draw(spriteBatch);
         }
     }
+
+    public bool IsClear() =>
+        Npcs.Count(x => x.Status == Npc.StatusSpyUndetected) + Npcs.Count(x => x.Status == Npc.StatusSpyDetected) <= 0;
 }

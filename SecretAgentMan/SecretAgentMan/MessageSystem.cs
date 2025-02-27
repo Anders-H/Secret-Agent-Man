@@ -10,7 +10,7 @@ namespace SecretAgentMan;
 public class MessageSystem : IRetroActor
 {
     private readonly TextBlock _textBlock;
-    private const int YStart = 8;
+    private const int YStart = 56;
     private readonly List<Message> _messages;
     private int _currentMayorCell;
 
@@ -48,14 +48,19 @@ public class MessageSystem : IRetroActor
     {
         var y = YStart;
 
+        if (MayorVisible())
+            Game1.Mayor?.Draw(spriteBatch, _currentMayorCell, 582, 8, ColorPalette.White);
+
         foreach (var message in _messages)
         {
             _textBlock.DirectDraw(spriteBatch, message.X, y, message.Text, ColorPalette.White);
-            y += 8;
-        }
 
-        if (MayorVisible())
-            Game1.Mayor?.Draw(spriteBatch, _currentMayorCell, 590, 8, ColorPalette.White);
+            var messageEndX = message.X + ((message.Text.Length + 3) * 8);
+            System.Diagnostics.Debug.WriteLine(messageEndX);
+
+            if (messageEndX > 50)
+                y += 8;
+        }
     }
 
     private bool MayorVisible() =>

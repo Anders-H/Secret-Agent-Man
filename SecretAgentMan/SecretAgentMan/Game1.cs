@@ -10,7 +10,6 @@ namespace SecretAgentMan;
 
 public class Game1 : RetroGame.RetroGame
 {
-    private const RetroDisplayMode DisplayMode = RetroDisplayMode.Fullscreen;
     public static RetroTexture? CharactersTexture { get; set; }
     public static RetroTexture? BackgroundTempTexture { get; set; }
     public static RetroTextureVertical? WaterTexture { get; set; }
@@ -20,6 +19,7 @@ public class Game1 : RetroGame.RetroGame
     public static RetroTexture? IntroGraphics { get; set; }
     public static SoundEffect? EnemyFire { get; set; }
     public static SoundEffect? PlayerFire { get; set; }
+    public static SoundEffect? EnemyDie { get; set; }
     public static Random Random;
     public static bool Cheat = false;
     public static int LastScore;
@@ -32,10 +32,11 @@ public class Game1 : RetroGame.RetroGame
         TodaysBestScore = 0;
     }
 
-    public Game1() : base(640, 360, DisplayMode)
+    public Game1() : base(640, 360, RetroDisplayMode.Fullscreen, false)
     {
         EnemyFire = new SoundEffect(this);
         PlayerFire = new SoundEffect(this);
+        EnemyDie = new SoundEffect(this);
     }
 
     protected override void LoadContent()
@@ -65,6 +66,7 @@ public class Game1 : RetroGame.RetroGame
 
         EnemyFire!.Initialize("sfx_gun1", "sfx_gun2", "sfx_gun3", "sfx_gun4", "sfx_gun5", "sfx_gun6");
         PlayerFire!.Initialize("sfx_gun7", "sfx_gun8", "sfx_gun9", "sfx_gun10");
+        EnemyDie!.Initialize("sfx_enemydeath1", "sfx_enemydeath2", "sfx_enemydeath3");
 
         CurrentScene = new IntroScene(this);
         base.LoadContent();

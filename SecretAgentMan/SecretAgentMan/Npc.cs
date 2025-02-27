@@ -224,6 +224,7 @@ public class Npc : Character, IRetroActor
 
     public void Die(ulong ticks)
     {
+        Game1.EnemyDie!.PlayRandom();
         CurrentAnimation = _die;
         AliveStatus = StatusDying;
         DieAtTicks = ticks;

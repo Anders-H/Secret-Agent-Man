@@ -50,7 +50,7 @@ public class IngameScene : Scene
         _player = new Player(_fireList);
         _roomList = new RoomList(_player, _enemyFireList);
         _currentRoomName = "";
-        UpdateRoomName();
+        UpdateRoomNameAndCheckClear();
         AddToAutoUpdate(Keyboard);
     }
 
@@ -67,9 +67,12 @@ public class IngameScene : Scene
         }
     }
 
-    private void UpdateRoomName()
+    private void UpdateRoomNameAndCheckClear()
     {
         _currentRoomName = _roomList[_currentRoomIndex].DistrictName;
+
+        if (_roomList[_currentRoomIndex].IsClear())
+            _messageSystem.AddMessage("this area is clear.");
     }
 
     public override void Update(GameTime gameTime, ulong ticks)
@@ -111,13 +114,13 @@ public class IngameScene : Scene
                 {
                     _currentRoomIndex++;
                     _fireList.Clear();
-                    UpdateRoomName();
+                    UpdateRoomNameAndCheckClear();
                 }
                 else if (previousRoom)
                 {
                     _currentRoomIndex--;
                     _fireList.Clear();
-                    UpdateRoomName();
+                    UpdateRoomNameAndCheckClear();
                 }
 
                 _roomList[_currentRoomIndex].Act(ticks);
