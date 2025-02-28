@@ -83,7 +83,7 @@ public class IngameScene : Scene
             {
                 if (Keyboard.IsKeyPressed(Keys.F3))
                 {
-                    Parent.CurrentScene = new StartScene(Parent, Game1.LastScore, Game1.TodaysBestScore, false, false);
+                    Parent.CurrentScene = new StartScene(Parent, Game1.LastScore, Game1.TodaysBestScore);
                     return;
                 }
 
@@ -198,7 +198,12 @@ public class IngameScene : Scene
 
             if (_gameCompleted && ticks > _gameCompletedAt + 500)
             {
-                Parent.CurrentScene = new StartScene(Parent, Game1.LastScore, Game1.TodaysBestScore, false, true);
+                Game1.LastScore = Score;
+
+                if (Game1.TodaysBestScore < Game1.LastScore)
+                    Game1.TodaysBestScore = Game1.LastScore;
+
+                Parent.CurrentScene = new GameOverScene(Parent, false, true);
                 return;
             }
 
@@ -257,7 +262,7 @@ public class IngameScene : Scene
             if (Game1.TodaysBestScore < Game1.LastScore)
                 Game1.TodaysBestScore = Game1.LastScore;
 
-            Parent.CurrentScene = new StartScene(Parent, Game1.LastScore, Game1.TodaysBestScore, true, false);
+            Parent.CurrentScene = new GameOverScene(Parent, true, false);
         }
 
         _roomList[_currentRoomIndex].ActDecorations(ticks);
@@ -293,7 +298,7 @@ public class IngameScene : Scene
         _messageSystem.Draw(spriteBatch);
 
         if (_gameCompleted)
-            _textBlock.DirectDraw(spriteBatch, StartScene.GameClearX, 150, StartScene.GameClearText, ColorPalette.Green);
+            _textBlock.DirectDraw(spriteBatch, GameOverScene.GameClearX, 150, GameOverScene.GameClearText, ColorPalette.Green);
 
         base.Draw(gameTime, ticks, spriteBatch);
     }

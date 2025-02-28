@@ -54,9 +54,7 @@ public class MessageSystem : IRetroActor
         foreach (var message in _messages)
         {
             _textBlock.DirectDraw(spriteBatch, message.X, y, message.Text, ColorPalette.White);
-
             var messageEndX = message.X + ((message.Text.Length + 3) * 8);
-            System.Diagnostics.Debug.WriteLine(messageEndX);
 
             if (messageEndX > 50)
                 y += 8;

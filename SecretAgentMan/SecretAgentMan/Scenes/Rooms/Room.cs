@@ -11,7 +11,7 @@ public class Room
 {
     public string DistrictName { get; }
     public List<Npc> Npcs { get; }
-    private List<Airplane> _airplanes;
+    private readonly List<Airplane> _airplanes;
 
     public Room(string districtName)
     {

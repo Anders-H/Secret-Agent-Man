@@ -31,7 +31,7 @@ public class IntroScene : Scene
         if (Keyboard.IsKeyPressed(Keys.Escape))
             Exit();
         else if (Keyboard.IsFirePressed())
-            Parent.CurrentScene = new StartScene(Parent, 0, 0, false, false);
+            Parent.CurrentScene = new StartScene(Parent, 0, 0);
 
         base.Update(gameTime, ticks);
     }
