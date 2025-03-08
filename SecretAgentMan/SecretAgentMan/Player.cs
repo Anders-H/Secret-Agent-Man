@@ -25,7 +25,7 @@ public class Player : Character
         var changeAnimationCells = false;
         var isMoving = false;
 
-        if (keyboard.IsKeyDown(Keys.Right))
+        if (keyboard.MoveRight())
         {
             if (!FaceRight)
             {
@@ -49,7 +49,7 @@ public class Player : Character
                 }
             }
         }
-        else if (keyboard.IsKeyDown(Keys.Left))
+        else if (keyboard.MoveLeft())
         {
             if (FaceRight)
             {
@@ -74,7 +74,7 @@ public class Player : Character
             }
         }
 
-        if (keyboard.IsKeyDown(Keys.Up))
+        if (keyboard.MoveUp())
         {
             isMoving = true;
             Y -= 2;
@@ -82,7 +82,7 @@ public class Player : Character
             if (Y < IngameScene.SpriteUpperLimit)
                 Y = IngameScene.SpriteUpperLimit;
         }
-        else if (keyboard.IsKeyDown(Keys.Down))
+        else if (keyboard.MoveDown())
         {
             isMoving = true;
             Y += 2;

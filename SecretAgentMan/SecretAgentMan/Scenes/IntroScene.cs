@@ -38,6 +38,6 @@ public class IntroScene : Scene
 
     public override void Draw(GameTime gameTime, ulong ticks, SpriteBatch spriteBatch)
     {
-        Game1.IntroGraphics.Draw(spriteBatch, 0, 0, _y);
+        Game1.IntroGraphics!.Draw(spriteBatch, 0, 0, _y);
     }
 }

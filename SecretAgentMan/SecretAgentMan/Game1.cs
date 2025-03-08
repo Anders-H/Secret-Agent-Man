@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RetroGame;
 using RetroGame.Audio;
+using RetroGame.HighScore;
 using RetroGame.RetroTextures;
 using SecretAgentMan.Scenes;
 
@@ -24,12 +25,14 @@ public class Game1 : RetroGame.RetroGame
     public static bool Cheat = false;
     public static int LastScore;
     public static int TodaysBestScore;
+    public static HighScoreList HighScore { get; }
 
     static Game1()
     {
         Random = new Random();
         LastScore = 0;
         TodaysBestScore = 0;
+        HighScore = new HighScoreList(640, 380);
     }
 
     public Game1() : base(640, 360, RetroDisplayMode.Fullscreen, false)
