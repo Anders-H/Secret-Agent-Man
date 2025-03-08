@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RetroGame;
@@ -18,6 +19,9 @@ public class Game1 : RetroGame.RetroGame
     public static RetroTexture? AirplaneLeftTexture { get; set; }
     public static RetroTexture? Mayor { get; set; }
     public static RetroTexture? IntroGraphics { get; set; }
+    public static RetroTextureVertical? BackgroundLayer01 { get; set; }
+    public static RetroTextureVertical? BackgroundLayer02 { get; set; }
+    public static Decoration Decoration { get; set; }
     public static SoundEffect? EnemyFire { get; set; }
     public static SoundEffect? PlayerFire { get; set; }
     public static SoundEffect? EnemyDie { get; set; }
@@ -33,6 +37,7 @@ public class Game1 : RetroGame.RetroGame
         LastScore = 0;
         TodaysBestScore = 0;
         HighScore = new HighScoreList(640, 380);
+        Decoration = new Decoration();
     }
 
     public Game1() : base(640, 360, RetroDisplayMode.Fullscreen, false)
@@ -46,11 +51,14 @@ public class Game1 : RetroGame.RetroGame
     {
         BackColor = Color.Black;
 
+        BackgroundLayer01 = new RetroTextureVertical(GraphicsDevice, 640, 91, 4);
+        BackgroundLayer01.SetData(Content.Load<Texture2D>("background-640x91"));
+
+        BackgroundLayer02 = new RetroTextureVertical(GraphicsDevice, 640, 91, 4);
+        BackgroundLayer02.SetData(Content.Load<Texture2D>("sky-640x91"));
+
         CharactersTexture = new RetroTexture(GraphicsDevice, 25, 25, 32);
         CharactersTexture.SetData(Content.Load<Texture2D>("player25x25"));
-
-        BackgroundTempTexture = new RetroTexture(GraphicsDevice, 640, 360, 1);
-        BackgroundTempTexture.SetData(Content.Load<Texture2D>("skylinetest"));
 
         WaterTexture = new RetroTextureVertical(GraphicsDevice, 640, 30, 18);
         WaterTexture.SetData(Content.Load<Texture2D>("water640x30"));

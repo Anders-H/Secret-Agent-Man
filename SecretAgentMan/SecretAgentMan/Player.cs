@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using RetroGame.Input;
-using Microsoft.Xna.Framework.Input;
 using SecretAgentMan.Scenes;
 
 namespace SecretAgentMan;

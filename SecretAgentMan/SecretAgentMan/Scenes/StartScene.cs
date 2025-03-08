@@ -1,11 +1,11 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RetroGame;
 using RetroGame.Input;
 using RetroGame.Scene;
 using RetroGame.Text;
-using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 
 namespace SecretAgentMan.Scenes;
 
@@ -42,6 +42,7 @@ public class StartScene : Scene
             Exit();
             return;
         }
+
         if ((Keyboard.IsFirePressed() || Keyboard.IsPadButtonPressed(Buttons.Start) ) && ticks > 40)
         {
             Parent.CurrentScene = new IngameScene(Parent);

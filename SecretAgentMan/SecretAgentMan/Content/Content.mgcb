@@ -13,6 +13,18 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin background-640x91.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:background-640x91.png
+
 #begin c64font.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -175,7 +187,7 @@
 /processorParam:Quality=Best
 /build:sfx_gun9.wav
 
-#begin skylinetest.png
+#begin sky-640x91.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -185,7 +197,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:skylinetest.png
+/build:sky-640x91.png
 
 #begin water640x30.png
 /importer:TextureImporter

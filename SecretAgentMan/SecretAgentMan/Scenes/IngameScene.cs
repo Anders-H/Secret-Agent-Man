@@ -271,6 +271,7 @@ public class IngameScene : Scene
 
     public override void Draw(GameTime gameTime, ulong ticks, SpriteBatch spriteBatch)
     {
+        Game1.Decoration.Draw(spriteBatch, _currentRoomIndex);
         Game1.BackgroundTempTexture?.Draw(spriteBatch, 0, 0, 0, ColorPalette.White);
         Game1.WaterTexture?.Draw(spriteBatch, _waterFrameIndex, 0, 91, ColorPalette.White);
 
