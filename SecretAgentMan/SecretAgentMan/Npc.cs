@@ -16,6 +16,7 @@ public class Npc : Character, IRetroActor
     private readonly int[] _die = [22, 23, 22, 23];
     private readonly int[] _walkRightWithGun = [8, 9, 10, 11];
     private readonly int[] _walkLeftWithGun = [12, 13, 14, 15];
+    private static readonly ulong[] Speeds = [1, 2, 1, 1, 2, 2, 3, 3, 3, 4, 5, 4, 5, 7, 7];
     private bool _gunUp;
     private bool _isMovingUp;
     private bool _isMovingDown;
@@ -25,7 +26,7 @@ public class Npc : Character, IRetroActor
     public const int StatusSpyUndetected = 1;
     public const int StatusSpyDetected = 2;
 
-    public Npc(int status, Player? player, List<Fire> enemyFireList) : base(enemyFireList)
+    public Npc(int status, Player? player, List<Fire> enemyFireList, ulong speed) : base(enemyFireList)
     {
         _player = player;
         Status = status;
@@ -33,7 +34,7 @@ public class Npc : Character, IRetroActor
         _ticksSinceGunToggle = 0;
         _ticksSinceLastFire = 0;
         _gunUp = false;
-        _speed = (ulong)Game1.Random.Next(1, 8);
+        _speed = speed;
 
         if (Game1.Random.Next(0, 2) == 0)
         {
@@ -58,27 +59,24 @@ public class Npc : Character, IRetroActor
 
         if (AliveStatus == StatusAlive)
         {
-            if (ticks % _speed == 0)
+            if (ticks % 3 == 0)
+                PerhapsToggleGunDrawn();
+
+            if (ticks % (_speed + 1) == 0)
             {
-                _ticksSinceGunToggle++;
-
-                if (Status != StatusInnocent & _ticksSinceGunToggle > 50)
+                if (_isMovingUp)
                 {
-                    if (Game1.Random.Next(500) == 100)
-                    {
-                        _gunUp = !_gunUp;
+                    Y -= 1;
 
-                        if (_gunUp)
-                        {
-                            Status = StatusSpyDetected;
-                            CurrentAnimation = FaceRight ? _walkRightWithGun : _walkLeftWithGun;
-                            _ticksSinceLastFire = 0;
-                        }
-                        else
-                        {
-                            CurrentAnimation = FaceRight ? _walkRight : _walkLeft;
-                        }
-                    }
+                    if (Y < IngameScene.SpriteUpperLimit)
+                        Y = IngameScene.SpriteUpperLimit;
+                }
+                else if (_isMovingDown)
+                {
+                    Y += 1;
+
+                    if (Y > 335)
+                        Y = 335;
                 }
 
                 if (FaceRight)
@@ -104,21 +102,6 @@ public class Npc : Character, IRetroActor
                     }
                 }
 
-                if (_isMovingUp)
-                {
-                    Y -= 1;
-
-                    if (Y < IngameScene.SpriteUpperLimit)
-                        Y = IngameScene.SpriteUpperLimit;
-                }
-                else if (_isMovingDown)
-                {
-                    Y += 1;
-
-                    if (Y > 335)
-                        Y = 335;
-                }
-
                 if (_gunUp)
                 {
                     if (_ticksSinceLastFire > 7 && Game1.Random.Next(6) == 4 && InPositionToShootPlayer())
@@ -131,71 +114,98 @@ public class Npc : Character, IRetroActor
                         _ticksSinceLastFire++;
                     }
                 }
-
-                if (ticks % 7 == 0)
-                    CurrentAnimationIndex++;
             }
 
-            if (_ticksSinceDirectionChange > 40)
-            {
-                var newDirection = Game1.Random.Next(200);
+            if (ticks % (_speed + 9) == 0)
+                CurrentAnimationIndex++;
 
-                switch (newDirection)
-                {
-                    case 6:
-                    case 7:
-                        if (!_isMovingUp)
-                        {
-                            _isMovingUp = true;
-                            _isMovingDown = false;
-                            _ticksSinceDirectionChange = 0;
-                        }
-                        break;
-                    case 8:
-                    case 9:
-                        if (_isMovingUp || _isMovingDown)
-                        {
-                            _isMovingUp = false;
-                            _isMovingDown = false;
-                            _ticksSinceDirectionChange = 0;
-                        }
-                        break;
-                    case 10:
-                    case 11:
-                        if (!_isMovingDown)
-                        {
-                            _isMovingUp = false;
-                            _isMovingDown = true;
-                            _ticksSinceDirectionChange = 0;
-                        }
-                        break;
-                    case 12:
-                        if (FaceRight)
-                        {
-                            FaceRight = false;
-                            CurrentAnimation = _gunUp ? _walkLeftWithGun : _walkLeft;
-                            _ticksSinceDirectionChange = 0;
-                        }
-                        break;
-                    case 13:
-                        if (!FaceRight)
-                        {
-                            FaceRight = true;
-                            CurrentAnimation = _gunUp ? _walkRightWithGun : _walkRight;
-                            _ticksSinceDirectionChange = 0;
-                        }
-                        break;
-                }
-            }
+            if (_ticksSinceDirectionChange > 60)
+                PerhapsChangeDirection();
         }
         else if (AliveStatus == StatusDying)
         {
             if (ticks % 10 == 0)
             {
                 CurrentAnimationIndex++;
-                
+
                 if (ticks - DieAtTicks > 40)
                     AliveStatus = StatusDead;
+            }
+        }
+    }
+
+    private void PerhapsChangeDirection()
+    {
+        var newDirection = Game1.Random.Next(300);
+
+        switch (newDirection)
+        {
+            case 6:
+            case 7:
+                if (!_isMovingUp)
+                {
+                    _isMovingUp = true;
+                    _isMovingDown = false;
+                    _ticksSinceDirectionChange = 0;
+                }
+                break;
+            case 8:
+            case 9:
+                if (_isMovingUp || _isMovingDown)
+                {
+                    _isMovingUp = false;
+                    _isMovingDown = false;
+                    _ticksSinceDirectionChange = 0;
+                }
+                break;
+            case 10:
+            case 11:
+                if (!_isMovingDown)
+                {
+                    _isMovingUp = false;
+                    _isMovingDown = true;
+                    _ticksSinceDirectionChange = 0;
+                }
+                break;
+            case 12:
+                if (FaceRight)
+                {
+                    FaceRight = false;
+                    CurrentAnimation = _gunUp ? _walkLeftWithGun : _walkLeft;
+                    _ticksSinceDirectionChange = 0;
+                }
+                break;
+            case 13:
+                if (!FaceRight)
+                {
+                    FaceRight = true;
+                    CurrentAnimation = _gunUp ? _walkRightWithGun : _walkRight;
+                    _ticksSinceDirectionChange = 0;
+                }
+                break;
+        }
+    }
+
+    private void PerhapsToggleGunDrawn()
+    {
+        _ticksSinceGunToggle++;
+
+        if (Status != StatusInnocent & _ticksSinceGunToggle > 150)
+        {
+            if (Game1.Random.Next(550) == 100)
+            {
+                _gunUp = !_gunUp;
+
+                if (_gunUp)
+                {
+                    Status = StatusSpyDetected;
+                    CurrentAnimation = FaceRight ? _walkRightWithGun : _walkLeftWithGun;
+                    _ticksSinceLastFire = 0;
+                }
+                else
+                {
+                    CurrentAnimation = FaceRight ? _walkRight : _walkLeft;
+                }
             }
         }
     }
@@ -233,15 +243,15 @@ public class Npc : Character, IRetroActor
     private bool InFullView =>
         X >= 0 && X <= 615;
 
-    public static Npc CreateInnocent(List<Fire> enemyFireList)
+    public static Npc CreateInnocent(List<Fire> enemyFireList, int index)
     {
-        var n = new Npc(StatusInnocent, null, enemyFireList);
+        var n = new Npc(StatusInnocent, null, enemyFireList, Speeds[index]);
         return n;
     }
 
-    public static Npc CreateSpy(Player player, List<Fire> enemyFireList)
+    public static Npc CreateSpy(Player player, List<Fire> enemyFireList, int index)
     {
-        var n = new Npc(StatusSpyUndetected, player, enemyFireList);
+        var n = new Npc(StatusSpyUndetected, player, enemyFireList, Speeds[index]);
         return n;
     }
 }

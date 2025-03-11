@@ -17,10 +17,10 @@ public class RoomList : List<Room>
             var room = new Room(names[i]);
 
             for (var j = 0; j < innocentCount[i]; j++)
-                room.Npcs.Add(Npc.CreateInnocent(enemyFireList));
+                room.Npcs.Add(Npc.CreateInnocent(enemyFireList, j));
 
             for (var j = 0; j < spyCount[i]; j++)
-                room.Npcs.Add(Npc.CreateSpy(player, enemyFireList));
+                room.Npcs.Add(Npc.CreateSpy(player, enemyFireList, j));
 
             switch (i)
             {
