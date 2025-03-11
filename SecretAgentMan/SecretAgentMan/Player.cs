@@ -102,6 +102,7 @@ public class Player : Character
 
     public void Die(ulong ticks)
     {
+        Game1.PlayerDie!.PlayNext();
         CurrentAnimation = _die;
         AliveStatus = StatusDying;
         DieAtTicks = ticks;

@@ -114,12 +114,14 @@ public class IngameScene : Scene
                 {
                     _currentRoomIndex++;
                     _fireList.Clear();
+                    _enemyFireList.Clear();
                     UpdateRoomNameAndCheckClear();
                 }
                 else if (previousRoom)
                 {
                     _currentRoomIndex--;
                     _fireList.Clear();
+                    _enemyFireList.Clear();
                     UpdateRoomNameAndCheckClear();
                 }
 

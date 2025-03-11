@@ -187,6 +187,12 @@
 /processorParam:Quality=Best
 /build:sfx_gun9.wav
 
+#begin sfx_playerdeath.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx_playerdeath.wav
+
 #begin sky-640x91.png
 /importer:TextureImporter
 /processor:TextureProcessor

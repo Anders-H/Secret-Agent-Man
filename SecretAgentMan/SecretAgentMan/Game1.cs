@@ -26,6 +26,7 @@ public class Game1 : RetroGame.RetroGame
     public static SoundEffect? EnemyFire { get; set; }
     public static SoundEffect? PlayerFire { get; set; }
     public static SoundEffect? EnemyDie { get; set; }
+    public static SoundEffect? PlayerDie { get; set; }
     public static Random Random;
     public static bool Cheat = false;
     public static int LastScore;
@@ -46,6 +47,7 @@ public class Game1 : RetroGame.RetroGame
         EnemyFire = new SoundEffect(this);
         PlayerFire = new SoundEffect(this);
         EnemyDie = new SoundEffect(this);
+        PlayerDie = new SoundEffect(this);
     }
 
     protected override void LoadContent()
@@ -85,6 +87,7 @@ public class Game1 : RetroGame.RetroGame
         EnemyFire!.Initialize("sfx_gun1", "sfx_gun2", "sfx_gun3", "sfx_gun4", "sfx_gun5", "sfx_gun6");
         PlayerFire!.Initialize("sfx_gun7", "sfx_gun8", "sfx_gun9", "sfx_gun10");
         EnemyDie!.Initialize("sfx_enemydeath1", "sfx_enemydeath2", "sfx_enemydeath3");
+        PlayerDie!.Initialize("sfx_playerdeath");
 
         CurrentScene = new IntroScene(this);
         base.LoadContent();
