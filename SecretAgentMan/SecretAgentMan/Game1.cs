@@ -78,7 +78,7 @@ public class Game1 : RetroGame.RetroGame
         AirplaneLeftTexture = new RetroTexture(GraphicsDevice, 5, 3, 25);
         AirplaneLeftTexture.SetData(Content.Load<Texture2D>("planeflipped5x3"));
 
-        Mayor = new RetroTexture(GraphicsDevice, 50, 50, 2);
+        Mayor = new RetroTexture(GraphicsDevice, 50, 50, 4);
         Mayor.SetData(Content.Load<Texture2D>("mayor50x50"));
 
         IntroGraphics = new RetroTexture(GraphicsDevice, 640, 360, 1);

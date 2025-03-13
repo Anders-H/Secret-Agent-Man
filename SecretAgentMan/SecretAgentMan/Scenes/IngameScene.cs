@@ -1,31 +1,24 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using RetroGame;
-using RetroGame.Input;
-using RetroGame.Scene;
-using RetroGame.Text;
 using SecretAgentMan.Scenes.Rooms;
+using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace SecretAgentMan.Scenes;
 
-public class IngameScene : Scene
+public class IngameScene : RetroGame.Scene.IngameScene
 {
+    private int _innocentKill;
+    private ulong _lastInnocentKillAt;
     private int _messageDebug;
-    private string _scoreString;
-    private int _score;
     private readonly MessageSystem _messageSystem;
-    private readonly TextBlock _textBlock;
     private bool _askQuitMode;
-    private KeyboardStateChecker Keyboard { get; }
     private int _currentRoomIndex;
     private readonly Player _player;
-    // ReSharper disable once CollectionNeverUpdated.Local
     private readonly RoomList _roomList;
-    private string _currentRoomName;
-    private readonly List<Fire> _fireList;
-    private readonly List<Fire> _enemyFireList;
+    private string _currentRoomName = "";
+    private readonly FireList _fireList = [];
+    private readonly FireList _enemyFireList = [];
     private int _waterFrameIndex;
     private int _killedSpyCount;
     private bool _gameCompleted;
@@ -35,44 +28,19 @@ public class IngameScene : Scene
     public IngameScene(RetroGame.RetroGame parent) : base(parent)
     {
         _gameCompleted = false;
-        _gameCompletedAt = 0;
-        _killedSpyCount = 0;
-        _scoreString = "score: 0";
-        _waterFrameIndex = 0;
         _messageSystem = new MessageSystem();
-        _messageDebug = 0;
-        Keyboard = new KeyboardStateChecker();
-        _textBlock = new TextBlock(CharacterSet.Uppercase);
         _askQuitMode = false;
-        _currentRoomIndex = 0;
-        _fireList = [];
-        _enemyFireList = [];
         _player = new Player(_fireList);
         _roomList = new RoomList(_player, _enemyFireList);
-        _currentRoomName = "";
         UpdateRoomNameAndCheckClear();
-        AddToAutoUpdate(Keyboard);
-    }
-
-    public int Score
-    {
-        get => _score;
-        set
-        {
-            if (value != _score)
-            {
-                _score = value;
-                _scoreString = $"score: {_score}";
-            }
-        }
     }
 
     private void UpdateRoomNameAndCheckClear()
     {
-        _currentRoomName = _roomList[_currentRoomIndex].DistrictName;
+        _currentRoomName = _roomList.GetDistrictName(_currentRoomIndex);
 
-        if (_roomList[_currentRoomIndex].IsClear())
-            _messageSystem.AddMessage("this area is clear.");
+        if (_roomList.RoomIsClear(_currentRoomIndex))
+            _messageSystem.AddMessage("this area is clear.", false);
     }
 
     public override void Update(GameTime gameTime, ulong ticks)
@@ -125,12 +93,12 @@ public class IngameScene : Scene
                     UpdateRoomNameAndCheckClear();
                 }
 
-                _roomList[_currentRoomIndex].Act(ticks);
+                _roomList.Act(_currentRoomIndex, ticks);
 
                 if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F10))
                 {
                     _messageDebug++;
-                    _messageSystem.AddMessage($"you have added text {_messageDebug} to the {(Game1.Random.Next(2) == 0 ? "message " : "")}system!{(Game1.Random.Next(2) == 0 ? " thank you!" : "")}");
+                    _messageSystem.AddMessage($"you have added text {_messageDebug} to the {(Game1.Random.Next(2) == 0 ? "message " : "")}system!{(Game1.Random.Next(2) == 0 ? " thank you!" : "")}", Game1.Random.Next(0, 2) == 1);
                 }
 
                 _messageSystem.Act(ticks);
@@ -139,7 +107,7 @@ public class IngameScene : Scene
             foreach (var fire in _fireList)
                 fire.Act(ticks);
 
-            foreach (var npc in _roomList[_currentRoomIndex].Npcs)
+            foreach (var npc in _roomList.GetNpcs(_currentRoomIndex))
             {
                 foreach (var fire in _fireList)
                 {
@@ -147,10 +115,28 @@ public class IngameScene : Scene
                     {
                         _fireList.Remove(fire);
 
-                        if (npc.Status == Npc.StatusInnocent || npc.Status == Npc.StatusSpyUndetected)
+                        if (npc.PlayerMayNotKill())
                         {
                             if (npc.AliveStatus == Character.StatusAlive)
+                            {
                                 npc.Die(ticks);
+                                _innocentKill++;
+
+                                switch (_innocentKill)
+                                {
+                                    case 1:
+                                        _messageSystem.AddMessage("you have killed an innocent man!", true);
+                                        Score -= 10;
+                                        break;
+                                    case 2:
+                                        _messageSystem.AddMessage("you cannot just go around an shoot people!", true);
+                                        Score -= 50;
+                                        break;
+                                    case 3:
+                                        _lastInnocentKillAt = ticks;
+                                        break;
+                                }
+                            }
                         }
                         else if (npc.Status == Npc.StatusSpyDetected && npc.AliveStatus == Character.StatusAlive)
                         {
@@ -161,7 +147,7 @@ public class IngameScene : Scene
 
                             if (_killedSpyCount >= _roomList.SpyCount)
                             {
-                                _messageSystem.AddMessage($"all spies eliminated! {scoreAdded} points! well done!");
+                                _messageSystem.AddMessage($"all spies eliminated! {scoreAdded} points! well done!", false);
                                 _fireList.Clear();
                                 _enemyFireList.Clear();
                                 _gameCompleted = true;
@@ -172,22 +158,22 @@ public class IngameScene : Scene
                                 switch (_killedSpyCount)
                                 {
                                     case 1:
-                                        _messageSystem.AddMessage($"first spy eliminated! {scoreAdded} points!");
+                                        _messageSystem.AddMessage($"first spy eliminated! {scoreAdded} points!", false);
                                         break;
                                     case 2:
-                                        _messageSystem.AddMessage($"second spy eliminated! {scoreAdded} points!");
+                                        _messageSystem.AddMessage($"second spy eliminated! {scoreAdded} points!", false);
                                         break;
                                     case 3:
-                                        _messageSystem.AddMessage($"third spy eliminated! {scoreAdded} points!");
+                                        _messageSystem.AddMessage($"third spy eliminated! {scoreAdded} points!", false);
                                         break;
                                     case 4:
-                                        _messageSystem.AddMessage($"fourth spy eliminated! {scoreAdded} points!");
+                                        _messageSystem.AddMessage($"fourth spy eliminated! {scoreAdded} points!", false);
                                         break;
                                     case 5:
-                                        _messageSystem.AddMessage($"fifth spy eliminated! {scoreAdded} points!");
+                                        _messageSystem.AddMessage($"fifth spy eliminated! {scoreAdded} points!", false);
                                         break;
                                     default:
-                                        _messageSystem.AddMessage($"spy number {_killedSpyCount} eliminated! {scoreAdded} points!");
+                                        _messageSystem.AddMessage($"spy number {_killedSpyCount} eliminated! {scoreAdded} points!", false);
                                         break;
 
                                 }
@@ -196,6 +182,17 @@ public class IngameScene : Scene
                         break;
                     }
                 }
+            }
+
+            if (_innocentKill >= 3 && ticks > _lastInnocentKillAt + 100)
+            {
+                Game1.LastScore = Score;
+
+                if (Game1.TodaysBestScore < Game1.LastScore)
+                    Game1.TodaysBestScore = Game1.LastScore;
+
+                Parent.CurrentScene = new GameOverScene(Parent, false, true); //new GameOverInnocentDeathScene(Parent);
+                return;
             }
 
             if (_gameCompleted && ticks > _gameCompletedAt + 500)
@@ -232,14 +229,7 @@ public class IngameScene : Scene
                     return;
                 }
 
-                foreach (var npc in _roomList[_currentRoomIndex].Npcs)
-                {
-                    if (npc.AliveStatus == Character.StatusDead)
-                    {
-                        _roomList[_currentRoomIndex].Npcs.Remove(npc);
-                        break;
-                    }
-                }
+                _roomList.RemoveOneDeadNpc(_currentRoomIndex);
 
                 foreach (var fire in _enemyFireList)
                 {
@@ -267,7 +257,7 @@ public class IngameScene : Scene
             Parent.CurrentScene = new GameOverScene(Parent, true, false);
         }
 
-        _roomList[_currentRoomIndex].ActDecorations(ticks);
+        _roomList.AnimateDecorations(_currentRoomIndex, ticks);
         base.Update(gameTime, ticks);
     }
 
@@ -281,27 +271,22 @@ public class IngameScene : Scene
         {
             const string quitText = "press f3 to quit, press f7 to continue.";
             var quitX = 320 - ((quitText.Length * 8) / 2);
-            _textBlock.DirectDraw(spriteBatch, quitX, 150, quitText, ColorPalette.White);
+            Text.DirectDraw(spriteBatch, quitX, 150, quitText, ColorPalette.White);
         }
         else
         {
-            _roomList[_currentRoomIndex].Draw(spriteBatch, _textBlock, _player);
-
-            foreach (var fire in _fireList)
-                fire.Draw(spriteBatch);
-
-            foreach (var fire in _enemyFireList)
-                fire.Draw(spriteBatch);
-
-            _roomList[_currentRoomIndex].DrawAirPlanes(spriteBatch);
+            _roomList.DrawBackground(spriteBatch, _currentRoomIndex, Text, _player);
+            _fireList.Draw(spriteBatch);
+            _enemyFireList.Draw(spriteBatch);
+            _roomList.DrawDecorations(spriteBatch, _currentRoomIndex);
         }
 
-        _textBlock.DirectDraw(spriteBatch, 0, 0, _currentRoomName, Color.White);
-        _textBlock.DirectDraw(spriteBatch, 480, 0, _scoreString, Color.White);
+        Text.DirectDraw(spriteBatch, 0, 0, _currentRoomName, Color.White);
+        DrawScore(spriteBatch, 480, 0, ColorPalette.White);
         _messageSystem.Draw(spriteBatch);
 
         if (_gameCompleted)
-            _textBlock.DirectDraw(spriteBatch, GameOverScene.GameClearX, 150, GameOverScene.GameClearText, ColorPalette.Green);
+            Text.DirectDraw(spriteBatch, GameOverScene.GameClearX, 150, GameOverScene.GameClearText, ColorPalette.Green);
 
         base.Draw(gameTime, ticks, spriteBatch);
     }

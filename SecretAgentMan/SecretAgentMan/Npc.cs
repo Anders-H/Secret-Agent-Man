@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using RetroGame.Scene;
-using SecretAgentMan.Scenes;
+using IngameScene = SecretAgentMan.Scenes.IngameScene;
 
 namespace SecretAgentMan;
 
@@ -254,4 +254,7 @@ public class Npc : Character, IRetroActor
         var n = new Npc(StatusSpyUndetected, player, enemyFireList, Speeds[index]);
         return n;
     }
+
+    public bool PlayerMayNotKill() =>
+        Status == Npc.StatusInnocent || Status == Npc.StatusSpyUndetected;
 }

@@ -13,16 +13,21 @@ public class MessageSystem : IRetroActor
     private const int YStart = 56;
     private readonly List<Message> _messages;
     private int _currentMayorCell;
+    private bool _isAngry;
 
     public MessageSystem()
     {
+        _isAngry = false;
         _currentMayorCell = 0;
         _textBlock = new TextBlock(CharacterSet.Uppercase);
         _messages = new List<Message>();
     }
 
-    public void AddMessage(string message) =>
+    public void AddMessage(string message, bool isAngry)
+    {
+        _isAngry = isAngry;
         _messages.Add(new Message(message));
+    }
 
     public void Act(ulong ticks)
     {
@@ -40,8 +45,16 @@ public class MessageSystem : IRetroActor
             message.X--;
         }
 
-        if (ticks % 20 == 0)
-            _currentMayorCell = _currentMayorCell == 0 ? 1 : 0;
+        if (_isAngry)
+        {
+            if (ticks % 5 == 0)
+                _currentMayorCell = _currentMayorCell != 2 ? 2 : 3;
+        }
+        else
+        {
+            if (ticks % 20 == 0)
+                _currentMayorCell = _currentMayorCell != 0 ? 0 : 1;
+        }
     }
 
     public void Draw(SpriteBatch spriteBatch)
