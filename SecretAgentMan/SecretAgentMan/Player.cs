@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using RetroGame.Input;
 using SecretAgentMan.Scenes;
+using SharpDX.Direct2D1;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
 namespace SecretAgentMan;
 
@@ -100,7 +102,19 @@ public class Player : Character
             Tick(ticks);
     }
 
-    public void Die(ulong ticks)
+    public void DieIfHit(FireList enemyFire, ulong ticks)
+    {
+        foreach (var fire in enemyFire)
+        {
+            if (!Hit(fire))
+                continue;
+
+            Die(ticks);
+            break;
+        }
+    }
+
+    private void Die(ulong ticks)
     {
         Game1.PlayerDie!.PlayNext();
         CurrentAnimation = _die;

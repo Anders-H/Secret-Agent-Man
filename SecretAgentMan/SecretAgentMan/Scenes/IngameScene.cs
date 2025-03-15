@@ -11,14 +11,13 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private int _innocentKill;
     private ulong _lastInnocentKillAt;
     private int _messageDebug;
-    private readonly MessageSystem _messageSystem;
+    private readonly MessageSystem _messageSystem = new();
     private bool _askQuitMode;
     private int _currentRoomIndex;
     private readonly Player _player;
     private readonly RoomList _roomList;
     private string _currentRoomName = "";
-    private readonly FireList _fireList = [];
-    private readonly FireList _enemyFireList = [];
+    private readonly IngameFire _fire = new();
     private int _waterFrameIndex;
     private int _killedSpyCount;
     private bool _gameCompleted;
@@ -27,11 +26,8 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
     public IngameScene(RetroGame.RetroGame parent) : base(parent)
     {
-        _gameCompleted = false;
-        _messageSystem = new MessageSystem();
-        _askQuitMode = false;
-        _player = new Player(_fireList);
-        _roomList = new RoomList(_player, _enemyFireList);
+        _player = new Player(_fire.PlayerFire);
+        _roomList = new RoomList(_player, _fire.EnemyFire);
         UpdateRoomNameAndCheckClear();
     }
 
@@ -81,15 +77,13 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 if (nextRoom)
                 {
                     _currentRoomIndex++;
-                    _fireList.Clear();
-                    _enemyFireList.Clear();
+                    _fire.Clear();
                     UpdateRoomNameAndCheckClear();
                 }
                 else if (previousRoom)
                 {
                     _currentRoomIndex--;
-                    _fireList.Clear();
-                    _enemyFireList.Clear();
+                    _fire.Clear();
                     UpdateRoomNameAndCheckClear();
                 }
 
@@ -104,16 +98,15 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 _messageSystem.Act(ticks);
             }
 
-            foreach (var fire in _fireList)
-                fire.Act(ticks);
+            _fire.Act(ticks);
 
             foreach (var npc in _roomList.GetNpcs(_currentRoomIndex))
             {
-                foreach (var fire in _fireList)
+                foreach (var fire in _fire.PlayerFire)
                 {
                     if (npc.Hit(fire))
                     {
-                        _fireList.Remove(fire);
+                        _fire.PlayerFire.Remove(fire);
 
                         if (npc.PlayerMayNotKill())
                         {
@@ -148,35 +141,13 @@ public class IngameScene : RetroGame.Scene.IngameScene
                             if (_killedSpyCount >= _roomList.SpyCount)
                             {
                                 _messageSystem.AddMessage($"all spies eliminated! {scoreAdded} points! well done!", false);
-                                _fireList.Clear();
-                                _enemyFireList.Clear();
+                                _fire.Clear();
                                 _gameCompleted = true;
                                 _gameCompletedAt = ticks;
                             }
                             else
                             {
-                                switch (_killedSpyCount)
-                                {
-                                    case 1:
-                                        _messageSystem.AddMessage($"first spy eliminated! {scoreAdded} points!", false);
-                                        break;
-                                    case 2:
-                                        _messageSystem.AddMessage($"second spy eliminated! {scoreAdded} points!", false);
-                                        break;
-                                    case 3:
-                                        _messageSystem.AddMessage($"third spy eliminated! {scoreAdded} points!", false);
-                                        break;
-                                    case 4:
-                                        _messageSystem.AddMessage($"fourth spy eliminated! {scoreAdded} points!", false);
-                                        break;
-                                    case 5:
-                                        _messageSystem.AddMessage($"fifth spy eliminated! {scoreAdded} points!", false);
-                                        break;
-                                    default:
-                                        _messageSystem.AddMessage($"spy number {_killedSpyCount} eliminated! {scoreAdded} points!", false);
-                                        break;
-
-                                }
+                                MayorResources.SaySpyKilled(_killedSpyCount, scoreAdded, _messageSystem);
                             }
                         }
                         break;
@@ -191,7 +162,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 if (Game1.TodaysBestScore < Game1.LastScore)
                     Game1.TodaysBestScore = Game1.LastScore;
 
-                Parent.CurrentScene = new GameOverScene(Parent, false, true); //new GameOverInnocentDeathScene(Parent);
+                Parent.CurrentScene = new GameOverInnocentDeathScene(Parent);
                 return;
             }
 
@@ -208,44 +179,14 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
             if (!_gameCompleted)
             {
-                foreach (var fire in _fireList)
-                {
-                    if (!fire.IsDead)
-                        continue;
-
-                    _fireList.Remove(fire);
-                    return;
-                }
-
-                foreach (var fire in _enemyFireList)
-                    fire.Act(ticks);
-
-                foreach (var fire in _enemyFireList)
-                {
-                    if (!fire.IsDead)
-                        continue;
-
-                    _enemyFireList.Remove(fire);
-                    return;
-                }
-
+                _fire.RemoveOneDeadFire();
                 _roomList.RemoveOneDeadNpc(_currentRoomIndex);
-
-                foreach (var fire in _enemyFireList)
-                {
-                    if (_player.Hit(fire))
-                    {
-                        _player.Die(ticks);
-                        break;
-                    }
-                }
+                _player.DieIfHit(_fire.EnemyFire, ticks);
             }
         }
 
         if (_player.AliveStatus == Character.StatusDying)
-        {
             _player.Tick(ticks);
-        }
 
         if (_player.AliveStatus == Character.StatusDead)
         {
@@ -276,8 +217,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
         else
         {
             _roomList.DrawBackground(spriteBatch, _currentRoomIndex, Text, _player);
-            _fireList.Draw(spriteBatch);
-            _enemyFireList.Draw(spriteBatch);
+            _fire.Draw(spriteBatch);
             _roomList.DrawDecorations(spriteBatch, _currentRoomIndex);
         }
 

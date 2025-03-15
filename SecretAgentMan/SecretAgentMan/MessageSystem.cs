@@ -62,7 +62,7 @@ public class MessageSystem : IRetroActor
         var y = YStart;
 
         if (MayorVisible())
-            Game1.Mayor?.Draw(spriteBatch, _currentMayorCell, 582, 8, ColorPalette.White);
+            MayorResources.MayorTexture?.Draw(spriteBatch, _currentMayorCell, 582, 8, ColorPalette.White);
 
         foreach (var message in _messages)
         {

@@ -16,7 +16,6 @@ public class Game1 : RetroGame.RetroGame
     public static RetroTextureVertical? WaterTexture { get; set; }
     public static RetroTexture? AirplaneRightTexture { get; set; }
     public static RetroTexture? AirplaneLeftTexture { get; set; }
-    public static RetroTexture? Mayor { get; set; }
     public static RetroTexture? IntroGraphics { get; set; }
     public static RetroTextureVertical? BackgroundLayer01 { get; set; }
     public static RetroTextureVertical? BackgroundLayer02 { get; set; }
@@ -78,8 +77,7 @@ public class Game1 : RetroGame.RetroGame
         AirplaneLeftTexture = new RetroTexture(GraphicsDevice, 5, 3, 25);
         AirplaneLeftTexture.SetData(Content.Load<Texture2D>("planeflipped5x3"));
 
-        Mayor = new RetroTexture(GraphicsDevice, 50, 50, 4);
-        Mayor.SetData(Content.Load<Texture2D>("mayor50x50"));
+        MayorResources.LoadContent(GraphicsDevice, Content);
 
         IntroGraphics = new RetroTexture(GraphicsDevice, 640, 360, 1);
         IntroGraphics.SetData(Content.Load<Texture2D>("load-screen-360p-nofilter"));

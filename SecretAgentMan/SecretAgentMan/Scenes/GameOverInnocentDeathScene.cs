@@ -6,22 +6,24 @@ using RetroGame.Text;
 
 namespace SecretAgentMan.Scenes;
 
-public class GameOverScene : Scene
+public class GameOverInnocentDeathScene : Scene
 {
-    private readonly bool _gameOverAnimation;
-    private readonly bool _gameClearAnimation;
+    private const string MayorTalk = "another innocent civilian killed. this ends now!";
+    private readonly int _mayorTalkX;
+    private int _mayorTalkCharacterCount = 0;
     private const string GameOverText = "game over";
     private const int GameOverX = 284;
     private readonly TextBlock _textBlock;
     private readonly string _lastScoreString;
     private readonly string _todaysBestScoreString;
-    public const string GameClearText = "game completed";
-    public const int GameClearX = 264;
+    private int _currentMayorCell;
+    private bool _isAngry;
 
-    public GameOverScene(RetroGame.RetroGame parent, bool gameOverAnimation, bool gameClearAnimation) : base(parent)
+    public GameOverInnocentDeathScene(RetroGame.RetroGame parent) : base(parent)
     {
-        _gameOverAnimation = gameOverAnimation;
-        _gameClearAnimation = gameClearAnimation;
+        _isAngry = false;
+        _currentMayorCell = 0;
+        _mayorTalkX = 320 - ((MayorTalk.Length * 8) / 2);
         _lastScoreString = $"last score: {Game1.LastScore}";
         _todaysBestScoreString = $"best today: {Game1.TodaysBestScore}";
         _textBlock = new TextBlock(CharacterSet.Uppercase);
@@ -29,7 +31,24 @@ public class GameOverScene : Scene
 
     public override void Update(GameTime gameTime, ulong ticks)
     {
-        if (ticks > 120)
+        if (_isAngry)
+        {
+            if (ticks % 5 == 0)
+                _currentMayorCell = _currentMayorCell != 2 ? 2 : 3;
+        }
+        else
+        {
+            if (ticks % 20 == 0)
+                _currentMayorCell = _currentMayorCell != 0 ? 0 : 1;
+        }
+
+        if (ticks % 3 == 0 && _mayorTalkCharacterCount < MayorTalk.Length)
+            _mayorTalkCharacterCount++;
+
+        if (ticks == 150)
+            _isAngry = true;
+
+        if (ticks > 300)
         {
             if (Game1.HighScore.Qualify(Game1.LastScore))
                 //Parent.CurrentScene = new HighScoreScene(Parent, Game1.LastScore);
@@ -41,15 +60,9 @@ public class GameOverScene : Scene
 
     public override void Draw(GameTime gameTime, ulong ticks, SpriteBatch spriteBatch)
     {
-        if (_gameOverAnimation)
-        {
-            _textBlock.DirectDraw(spriteBatch, GameOverX, 150, GameOverText, ColorPalette.Red);
-        }
-        else if (_gameClearAnimation)
-        {
-            _textBlock.DirectDraw(spriteBatch, GameClearX, 150, GameClearText, ColorPalette.Green);
-        }
-
+        MayorResources.MayorTexture?.Draw(spriteBatch, _currentMayorCell, 295, 90, ColorPalette.White);
+        _textBlock.DirectDraw(spriteBatch, _mayorTalkX, 150, MayorTalk[.._mayorTalkCharacterCount], ColorPalette.White);
+        _textBlock.DirectDraw(spriteBatch, GameOverX, 200, GameOverText, ColorPalette.Red);
         _textBlock.DirectDraw(spriteBatch, 0, 344, _todaysBestScoreString, ColorPalette.LightGrey);
         _textBlock.DirectDraw(spriteBatch, 0, 336, _lastScoreString, ColorPalette.LightGrey);
     }
