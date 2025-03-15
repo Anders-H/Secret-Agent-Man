@@ -157,22 +157,14 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
             if (_innocentKill >= 3 && ticks > _lastInnocentKillAt + 100)
             {
-                Game1.LastScore = Score;
-
-                if (Game1.TodaysBestScore < Game1.LastScore)
-                    Game1.TodaysBestScore = Game1.LastScore;
-
+                ScoreManagement.StoreLastScore(Score);
                 Parent.CurrentScene = new GameOverInnocentDeathScene(Parent);
                 return;
             }
 
             if (_gameCompleted && ticks > _gameCompletedAt + 500)
             {
-                Game1.LastScore = Score;
-
-                if (Game1.TodaysBestScore < Game1.LastScore)
-                    Game1.TodaysBestScore = Game1.LastScore;
-
+                ScoreManagement.StoreLastScore(Score);
                 Parent.CurrentScene = new GameOverScene(Parent, false, true);
                 return;
             }
@@ -190,11 +182,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
         if (_player.AliveStatus == Character.StatusDead)
         {
-            Game1.LastScore = Score;
-
-            if (Game1.TodaysBestScore < Game1.LastScore)
-                Game1.TodaysBestScore = Game1.LastScore;
-
+            ScoreManagement.StoreLastScore(Score);
             Parent.CurrentScene = new GameOverScene(Parent, true, false);
         }
 
