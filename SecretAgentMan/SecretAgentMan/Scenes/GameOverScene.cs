@@ -32,8 +32,7 @@ public class GameOverScene : Scene
         if (ticks > 120)
         {
             if (Game1.HighScore.Qualify(Game1.LastScore))
-                //Parent.CurrentScene = new HighScoreScene(Parent, Game1.LastScore);
-                Parent.CurrentScene = new StartScene(Parent, Game1.LastScore, Game1.TodaysBestScore);
+                Parent.CurrentScene = new HighScoreScene(Parent, Game1.LastScore);
             else
                 Parent.CurrentScene = new StartScene(Parent, Game1.LastScore, Game1.TodaysBestScore);
         }

@@ -10,7 +10,7 @@ public class GameOverInnocentDeathScene : Scene
 {
     private const string MayorTalk = "another innocent civilian killed. this ends now!";
     private readonly int _mayorTalkX;
-    private int _mayorTalkCharacterCount = 0;
+    private int _mayorTalkCharacterCount;
     private const string GameOverText = "game over";
     private const int GameOverX = 284;
     private readonly TextBlock _textBlock;
@@ -51,8 +51,7 @@ public class GameOverInnocentDeathScene : Scene
         if (ticks > 300)
         {
             if (Game1.HighScore.Qualify(Game1.LastScore))
-                //Parent.CurrentScene = new HighScoreScene(Parent, Game1.LastScore);
-                Parent.CurrentScene = new StartScene(Parent, Game1.LastScore, Game1.TodaysBestScore);
+                Parent.CurrentScene = new HighScoreScene(Parent, Game1.LastScore);
             else
                 Parent.CurrentScene = new StartScene(Parent, Game1.LastScore, Game1.TodaysBestScore);
         }

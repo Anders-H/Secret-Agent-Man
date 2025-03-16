@@ -1,0 +1,84 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using RetroGame;
+using RetroGame.Input;
+using RetroGame.Scene;
+using RetroGame.Text;
+
+namespace SecretAgentMan.Scenes;
+
+public class HighScoreScene : Scene
+{
+    private readonly int _score;
+    private bool _editMode;
+    private ulong _editEndAt;
+    private readonly TextBlock _textBlock;
+    private KeyboardStateChecker Keyboard { get; }
+    private const string BestPlayer = "you are one of the best players today. enter your name in the highscore list! well done, sir!";
+    private int _bestPlayerX;
+
+    public HighScoreScene(RetroGame.RetroGame parent, int score) : base(parent)
+    {
+        _bestPlayerX = 650;
+        Keyboard = new KeyboardStateChecker();
+        _score = score;
+        _editMode = false;
+        _textBlock = new TextBlock(CharacterSet.Uppercase);
+        AddToAutoUpdate(Keyboard);
+    }
+
+    public override void Update(GameTime gameTime, ulong ticks)
+    {
+        if (ticks % 2 == 0)
+        {
+            _bestPlayerX--;
+
+            if (_bestPlayerX < -940)
+                _bestPlayerX = 640;
+        }
+
+        if (ticks < 2)
+        {
+            Keyboard.ClearState();
+            return;
+        }
+        
+        if (ticks == 3)
+        {
+            if (Game1.HighScore.Qualify(_score))
+            {
+                Game1.HighScore.BeginEdit(_score);
+                _editMode = true;
+                return;
+            }
+        }
+
+        if (_editMode)
+        {
+            if (Game1.HighScore.StillEditing)
+            {
+                Game1.HighScore.Edit(Keyboard);
+            }
+            else
+            {
+                _editMode = false;
+                _editEndAt = ticks;
+            }
+        }
+        else
+        {
+            if (Keyboard.IsKeyPressed(Keys.Escape) || Keyboard.IsFirePressed() || ticks - _editEndAt > 100)
+                Parent.CurrentScene = new StartScene(Parent, _score, Game1.TodaysBestScore);
+        }
+
+        base.Update(gameTime, ticks);
+    }
+
+    public override void Draw(GameTime gameTime, ulong ticks, SpriteBatch spriteBatch)
+    {
+        _textBlock.DirectDraw(spriteBatch, _bestPlayerX, 70, BestPlayer, ColorPalette.Green);
+        Game1.HighScore.Draw(spriteBatch, ticks);
+        base.Draw(gameTime, ticks, spriteBatch);
+    }
+}
