@@ -172,7 +172,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
             if (!_gameCompleted)
             {
                 _fire.RemoveOneDeadFire();
-                _roomList.RemoveOneDeadNpc(_currentRoomIndex);
+                _roomList.TurnOneDeadNpcToGraveStone(_currentRoomIndex);
                 _player.DieIfHit(_fire.EnemyFire, ticks);
             }
         }
@@ -186,7 +186,6 @@ public class IngameScene : RetroGame.Scene.IngameScene
             Parent.CurrentScene = new GameOverScene(Parent, true, false);
         }
 
-        _roomList.AnimateDecorations(_currentRoomIndex, ticks);
         base.Update(gameTime, ticks);
     }
 

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
+using RetroGame;
 using RetroGame.Scene;
 using IngameScene = SecretAgentMan.Scenes.IngameScene;
 
 namespace SecretAgentMan;
 
-public class Npc : Character, IRetroActor
+public class Npc : Character, IRetroActor, IGameFieldThings
 {
     private readonly Player? _player;
     private int _ticksSinceDirectionChange;
@@ -21,10 +23,12 @@ public class Npc : Character, IRetroActor
     private bool _isMovingUp;
     private bool _isMovingDown;
     private readonly ulong _speed;
+    private int _graveStoneCellIndex;
     public int Status { get; private set; }
     public const int StatusInnocent = 0;
     public const int StatusSpyUndetected = 1;
     public const int StatusSpyDetected = 2;
+    public bool IsGraveStone { get; private set; }
 
     public Npc(int status, Player? player, List<Fire> enemyFireList, ulong speed) : base(enemyFireList)
     {
@@ -54,6 +58,14 @@ public class Npc : Character, IRetroActor
 
     public void Act(ulong ticks)
     {
+        if (IsGraveStone)
+        {
+            if (ticks % 15 == 0 && _graveStoneCellIndex < 12)
+                _graveStoneCellIndex++;
+
+            return;
+        }
+
         if (InFullView)
             _ticksSinceDirectionChange++;
 
@@ -255,6 +267,27 @@ public class Npc : Character, IRetroActor
         return n;
     }
 
+    public new int IntY =>
+        IsGraveStone ? base.IntY - 10 : base.IntY;
+
     public bool PlayerMayNotKill() =>
-        Status == Npc.StatusInnocent || Status == Npc.StatusSpyUndetected;
+        Status == StatusInnocent || Status == StatusSpyUndetected;
+
+    public void Draw(SpriteBatch spriteBatch)
+    {
+        if (IsGraveStone)
+        {
+            Game1.GraveStoneTexture?.Draw(spriteBatch, _graveStoneCellIndex, IntX, base.IntY, ColorPalette.White);
+            return;
+        }
+
+        Draw(spriteBatch, Game1.CharactersTexture, CellIndex, ColorPalette.White);
+    }
+    
+    public void TurnToGraveStone()
+    {
+        _graveStoneCellIndex = 0;
+        IsGraveStone = true;
+        Y += 3;
+    }
 }

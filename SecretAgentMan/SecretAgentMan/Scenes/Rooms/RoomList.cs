@@ -68,17 +68,14 @@ public class RoomList
     public List<Npc> GetNpcs(int room) =>
         Rooms[room].Npcs;
 
-    public void RemoveOneDeadNpc(int room)
+    public void TurnOneDeadNpcToGraveStone(int room)
     {
-        foreach (var npc in Rooms[room].Npcs.Where(npc => npc.AliveStatus == Character.StatusDead))
+        foreach (var npc in Rooms[room].Npcs.Where(npc => npc.AliveStatus == Character.StatusDead && !npc.IsGraveStone))
         {
-            Rooms[room].Npcs.Remove(npc);
+            npc.TurnToGraveStone();
             break;
         }
     }
-
-    public void AnimateDecorations(int room, ulong ticks) =>
-        Rooms[room].ActDecorations(ticks);
 
     public void DrawBackground(SpriteBatch spriteBatch, int room, TextBlock text, Player player) =>
         Rooms[room].Draw(spriteBatch, text, player);

@@ -28,17 +28,10 @@ public class Room
     public void Act(ulong ticks)
     {
         foreach (var npc in Npcs)
-        {
             npc.Act(ticks);
-        }
-    }
 
-    public void ActDecorations(ulong ticks)
-    {
         foreach (var airplane in _airplanes)
-        {
             airplane.Act(ticks);
-        }
     }
 
     public void Draw(SpriteBatch spriteBatch, TextBlock textBlock, Player player)
@@ -46,16 +39,16 @@ public class Room
         var playerIsDrawn = false;
         var lastY = IngameScene.SpriteUpperLimit - 1;
 
-        foreach (var npc in Npcs.OrderBy(x => x.Y))
+        foreach (var t in Npcs.OrderBy(x => x.IntY))
         {
-            if (!playerIsDrawn && player.Y >= lastY && player.Y <= npc.Y)
+            if (!playerIsDrawn && player.Y >= lastY && player.Y <= t.IntY)
             {
                 player.Draw(spriteBatch, Game1.CharactersTexture, player.CellIndex, Color.White);
                 playerIsDrawn = true;
             }
 
-            npc.Draw(spriteBatch, Game1.CharactersTexture, npc.CellIndex, Color.White);
-            lastY = npc.IntY;
+            t.Draw(spriteBatch);
+            lastY = t.IntY;
         }
 
         if (!playerIsDrawn)

@@ -133,6 +133,18 @@
 /processorParam:TextureFormat=Color
 /build:preloadscreen1.png
 
+#begin rip25x25.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:rip25x25.png
+
 #begin sfx_enemydeath1.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

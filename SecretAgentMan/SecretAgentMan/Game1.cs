@@ -16,6 +16,7 @@ public class Game1 : RetroGame.RetroGame
     public static RetroTextureVertical? WaterTexture { get; set; }
     public static RetroTexture? AirplaneRightTexture { get; set; }
     public static RetroTexture? AirplaneLeftTexture { get; set; }
+    public static RetroTexture? GraveStoneTexture { get; set; }
     public static RetroTexture? IntroGraphics1 { get; set; }
     public static RetroTexture? IntroGraphics2 { get; set; }
     public static RetroTexture? IntroGraphics3 { get; set; }
@@ -69,6 +70,9 @@ public class Game1 : RetroGame.RetroGame
 
         CharactersTexture = new RetroTexture(GraphicsDevice, 25, 25, 32);
         CharactersTexture.SetData(Content.Load<Texture2D>("player25x25"));
+
+        GraveStoneTexture = new RetroTexture(GraphicsDevice, 25, 25, 13);
+        GraveStoneTexture.SetData(Content.Load<Texture2D>("rip25x25"));
 
         WaterTexture = new RetroTextureVertical(GraphicsDevice, 640, 30, 18);
         WaterTexture.SetData(Content.Load<Texture2D>("water640x30"));
