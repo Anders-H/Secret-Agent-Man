@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using RetroGame.RetroTextures;
 
-namespace SecretAgentMan;
+namespace SecretAgentMan.OtherResources;
 
 public static class MayorResources
 {

@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RetroGame;
+using SecretAgentMan.OtherResources;
 using SecretAgentMan.Scenes.Rooms;
+using SecretAgentMan.Sprites;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace SecretAgentMan.Scenes;

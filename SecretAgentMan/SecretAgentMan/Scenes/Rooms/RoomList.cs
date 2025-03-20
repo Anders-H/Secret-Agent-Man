@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using RetroGame.Text;
+using SecretAgentMan.Sprites;
 using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 
 namespace SecretAgentMan.Scenes.Rooms;

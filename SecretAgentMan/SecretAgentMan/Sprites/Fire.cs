@@ -3,7 +3,7 @@ using RetroGame;
 using RetroGame.Scene;
 using RetroGame.Sprites;
 
-namespace SecretAgentMan;
+namespace SecretAgentMan.Sprites;
 
 public class Fire : Sprite, IRetroActor
 {

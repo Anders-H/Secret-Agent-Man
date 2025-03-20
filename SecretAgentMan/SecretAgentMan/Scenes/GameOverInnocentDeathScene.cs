@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RetroGame;
 using RetroGame.Scene;
 using RetroGame.Text;
+using SecretAgentMan.OtherResources;
 
 namespace SecretAgentMan.Scenes;
 

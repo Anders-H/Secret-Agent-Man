@@ -2,7 +2,7 @@
 using RetroGame;
 using RetroGame.Sprites;
 
-namespace SecretAgentMan;
+namespace SecretAgentMan.OtherResources;
 
 public class Decoration : Sprite
 {

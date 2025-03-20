@@ -5,7 +5,7 @@ using RetroGame;
 using RetroGame.Scene;
 using IngameScene = SecretAgentMan.Scenes.IngameScene;
 
-namespace SecretAgentMan;
+namespace SecretAgentMan.Sprites;
 
 public class Npc : Character, IRetroActor, IGameFieldThings
 {
@@ -283,7 +283,7 @@ public class Npc : Character, IRetroActor, IGameFieldThings
 
         Draw(spriteBatch, Game1.CharactersTexture, CellIndex, ColorPalette.White);
     }
-    
+
     public void TurnToGraveStone()
     {
         _graveStoneCellIndex = 0;

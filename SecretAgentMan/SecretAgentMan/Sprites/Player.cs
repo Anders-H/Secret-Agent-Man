@@ -4,7 +4,7 @@ using SecretAgentMan.Scenes;
 using SharpDX.Direct2D1;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
-namespace SecretAgentMan;
+namespace SecretAgentMan.Sprites;
 
 public class Player : Character
 {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace SecretAgentMan;
+namespace SecretAgentMan.Sprites;
 
 public class FireList : List<Fire>
 {

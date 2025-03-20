@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RetroGame;
 using RetroGame.Text;
+using SecretAgentMan.Sprites;
 
 namespace SecretAgentMan.Scenes.Rooms;
 

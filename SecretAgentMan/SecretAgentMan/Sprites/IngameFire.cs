@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 
-namespace SecretAgentMan;
+namespace SecretAgentMan.Sprites;
 
 public class IngameFire
 {
-    public FireList PlayerFire { get;}
+    public FireList PlayerFire { get; }
     public FireList EnemyFire { get; }
 
     public IngameFire()

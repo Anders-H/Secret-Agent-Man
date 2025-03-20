@@ -5,7 +5,7 @@ using RetroGame;
 using RetroGame.Scene;
 using RetroGame.Text;
 
-namespace SecretAgentMan;
+namespace SecretAgentMan.OtherResources;
 
 public class MessageSystem : IRetroActor
 {
@@ -67,7 +67,7 @@ public class MessageSystem : IRetroActor
         foreach (var message in _messages)
         {
             _textBlock.DirectDraw(spriteBatch, message.X, y, message.Text, ColorPalette.White);
-            var messageEndX = message.X + ((message.Text.Length + 3) * 8);
+            var messageEndX = message.X + (message.Text.Length + 3) * 8;
 
             if (messageEndX > 50)
                 y += 8;

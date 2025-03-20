@@ -1,4 +1,4 @@
-﻿namespace SecretAgentMan;
+﻿namespace SecretAgentMan.OtherResources;
 
 public static class ScoreManagement
 {

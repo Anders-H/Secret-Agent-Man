@@ -5,6 +5,7 @@ using RetroGame;
 using RetroGame.Audio;
 using RetroGame.HighScore;
 using RetroGame.RetroTextures;
+using SecretAgentMan.OtherResources;
 using SecretAgentMan.Scenes;
 
 namespace SecretAgentMan;
