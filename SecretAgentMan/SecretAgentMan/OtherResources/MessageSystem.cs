@@ -10,7 +10,7 @@ namespace SecretAgentMan.OtherResources;
 public class MessageSystem : IRetroActor
 {
     private readonly TextBlock _textBlock;
-    private const int YStart = 56;
+    private const int YStart = 59;
     private readonly List<Message> _messages;
     private int _currentMayorCell;
     private bool _isAngry;
@@ -42,7 +42,36 @@ public class MessageSystem : IRetroActor
 
         foreach (var message in _messages)
         {
-            message.X--;
+            switch (_messages.Count)
+            {
+                case 1:
+                case 2:
+                case 3:
+                    message.X--;
+                    break;
+                case 4:
+                case 5:
+                    message.X -= 2;
+                    break;
+                case 6:
+                    message.X -= 3;
+                    break;
+                case 7:
+                    message.X -= 4;
+                    break;
+                case 8:
+                    message.X -= 5;
+                    break;
+                case 9:
+                    message.X -= 6;
+                    break;
+                case 10:
+                    message.X -= 7;
+                    break;
+                default:
+                    message.X -= 8;
+                    break;
+            }
         }
 
         if (_isAngry)

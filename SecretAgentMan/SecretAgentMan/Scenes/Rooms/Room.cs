@@ -12,13 +12,15 @@ public class Room
 {
     public string DistrictName { get; }
     public List<Npc> Npcs { get; }
+    public List<Coin> Coins { get; }
     private readonly List<Airplane> _airplanes;
-
+    
     public Room(string districtName)
     {
         _airplanes = [];
         DistrictName = districtName;
         Npcs = [];
+        Coins = [];
     }
 
     public void AddAirplane()

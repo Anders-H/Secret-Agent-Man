@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using RetroGame.Input;
 using SecretAgentMan.Scenes;
+using SecretAgentMan.Scenes.Rooms;
 using SharpDX.Direct2D1;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
@@ -19,7 +20,7 @@ public class Player : Character
         Y = 250;
     }
 
-    public void PlayerControl(ulong ticks, KeyboardStateChecker keyboard, int currentRoomIndex, out bool nextRoom, out bool previousRoom)
+    public void PlayerControl(ulong ticks, KeyboardStateChecker keyboard, int currentRoomIndex, out bool nextRoom, out bool previousRoom, RoomList rooms)
     {
         nextRoom = false;
         previousRoom = false;
@@ -39,7 +40,7 @@ public class Player : Character
 
             if (X > 615)
             {
-                if (currentRoomIndex < 4)
+                if (currentRoomIndex < rooms.Count - 1)
                 {
                     nextRoom = true;
                     X = 0;

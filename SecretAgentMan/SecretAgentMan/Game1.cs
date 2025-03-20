@@ -28,6 +28,7 @@ public class Game1 : RetroGame.RetroGame
     public static RetroTextureVertical? BackgroundLayer02 { get; set; }
     public static RetroTextureVertical? BackgroundLayer03 { get; set; }
     public static RetroTextureVertical? BackgroundLayer04 { get; set; }
+    public static RetroTexture? CoinTexture { get; set; }
     public static Decoration Decoration { get; set; }
     public static SoundEffect? EnemyFire { get; set; }
     public static SoundEffect? PlayerFire { get; set; }
@@ -59,18 +60,11 @@ public class Game1 : RetroGame.RetroGame
     protected override void LoadContent()
     {
         BackColor = Color.Black;
-
-        BackgroundLayer01 = new RetroTextureVertical(GraphicsDevice, 640, 91, 4);
-        BackgroundLayer01.SetData(Content.Load<Texture2D>("background-640x91"));
-
-        BackgroundLayer02 = new RetroTextureVertical(GraphicsDevice, 640, 91, 4);
-        BackgroundLayer02.SetData(Content.Load<Texture2D>("sky-640x91"));
-
-        BackgroundLayer03 = new RetroTextureVertical(GraphicsDevice, 640, 91, 4);
-        BackgroundLayer03.SetData(Content.Load<Texture2D>("skyline_bg-640x91"));
-
-        BackgroundLayer04 = new RetroTextureVertical(GraphicsDevice, 640, 91, 4);
-        BackgroundLayer04.SetData(Content.Load<Texture2D>("skyline_fg-640x91"));
+        BackgroundLayer01 = RetroTextureVertical.LoadContent(GraphicsDevice, Content, 640, 91, 4, "background-640x91");
+        BackgroundLayer02 = RetroTextureVertical.LoadContent(GraphicsDevice, Content, 640, 91, 4, "sky-640x91");
+        BackgroundLayer03 = RetroTextureVertical.LoadContent(GraphicsDevice, Content, 640, 91, 4, "skyline_bg-640x91");
+        BackgroundLayer04 = RetroTextureVertical.LoadContent(GraphicsDevice, Content, 640, 91, 4, "skyline_fg-640x91");
+        CoinTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 14, 14, 4, "coin14x14");
 
         CharactersTexture = new RetroTexture(GraphicsDevice, 25, 25, 32);
         CharactersTexture.SetData(Content.Load<Texture2D>("player25x25"));

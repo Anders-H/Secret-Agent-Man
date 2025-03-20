@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using RetroGame.Text;
 using SecretAgentMan.Sprites;
@@ -30,14 +31,15 @@ public class RoomList
 
             switch (i)
             {
-                case 1:
-                case 5:
-                    room.AddAirplane();
+                case 0:
                     room.AddAirplane();
                     break;
-                case 2:
-                case 4:
+                case 1:
                     room.AddAirplane();
+                    room.AddAirplane();
+                    room.Coins.Add(new Coin(500, 150, 0));
+                    break;
+                case 2:
                     room.AddAirplane();
                     room.AddAirplane();
                     break;
@@ -46,16 +48,46 @@ public class RoomList
                     room.AddAirplane();
                     room.AddAirplane();
                     room.AddAirplane();
+
+                    for (var c = 0; c < 10; c++)
+                        room.Coins.Add(new Coin(22 + 64 * c, 300, c % 4));
+
                     break;
-                default:
+                case 4:
+                    room.AddAirplane();
+                    room.AddAirplane();
                     room.AddAirplane();
                     break;
+                case 5:
+                    room.AddAirplane();
+                    room.AddAirplane();
+
+
+                    for (var c = 0; c < 16; c++)
+                        room.Coins.Add(new Coin(7 + 40 * c, 150, c % 4));
+
+                    break;
+                case 6:
+                    room.AddAirplane();
+                    room.AddAirplane();
+                    room.AddAirplane();
+                    room.AddAirplane();
+                    room.AddAirplane();
+
+                    for (var c = 0; c < 20; c++)
+                        room.Coins.Add(new Coin(7 + 32 * c, 300, c % 4));
+
+                    break;
+                default:
+                    throw new SystemException("What room?!?");
             }
 
             Rooms.Add(room);
             SpyCount += spyCount[i];
         }
     }
+
+    public int Count => Rooms.Count;
 
     public string GetDistrictName(int room) =>
         Rooms[room].DistrictName;
@@ -68,6 +100,9 @@ public class RoomList
 
     public List<Npc> GetNpcs(int room) =>
         Rooms[room].Npcs;
+
+    public List<Coin> GetCoins(int room) =>
+        Rooms[room].Coins;
 
     public void TurnOneDeadNpcToGraveStone(int room)
     {

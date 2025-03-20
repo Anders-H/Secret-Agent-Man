@@ -60,7 +60,7 @@ public class Npc : Character, IRetroActor, IGameFieldThings
     {
         if (IsGraveStone)
         {
-            if (ticks % 15 == 0 && _graveStoneCellIndex < 12)
+            if (ticks % 8 == 0 && _graveStoneCellIndex < 12)
                 _graveStoneCellIndex++;
 
             return;

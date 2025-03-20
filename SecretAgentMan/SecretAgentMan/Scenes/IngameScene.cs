@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Diagnostics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RetroGame;
 using SecretAgentMan.OtherResources;
@@ -74,7 +75,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                         _waterFrameIndex = 0;
                 }
 
-                _player.PlayerControl(ticks, Keyboard, _currentRoomIndex, out var nextRoom, out var previousRoom);
+                _player.PlayerControl(ticks, Keyboard, _currentRoomIndex, out var nextRoom, out var previousRoom, _roomList);
 
                 if (nextRoom)
                 {
@@ -101,6 +102,20 @@ public class IngameScene : RetroGame.Scene.IngameScene
             }
 
             _fire.Act(ticks);
+            var coins = _roomList.GetCoins(_currentRoomIndex);
+
+            foreach (var coin in coins)
+            {
+                coin.Act(ticks);
+
+                if (coin.Collide(_player))
+                {
+                    coins.Remove(coin);
+                    _messageSystem.AddMessage("coin collected, 50 points awarded", false);
+                    Score += 50;
+                    break;
+                }
+            }
 
             foreach (var npc in _roomList.GetNpcs(_currentRoomIndex))
             {
@@ -206,6 +221,10 @@ public class IngameScene : RetroGame.Scene.IngameScene
         else
         {
             _roomList.DrawBackground(spriteBatch, _currentRoomIndex, Text, _player);
+            
+            foreach (var coin in _roomList.GetCoins(_currentRoomIndex))
+                coin.Draw(spriteBatch);
+
             _fire.Draw(spriteBatch);
             _roomList.DrawDecorations(spriteBatch, _currentRoomIndex);
         }
