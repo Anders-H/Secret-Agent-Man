@@ -37,13 +37,19 @@ public class StartScene : Scene
 
     public override void Update(GameTime gameTime, ulong ticks)
     {
+        if (ticks <= 10)
+        {
+            Keyboard.ClearState();
+            return;
+        }
+
         if (Keyboard.IsKeyPressed(Keys.Escape))
         {
             Exit();
             return;
         }
 
-        if ((Keyboard.IsFirePressed() || Keyboard.IsPadButtonPressed(Buttons.Start) ) && ticks > 40)
+        if ((Keyboard.IsFirePressed() || Keyboard.IsPadButtonPressed(Buttons.Start) ) && ticks > 11)
         {
             Parent.CurrentScene = new IngameScene(Parent);
             return;
@@ -80,7 +86,8 @@ public class StartScene : Scene
         }
         else
         {
-            _textBlock.DirectDraw(spriteBatch, _logoX, _logoY, LogoText, ColorPalette.White);
+            if (ticks > 1 && _logoX != 0 && _logoY != 0)
+                _textBlock.DirectDraw(spriteBatch, _logoX, _logoY, LogoText, ColorPalette.White);
         }
 
         _textBlock.DirectDraw(spriteBatch, 0, 344, _todaysBestScoreString, ColorPalette.LightGrey);
