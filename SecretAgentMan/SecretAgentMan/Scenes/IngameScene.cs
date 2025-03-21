@@ -31,14 +31,14 @@ public class IngameScene : RetroGame.Scene.IngameScene
     {
         _player = new Player(_fire.PlayerFire);
         _roomList = new RoomList(_player, _fire.EnemyFire);
-        UpdateRoomNameAndCheckClear();
+        UpdateRoomNameAndCheckClear(0);
     }
 
-    private void UpdateRoomNameAndCheckClear()
+    private void UpdateRoomNameAndCheckClear(ulong ticks)
     {
         _currentRoomName = _roomList.GetDistrictName(_currentRoomIndex);
 
-        if (_roomList.RoomIsClear(_currentRoomIndex))
+        if (_roomList.RoomIsClear(_currentRoomIndex) && ticks > 200)
             _messageSystem.AddMessage("this area is clear.", false);
     }
 
@@ -81,13 +81,13 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 {
                     _currentRoomIndex++;
                     _fire.Clear();
-                    UpdateRoomNameAndCheckClear();
+                    UpdateRoomNameAndCheckClear(ticks);
                 }
                 else if (previousRoom)
                 {
                     _currentRoomIndex--;
                     _fire.Clear();
-                    UpdateRoomNameAndCheckClear();
+                    UpdateRoomNameAndCheckClear(ticks);
                 }
 
                 _roomList.Act(_currentRoomIndex, ticks);

@@ -8,11 +8,8 @@ public static class MayorResources
 {
     public static RetroTexture? MayorTexture { get; set; }
 
-    public static void LoadContent(GraphicsDevice graphics, ContentManager content)
-    {
-        MayorTexture = new RetroTexture(graphics, 50, 50, 4);
-        MayorTexture.SetData(content.Load<Texture2D>("mayor50x50"));
-    }
+    public static void LoadContent(GraphicsDevice graphics, ContentManager content) =>
+        MayorTexture = RetroTexture.LoadContent(graphics, content, 50, 50, 4, "mayor50x50");
 
     public static void SaySpyKilled(int killedSpyCount, int scoreAdded, MessageSystem messageSystem)
     {

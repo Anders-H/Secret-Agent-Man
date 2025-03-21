@@ -15,9 +15,9 @@ public class RoomList
     public RoomList(Player player, List<Fire> enemyFireList)
     {
         Rooms = [];
-        int[] spyCount = [1, 2, 3, 4, 5, 10, 15];
-        int[] innocentCount = [3, 4, 5, 6, 7, 10, 12];
-        string[] names = ["morristown", "kearny", "brooklyn, new york", "queens, new york", "the bronx, new york", "manhattan, new york", "harlem, new york"];
+        int[] spyCount = [0, 1, 2, 3, 4, 4, 6, 10, 15, 25];
+        int[] innocentCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        string[] names = ["Byram Township", "Hopatcong", "Randolph", "morristown", "kearny", "brooklyn, new york", "queens, new york", "the bronx, new york", "manhattan, new york", "harlem, new york"];
 
         for (var i = 0; i < spyCount.Length; i++)
         {
@@ -32,47 +32,43 @@ public class RoomList
             switch (i)
             {
                 case 0:
-                    room.AddAirplane();
+                    room.AddAirplane(1);
                     break;
                 case 1:
-                    room.AddAirplane();
-                    room.AddAirplane();
-                    room.Coins.Add(new Coin(500, 150, 0));
+                    room.AddAirplane(3);
                     break;
                 case 2:
-                    room.AddAirplane();
-                    room.AddAirplane();
+                    room.AddAirplane(2);
                     break;
                 case 3:
-                    room.AddAirplane();
-                    room.AddAirplane();
-                    room.AddAirplane();
-                    room.AddAirplane();
+                    room.AddAirplane(1);
+                    break;
+                case 4:
+                    room.AddAirplane(2);
+                    room.Coins.Add(new Coin(500, 150, 0));
+                    break;
+                case 5:
+                    room.AddAirplane(2);
+                    break;
+                case 6:
+                    room.AddAirplane(4);
 
                     for (var c = 0; c < 10; c++)
                         room.Coins.Add(new Coin(22 + 64 * c, 300, c % 4));
 
                     break;
-                case 4:
-                    room.AddAirplane();
-                    room.AddAirplane();
-                    room.AddAirplane();
+                case 7:
+                    room.AddAirplane(3);
                     break;
-                case 5:
-                    room.AddAirplane();
-                    room.AddAirplane();
-
+                case 8:
+                    room.AddAirplane(2);
 
                     for (var c = 0; c < 16; c++)
                         room.Coins.Add(new Coin(7 + 40 * c, 150, c % 4));
 
                     break;
-                case 6:
-                    room.AddAirplane();
-                    room.AddAirplane();
-                    room.AddAirplane();
-                    room.AddAirplane();
-                    room.AddAirplane();
+                case 9:
+                    room.AddAirplane(5);
 
                     for (var c = 0; c < 20; c++)
                         room.Coins.Add(new Coin(7 + 32 * c, 300, c % 4));

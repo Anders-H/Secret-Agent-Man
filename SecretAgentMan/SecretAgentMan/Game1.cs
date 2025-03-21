@@ -34,6 +34,8 @@ public class Game1 : RetroGame.RetroGame
     public static SoundEffect? PlayerFire { get; set; }
     public static SoundEffect? EnemyDie { get; set; }
     public static SoundEffect? PlayerDie { get; set; }
+    public static SoundEffect? EnemyCoin { get; set; }
+    public static SoundEffect? PlayerCoin { get; set; }
     public static Random Random;
     public static bool Cheat = false;
     public static int LastScore;
@@ -55,6 +57,8 @@ public class Game1 : RetroGame.RetroGame
         PlayerFire = new SoundEffect(this);
         EnemyDie = new SoundEffect(this);
         PlayerDie = new SoundEffect(this);
+        EnemyCoin = new SoundEffect(this);
+        PlayerCoin = new SoundEffect(this);
     }
 
     protected override void LoadContent()
@@ -65,9 +69,7 @@ public class Game1 : RetroGame.RetroGame
         BackgroundLayer03 = RetroTextureVertical.LoadContent(GraphicsDevice, Content, 640, 91, 4, "skyline_bg-640x91");
         BackgroundLayer04 = RetroTextureVertical.LoadContent(GraphicsDevice, Content, 640, 91, 4, "skyline_fg-640x91");
         CoinTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 14, 14, 4, "coin14x14");
-
-        CharactersTexture = new RetroTexture(GraphicsDevice, 25, 25, 32);
-        CharactersTexture.SetData(Content.Load<Texture2D>("player25x25"));
+        CharactersTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 25, 25, 32, "player25x25");
 
         GraveStoneTexture = new RetroTexture(GraphicsDevice, 25, 25, 13);
         GraveStoneTexture.SetData(Content.Load<Texture2D>("rip25x25"));
@@ -105,6 +107,8 @@ public class Game1 : RetroGame.RetroGame
         PlayerFire!.Initialize("sfx_gun7", "sfx_gun8", "sfx_gun9", "sfx_gun10");
         EnemyDie!.Initialize("sfx_enemydeath1", "sfx_enemydeath2", "sfx_enemydeath3");
         PlayerDie!.Initialize("sfx_playerdeath");
+        EnemyCoin!.Initialize("enemy_sfx_coin_1", "enemy_sfx_coin_2", "enemy_sfx_coin_3");
+        PlayerCoin!.Initialize("player_sfx_coin_1", "player_sfx_coin_2");
 
         CurrentScene = new IntroScene(this);
         base.LoadContent();

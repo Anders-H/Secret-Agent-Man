@@ -18,7 +18,7 @@ public class Npc : Character, IRetroActor, IGameFieldThings
     private readonly int[] _die = [22, 23, 22, 23];
     private readonly int[] _walkRightWithGun = [8, 9, 10, 11];
     private readonly int[] _walkLeftWithGun = [12, 13, 14, 15];
-    private static readonly ulong[] Speeds = [1, 2, 1, 1, 2, 2, 3, 3, 3, 4, 5, 4, 5, 7, 7];
+    private static readonly ulong[] Speeds = [1, 2, 1, 1, 2, 2, 3, 3, 3, 4, 5, 4, 5, 7, 7, 1, 7, 2, 6, 3, 5, 4, 8, 4, 8];
     private bool _gunUp;
     private bool _isMovingUp;
     private bool _isMovingDown;

@@ -23,9 +23,10 @@ public class Room
         Coins = [];
     }
 
-    public void AddAirplane()
+    public void AddAirplane(int count)
     {
-        _airplanes.Add(new Airplane());
+        for (var i = 0; i < count; i++)
+            _airplanes.Add(new Airplane());
     }
 
     public void Act(ulong ticks)
