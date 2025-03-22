@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RetroGame;
 using SecretAgentMan.OtherResources;
@@ -67,6 +66,9 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F9))
                     Game1.Cheat = !Game1.Cheat;
 
+                if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F8))
+                    Score += 100;
+
                 if (ticks % 7 == 0)
                 {
                     _waterFrameIndex++;
@@ -110,6 +112,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
                 if (coin.Collide(_player))
                 {
+                    Game1.PlayerCoin!.PlayRandom();
                     coins.Remove(coin);
                     _messageSystem.AddMessage("coin collected, 50 points awarded", false);
                     Score += 50;

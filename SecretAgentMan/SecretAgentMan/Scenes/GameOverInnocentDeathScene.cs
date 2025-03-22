@@ -35,7 +35,7 @@ public class GameOverInnocentDeathScene : Scene
         switch (_cellIndex)
         {
             case 0:
-                _wipe += 4;
+                _wipe += 2;
 
                 if (_wipe >= 650)
                 {
@@ -45,10 +45,25 @@ public class GameOverInnocentDeathScene : Scene
 
                 break;
             case 1:
-                _wipe++;
+                _wipe += 2;
 
                 if (_wipe >= 380)
-                    _cellIndex++;
+                {
+                    _wipe = 380;
+
+                    if (ticks > 550)
+                        _cellIndex++;
+                }
+
+                break;
+            case 2:
+                if (_wipe > 220)
+                    _wipe -= 2;
+                else
+                    _wipe--;
+
+                if (_wipe < 200)
+                    _wipe = 200;
 
                 break;
         }
@@ -70,10 +85,10 @@ public class GameOverInnocentDeathScene : Scene
         if (ticks == 200)
             _isAngry = true;
 
-        if (ticks > 500)
+        if (ticks > 780)
         {
             if (Game1.HighScore.Qualify(Game1.LastScore))
-                Parent.CurrentScene = new HighScoreScene(Parent, Game1.LastScore);
+                Parent.CurrentScene = new HighScoreScene(Parent, Game1.LastScore, GameOverReason.PlayerFired);
             else
                 Parent.CurrentScene = new StartScene(Parent, Game1.LastScore, Game1.TodaysBestScore);
         }
@@ -81,24 +96,26 @@ public class GameOverInnocentDeathScene : Scene
 
     public override void Draw(GameTime gameTime, ulong ticks, SpriteBatch spriteBatch)
     {
-        switch (_cellIndex)
+        if (_cellIndex == 0)
+            Game1.GameOverGraphics1!.DrawPart(spriteBatch, 640 - _wipe, 0, _wipe, 380, 640 - _wipe, 0);
+
+        if (ticks < 280)
+            MayorResources.MayorTexture?.Draw(spriteBatch, _currentMayorCell, 295, 145, ColorPalette.White);
+
+        if (ticks < 320)
+            _textBlock.DirectDraw(spriteBatch, _mayorTalkX, 200, MayorTalk[.._mayorTalkCharacterCount], ColorPalette.White);
+        
+        if (_cellIndex == 1)
         {
-            case 0:
-                Game1.GameOverGraphics1!.DrawPart(spriteBatch, 640 - _wipe, 0, _wipe, 380, 640 - _wipe, 0);
-                break;
-            case 1:
-                Game1.GameOverGraphics1!.Draw(spriteBatch, 0, 0, 0, ColorPalette.White);
-                Game1.GameOverGraphics3!.DrawPart(spriteBatch, 0, 0, 640, _wipe, 0, 0);
-                break;
-            default:
-                Game1.IntroGraphics1!.Draw(spriteBatch, 0, 0, 0, ColorPalette.White);
-                Game1.IntroGraphics3!.Draw(spriteBatch, 0, 0, 0, ColorPalette.White);
-                break;
+            Game1.GameOverGraphics4!.DrawPart(spriteBatch, 0, 0, 640, _wipe, 0, 0);
+            Game1.GameOverGraphics1!.DrawPart(spriteBatch, 0, 0, 640, 380 - _wipe, 0, 0);
+        }
+        else if (_cellIndex > 1)
+        {
+            Game1.GameOverGraphics4!.Draw(spriteBatch, 0, 0, 0);
+            Game1.GameOverGraphics3!.Draw(spriteBatch, 0, 0, _wipe);
         }
 
-        Game1.GameOverGraphics1!.DrawPart(spriteBatch, 640 - _wipe, 0, _wipe, 380, 640 - _wipe, 0);
-        MayorResources.MayorTexture?.Draw(spriteBatch, _currentMayorCell, 295, 145, ColorPalette.White);
-        _textBlock.DirectDraw(spriteBatch, _mayorTalkX, 200, MayorTalk[.._mayorTalkCharacterCount], ColorPalette.White);
         _textBlock.DirectDraw(spriteBatch, 0, 344, _todaysBestScoreString, ColorPalette.LightGrey);
         _textBlock.DirectDraw(spriteBatch, 0, 336, _lastScoreString, ColorPalette.LightGrey);
     }

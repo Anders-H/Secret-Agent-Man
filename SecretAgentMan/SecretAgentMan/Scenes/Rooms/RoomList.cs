@@ -17,7 +17,7 @@ public class RoomList
         Rooms = [];
         int[] spyCount = [0, 1, 2, 3, 4, 4, 6, 10, 15, 25];
         int[] innocentCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-        string[] names = ["Byram Township", "Hopatcong", "Randolph", "morristown", "kearny", "brooklyn, new york", "queens, new york", "the bronx, new york", "manhattan, new york", "harlem, new york"];
+        string[] names = ["byram township", "hopatcong", "randolph", "morristown", "kearny", "brooklyn, new york", "queens, new york", "the bronx, new york", "manhattan, new york", "harlem, new york"];
 
         for (var i = 0; i < spyCount.Length; i++)
         {

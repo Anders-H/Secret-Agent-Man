@@ -24,6 +24,7 @@ public class Game1 : RetroGame.RetroGame
     public static RetroTexture? GameOverGraphics1 { get; set; }
     public static RetroTexture? GameOverGraphics2 { get; set; }
     public static RetroTexture? GameOverGraphics3 { get; set; }
+    public static RetroTexture? GameOverGraphics4 { get; set; }
     public static RetroTextureVertical? BackgroundLayer01 { get; set; }
     public static RetroTextureVertical? BackgroundLayer02 { get; set; }
     public static RetroTextureVertical? BackgroundLayer03 { get; set; }
@@ -83,15 +84,10 @@ public class Game1 : RetroGame.RetroGame
         AirplaneLeftTexture = new RetroTexture(GraphicsDevice, 5, 3, 25);
         AirplaneLeftTexture.SetData(Content.Load<Texture2D>("planeflipped5x3"));
 
-        GameOverGraphics1 = new RetroTexture(GraphicsDevice, 640, 360, 1);
-        GameOverGraphics1.SetData(Content.Load<Texture2D>("gameover1"));
-
-        GameOverGraphics2 = new RetroTexture(GraphicsDevice, 640, 360, 1);
-        GameOverGraphics2.SetData(Content.Load<Texture2D>("gameover2"));
-
-        GameOverGraphics3 = new RetroTexture(GraphicsDevice, 640, 360, 1);
-        GameOverGraphics3.SetData(Content.Load<Texture2D>("gameover3"));
-
+        GameOverGraphics1 = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "gameover1");
+        GameOverGraphics2 = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "gameover2");
+        GameOverGraphics3 = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "gameover3");
+        GameOverGraphics4 = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "gameover4");
         MayorResources.LoadContent(GraphicsDevice, Content);
 
         IntroGraphics1 = new RetroTexture(GraphicsDevice, 640, 360, 1);

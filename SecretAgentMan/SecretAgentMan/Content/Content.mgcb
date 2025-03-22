@@ -61,6 +61,24 @@
 /processorParam:TextureFormat=Color
 /build:crt.png
 
+#begin enemy_sfx_coin_1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:enemy_sfx_coin_1.wav
+
+#begin enemy_sfx_coin_2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:enemy_sfx_coin_2.wav
+
+#begin enemy_sfx_coin_3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:enemy_sfx_coin_3.wav
+
 #begin gameover1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -96,6 +114,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:gameover3.png
+
+#begin gameover4.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:gameover4.png
 
 #begin load-screen-360p-nofilter.png
 /importer:TextureImporter
@@ -144,6 +174,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:planeflipped5x3.png
+
+#begin player_sfx_coin_1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:player_sfx_coin_1.wav
+
+#begin player_sfx_coin_2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:player_sfx_coin_2.wav
 
 #begin player25x25.png
 /importer:TextureImporter

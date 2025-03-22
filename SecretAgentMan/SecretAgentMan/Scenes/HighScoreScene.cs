@@ -17,9 +17,11 @@ public class HighScoreScene : Scene
     private KeyboardStateChecker Keyboard { get; }
     private const string BestPlayer = "you are one of the best players today. enter your name in the highscore list! well done, sir!";
     private int _bestPlayerX;
+    private readonly GameOverReason _gameOverReason;
 
-    public HighScoreScene(RetroGame.RetroGame parent, int score) : base(parent)
+    public HighScoreScene(RetroGame.RetroGame parent, int score, GameOverReason gameOverReason) : base(parent)
     {
+        _gameOverReason = gameOverReason;
         _bestPlayerX = 650;
         Keyboard = new KeyboardStateChecker();
         _score = score;
@@ -77,6 +79,13 @@ public class HighScoreScene : Scene
 
     public override void Draw(GameTime gameTime, ulong ticks, SpriteBatch spriteBatch)
     {
+        switch (_gameOverReason)
+        {
+            case GameOverReason.PlayerFired:
+                Game1.GameOverGraphics4!.Draw(spriteBatch, 0, 0, 0);
+                break;
+        }
+
         _textBlock.DirectDraw(spriteBatch, _bestPlayerX, 70, BestPlayer, ColorPalette.Green);
         Game1.HighScore.Draw(spriteBatch, ticks);
         base.Draw(gameTime, ticks, spriteBatch);
