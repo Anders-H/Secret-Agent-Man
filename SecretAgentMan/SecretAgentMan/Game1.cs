@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using RetroGame;
 using RetroGame.Audio;
 using RetroGame.HighScore;
@@ -37,6 +38,7 @@ public class Game1 : RetroGame.RetroGame
     public static SoundEffect? PlayerDie { get; set; }
     public static SoundEffect? EnemyCoin { get; set; }
     public static SoundEffect? PlayerCoin { get; set; }
+    public static Song? GameOverSong { get; set; }
     public static Random Random;
     public static bool Cheat = false;
     public static int LastScore;
@@ -48,7 +50,7 @@ public class Game1 : RetroGame.RetroGame
         Random = new Random();
         LastScore = 0;
         TodaysBestScore = 0;
-        HighScore = new HighScoreList(640, 380);
+        HighScore = new HighScoreList(640, 380, true, true, 220);
         Decoration = new Decoration();
     }
 
@@ -105,7 +107,7 @@ public class Game1 : RetroGame.RetroGame
         PlayerDie!.Initialize("sfx_playerdeath");
         EnemyCoin!.Initialize("enemy_sfx_coin_1", "enemy_sfx_coin_2", "enemy_sfx_coin_3");
         PlayerCoin!.Initialize("player_sfx_coin_1", "player_sfx_coin_2");
-
+        GameOverSong = Content.Load<Song>("game-over");
         CurrentScene = new IntroScene(this);
         base.LoadContent();
     }

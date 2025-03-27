@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using RetroGame;
 using RetroGame.Scene;
 using RetroGame.Text;
@@ -7,7 +8,7 @@ using SecretAgentMan.OtherResources;
 
 namespace SecretAgentMan.Scenes;
 
-public class GameOverInnocentDeathScene : Scene
+public class GameOverFiredScene : Scene
 {
     private const string MayorTalk = "another innocent civilian killed. this ends now!";
     private readonly int _mayorTalkX;
@@ -20,7 +21,7 @@ public class GameOverInnocentDeathScene : Scene
     private int _cellIndex;
     private int _wipe;
 
-    public GameOverInnocentDeathScene(RetroGame.RetroGame parent) : base(parent)
+    public GameOverFiredScene(RetroGame.RetroGame parent) : base(parent)
     {
         _isAngry = false;
         _currentMayorCell = 0;
@@ -28,10 +29,16 @@ public class GameOverInnocentDeathScene : Scene
         _lastScoreString = $"last score: {Game1.LastScore}";
         _todaysBestScoreString = $"best today: {Game1.TodaysBestScore}";
         _textBlock = new TextBlock(CharacterSet.Uppercase);
+
+        if (MediaPlayer.State == MediaState.Playing)
+            MediaPlayer.Stop();
     }
 
     public override void Update(GameTime gameTime, ulong ticks)
     {
+        if (ticks == 350)
+            MediaPlayer.Play(Game1.GameOverSong);
+
         switch (_cellIndex)
         {
             case 0:
@@ -65,6 +72,9 @@ public class GameOverInnocentDeathScene : Scene
                 if (_wipe < 200)
                     _wipe = 200;
 
+                if (ticks > 780 && !Game1.HighScore.Qualify(Game1.LastScore))
+                    _cellIndex++;
+
                 break;
         }
 
@@ -85,13 +95,11 @@ public class GameOverInnocentDeathScene : Scene
         if (ticks == 200)
             _isAngry = true;
 
-        if (ticks > 780)
-        {
-            if (Game1.HighScore.Qualify(Game1.LastScore))
-                Parent.CurrentScene = new HighScoreScene(Parent, Game1.LastScore, GameOverReason.PlayerFired);
-            else
-                Parent.CurrentScene = new StartScene(Parent, Game1.LastScore, Game1.TodaysBestScore);
-        }
+        if (ticks > 780 && Game1.HighScore.Qualify(Game1.LastScore))
+            Parent.CurrentScene = new HighScoreScene(Parent, Game1.LastScore, GameOverReason.PlayerFired);
+
+        if (ticks > 1000)
+            Parent.CurrentScene = new StartScene(Parent, Game1.LastScore, Game1.TodaysBestScore);
     }
 
     public override void Draw(GameTime gameTime, ulong ticks, SpriteBatch spriteBatch)

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using RetroGame;
 using RetroGame.Input;
 using RetroGame.Scene;
@@ -18,6 +19,7 @@ public class HighScoreScene : Scene
     private const string BestPlayer = "you are one of the best players today. enter your name in the highscore list! well done, sir!";
     private int _bestPlayerX;
     private readonly GameOverReason _gameOverReason;
+    private int _gameOverY;
 
     public HighScoreScene(RetroGame.RetroGame parent, int score, GameOverReason gameOverReason) : base(parent)
     {
@@ -28,6 +30,10 @@ public class HighScoreScene : Scene
         _editMode = false;
         _textBlock = new TextBlock(CharacterSet.Uppercase);
         AddToAutoUpdate(Keyboard);
+        Game1.HighScore.ResetVisuals();
+
+        if (_gameOverReason == GameOverReason.PlayerFired)
+            _gameOverY = 200;
     }
 
     public override void Update(GameTime gameTime, ulong ticks)
@@ -74,6 +80,17 @@ public class HighScoreScene : Scene
                 Parent.CurrentScene = new StartScene(Parent, _score, Game1.TodaysBestScore);
         }
 
+        switch (_gameOverReason)
+        {
+            case GameOverReason.PlayerFired:
+                _gameOverY--;
+
+                if (_gameOverY < -360)
+                    _gameOverY = -360;
+                
+                break;
+        }
+
         base.Update(gameTime, ticks);
     }
 
@@ -83,6 +100,7 @@ public class HighScoreScene : Scene
         {
             case GameOverReason.PlayerFired:
                 Game1.GameOverGraphics4!.Draw(spriteBatch, 0, 0, 0);
+                Game1.GameOverGraphics3!.Draw(spriteBatch, 0, 0, _gameOverY);
                 break;
         }
 

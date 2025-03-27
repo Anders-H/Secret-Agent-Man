@@ -63,10 +63,10 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 if (Keyboard.IsKeyPressed(Keys.Escape))
                     _askQuitMode = true;
 
-                if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F9))
+                if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F9) && RetroGame.RetroGame.CheatFileAvailable)
                     Game1.Cheat = !Game1.Cheat;
 
-                if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F8))
+                if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F8) && RetroGame.RetroGame.CheatFileAvailable)
                     Score += 100;
 
                 if (ticks % 7 == 0)
@@ -178,7 +178,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
             if (_innocentKill >= 3 && ticks > _lastInnocentKillAt + 100)
             {
                 ScoreManagement.StoreLastScore(Score);
-                Parent.CurrentScene = new GameOverInnocentDeathScene(Parent);
+                Parent.CurrentScene = new GameOverFiredScene(Parent);
                 return;
             }
 
