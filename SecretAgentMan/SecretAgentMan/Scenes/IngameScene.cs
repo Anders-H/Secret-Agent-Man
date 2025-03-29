@@ -185,7 +185,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
             if (_gameCompleted && ticks > _gameCompletedAt + 500)
             {
                 ScoreManagement.StoreLastScore(Score);
-                Parent.CurrentScene = new GameOverScene(Parent, false, true);
+                Parent.CurrentScene = new GameOverKilledScene(Parent); // TODO: Detta ska vara game completed.
                 return;
             }
 
@@ -203,7 +203,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
         if (_player.AliveStatus == Character.StatusDead)
         {
             ScoreManagement.StoreLastScore(Score);
-            Parent.CurrentScene = new GameOverScene(Parent, true, false);
+            Parent.CurrentScene = new GameOverKilledScene(Parent);
         }
 
         base.Update(gameTime, ticks);
@@ -237,7 +237,10 @@ public class IngameScene : RetroGame.Scene.IngameScene
         _messageSystem.Draw(spriteBatch);
 
         if (_gameCompleted)
-            Text.DirectDraw(spriteBatch, GameOverScene.GameClearX, 150, GameOverScene.GameClearText, ColorPalette.Green);
+        {
+            //TODO: Övergång till game completed.
+            //Text.DirectDraw(spriteBatch, GameOverKilledScene.GameClearX, 150, GameOverKilledScene.GameClearText, ColorPalette.Green);
+        }
 
         base.Draw(gameTime, ticks, spriteBatch);
     }
