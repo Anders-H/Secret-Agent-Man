@@ -89,8 +89,8 @@ public class Player : Character
             isMoving = true;
             Y += 2;
 
-            if (Y > 335)
-                Y = 335;
+            if (Y > IngameScene.SpriteLowerLimit)
+                Y = IngameScene.SpriteLowerLimit;
         }
 
         if (keyboard.IsFirePressed() && ticks > 3)

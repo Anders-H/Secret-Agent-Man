@@ -24,6 +24,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private bool _gameCompleted;
     private ulong _gameCompletedAt;
     public const int SpriteUpperLimit = 100;
+    public const int SpriteLowerLimit = 276;
 
     public IngameScene(RetroGame.RetroGame parent) : base(parent)
     {
@@ -142,7 +143,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                                         Score -= 10;
                                         break;
                                     case 2:
-                                        Game1.TypeWriter.SetText("you cannot just go around an shoot people!");
+                                        Game1.TypeWriter.SetText("you cannot just go around and shoot people!");
                                         Score -= 50;
                                         break;
                                     case 3:
@@ -205,7 +206,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
             ScoreManagement.StoreLastScore(Score);
             Parent.CurrentScene = new GameOverKilledScene(Parent);
         }
-
+        System.Diagnostics.Debug.WriteLine(_player.Y);
         base.Update(gameTime, ticks);
     }
 
@@ -234,6 +235,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
         Text.DirectDraw(spriteBatch, 0, 0, _currentRoomName, Color.White);
         DrawScore(spriteBatch, 480, 0, ColorPalette.White);
+        Game1.Hud?.Draw(spriteBatch, 0, 10, 301);
 
         if (_gameCompleted)
         {

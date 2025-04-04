@@ -53,7 +53,7 @@ public class Npc : Character, IRetroActor, IGameFieldThings
             X = 639 + Game1.Random.Next(100);
         }
 
-        Y = Game1.Random.Next(IngameScene.SpriteUpperLimit, 336);
+        Y = Game1.Random.Next(IngameScene.SpriteUpperLimit, IngameScene.SpriteLowerLimit);
     }
 
     public void Act(ulong ticks)
@@ -87,8 +87,8 @@ public class Npc : Character, IRetroActor, IGameFieldThings
                 {
                     Y += 1;
 
-                    if (Y > 335)
-                        Y = 335;
+                    if (Y > IngameScene.SpriteLowerLimit)
+                        Y = IngameScene.SpriteLowerLimit;
                 }
 
                 if (FaceRight)

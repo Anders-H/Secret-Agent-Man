@@ -32,6 +32,7 @@ public class Game1 : RetroGame.RetroGame
     public static RetroTextureVertical? BackgroundLayer03 { get; set; }
     public static RetroTextureVertical? BackgroundLayer04 { get; set; }
     public static RetroTexture? CoinTexture { get; set; }
+    public static RetroTexture? Hud { get; set; }
     public static Decoration Decoration { get; set; }
     public static SoundEffect? EnemyFire { get; set; }
     public static SoundEffect? PlayerFire { get; set; }
@@ -70,6 +71,7 @@ public class Game1 : RetroGame.RetroGame
     protected override void LoadContent()
     {
         BackColor = Color.Black;
+        Hud = RetroTexture.LoadContent(GraphicsDevice, Content, 620, 59, 1, "hud");
         BackgroundLayer01 = RetroTextureVertical.LoadContent(GraphicsDevice, Content, 640, 91, 4, "background-640x91");
         BackgroundLayer02 = RetroTextureVertical.LoadContent(GraphicsDevice, Content, 640, 91, 4, "sky-640x91");
         BackgroundLayer03 = RetroTextureVertical.LoadContent(GraphicsDevice, Content, 640, 91, 4, "skyline_bg-640x91");
