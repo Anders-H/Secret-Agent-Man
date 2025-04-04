@@ -55,7 +55,7 @@ public class Game1 : RetroGame.RetroGame
         TodaysBestScore = 0;
         HighScore = new HighScoreList(640, 380, true, true, 220);
         Decoration = new Decoration();
-        TypeWriter = new TypeWriter(50, 50, 6, ColorPalette.White);
+        TypeWriter = new TypeWriter(70, 307, 6, ColorPalette.White);
     }
 
     public Game1() : base(640, 360, RetroDisplayMode.Fullscreen, false)

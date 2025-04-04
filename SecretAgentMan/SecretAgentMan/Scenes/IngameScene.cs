@@ -23,7 +23,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private int _killedSpyCount;
     private bool _gameCompleted;
     private ulong _gameCompletedAt;
-    public const int SpriteUpperLimit = 100;
+    public const int SpriteUpperLimit = 98;
     public const int SpriteLowerLimit = 276;
 
     public IngameScene(RetroGame.RetroGame parent) : base(parent)
