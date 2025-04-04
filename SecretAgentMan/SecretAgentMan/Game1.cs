@@ -6,6 +6,7 @@ using RetroGame;
 using RetroGame.Audio;
 using RetroGame.HighScore;
 using RetroGame.RetroTextures;
+using RetroGame.Text;
 using SecretAgentMan.OtherResources;
 using SecretAgentMan.Scenes;
 
@@ -44,6 +45,7 @@ public class Game1 : RetroGame.RetroGame
     public static int LastScore;
     public static int TodaysBestScore;
     public static HighScoreList HighScore { get; }
+    public static TypeWriter TypeWriter { get; }
 
     static Game1()
     {
@@ -52,6 +54,7 @@ public class Game1 : RetroGame.RetroGame
         TodaysBestScore = 0;
         HighScore = new HighScoreList(640, 380, true, true, 220);
         Decoration = new Decoration();
+        TypeWriter = new TypeWriter(50, 50, 6, ColorPalette.White);
     }
 
     public Game1() : base(640, 360, RetroDisplayMode.Fullscreen, false)

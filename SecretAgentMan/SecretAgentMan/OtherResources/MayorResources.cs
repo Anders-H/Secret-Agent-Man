@@ -11,27 +11,27 @@ public static class MayorResources
     public static void LoadContent(GraphicsDevice graphics, ContentManager content) =>
         MayorTexture = RetroTexture.LoadContent(graphics, content, 50, 50, 4, "mayor50x50");
 
-    public static void SaySpyKilled(int killedSpyCount, int scoreAdded, MessageSystem messageSystem)
+    public static void SaySpyKilled(int killedSpyCount, int scoreAdded)
     {
         switch (killedSpyCount)
         {
             case 1:
-                messageSystem.AddMessage($"first spy eliminated! {scoreAdded} points!", false);
+                Game1.TypeWriter.SetText($"first spy eliminated! {scoreAdded} points!");
                 break;
             case 2:
-                messageSystem.AddMessage($"second spy eliminated! {scoreAdded} points!", false);
+                Game1.TypeWriter.SetText($"second spy eliminated! {scoreAdded} points!");
                 break;
             case 3:
-                messageSystem.AddMessage($"third spy eliminated! {scoreAdded} points!", false);
+                Game1.TypeWriter.SetText($"third spy eliminated! {scoreAdded} points!");
                 break;
             case 4:
-                messageSystem.AddMessage($"fourth spy eliminated! {scoreAdded} points!", false);
+                Game1.TypeWriter.SetText($"fourth spy eliminated! {scoreAdded} points!");
                 break;
             case 5:
-                messageSystem.AddMessage($"fifth spy eliminated! {scoreAdded} points!", false);
+                Game1.TypeWriter.SetText($"fifth spy eliminated! {scoreAdded} points!");
                 break;
             default:
-                messageSystem.AddMessage($"spy number {killedSpyCount} eliminated! {scoreAdded} points!", false);
+                Game1.TypeWriter.SetText($"spy number {killedSpyCount} eliminated! {scoreAdded} points!");
                 break;
         }
     }

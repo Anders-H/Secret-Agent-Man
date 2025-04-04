@@ -13,7 +13,6 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private int _innocentKill;
     private ulong _lastInnocentKillAt;
     private int _messageDebug;
-    private readonly MessageSystem _messageSystem = new();
     private bool _askQuitMode;
     private int _currentRoomIndex;
     private readonly Player _player;
@@ -30,6 +29,8 @@ public class IngameScene : RetroGame.Scene.IngameScene
     {
         _player = new Player(_fire.PlayerFire);
         _roomList = new RoomList(_player, _fire.EnemyFire);
+        AddToAutoUpdate(Game1.TypeWriter);
+        AddToAutoDraw(Game1.TypeWriter);
         UpdateRoomNameAndCheckClear(0);
     }
 
@@ -38,7 +39,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
         _currentRoomName = _roomList.GetDistrictName(_currentRoomIndex);
 
         if (_roomList.RoomIsClear(_currentRoomIndex) && ticks > 200)
-            _messageSystem.AddMessage("this area is clear.", false);
+            Game1.TypeWriter.SetText("this area is clear");
     }
 
     public override void Update(GameTime gameTime, ulong ticks)
@@ -97,10 +98,9 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F10))
                 {
                     _messageDebug++;
-                    _messageSystem.AddMessage($"you have added text {_messageDebug} to the {(Game1.Random.Next(2) == 0 ? "message " : "")}system!{(Game1.Random.Next(2) == 0 ? " thank you!" : "")}", Game1.Random.Next(0, 2) == 1);
+                    Game1.TypeWriter.SetText($"you have added text {_messageDebug} to the {(Game1.Random.Next(2) == 0 ? "message " : "")}system!{(Game1.Random.Next(2) == 0 ? " thank you!" : "")}");
+                    // TODO Arg eller inte?
                 }
-
-                _messageSystem.Act(ticks);
             }
 
             _fire.Act(ticks);
@@ -114,7 +114,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 {
                     Game1.PlayerCoin!.PlayRandom();
                     coins.Remove(coin);
-                    _messageSystem.AddMessage("coin collected, 50 points awarded", false);
+                    Game1.TypeWriter.SetText("coin collected, 50 points awarded");
                     Score += 50;
                     break;
                 }
@@ -138,11 +138,11 @@ public class IngameScene : RetroGame.Scene.IngameScene
                                 switch (_innocentKill)
                                 {
                                     case 1:
-                                        _messageSystem.AddMessage("you have killed an innocent man!", true);
+                                        Game1.TypeWriter.SetText("you have killed an innocent man!");
                                         Score -= 10;
                                         break;
                                     case 2:
-                                        _messageSystem.AddMessage("you cannot just go around an shoot people!", true);
+                                        Game1.TypeWriter.SetText("you cannot just go around an shoot people!");
                                         Score -= 50;
                                         break;
                                     case 3:
@@ -160,14 +160,14 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
                             if (_killedSpyCount >= _roomList.SpyCount)
                             {
-                                _messageSystem.AddMessage($"all spies eliminated! {scoreAdded} points! well done!", false);
+                                Game1.TypeWriter.SetText($"all spies eliminated! {scoreAdded} points! well done!");
                                 _fire.Clear();
                                 _gameCompleted = true;
                                 _gameCompletedAt = ticks;
                             }
                             else
                             {
-                                MayorResources.SaySpyKilled(_killedSpyCount, scoreAdded, _messageSystem);
+                                MayorResources.SaySpyKilled(_killedSpyCount, scoreAdded);
                             }
                         }
                         break;
@@ -234,7 +234,6 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
         Text.DirectDraw(spriteBatch, 0, 0, _currentRoomName, Color.White);
         DrawScore(spriteBatch, 480, 0, ColorPalette.White);
-        _messageSystem.Draw(spriteBatch);
 
         if (_gameCompleted)
         {

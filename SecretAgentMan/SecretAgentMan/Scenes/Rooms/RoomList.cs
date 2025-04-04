@@ -15,9 +15,9 @@ public class RoomList
     public RoomList(Player player, List<Fire> enemyFireList)
     {
         Rooms = [];
-        int[] spyCount = [25, 1, 2, 3, 4, 4, 6, 10, 15, 25];
+        int[] spyCount = [1, 1, 2, 3, 4, 4, 6, 10, 15, 25];
         int[] innocentCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-        string[] names = ["byram township", "hopatcong", "randolph", "morristown", "kearny", "brooklyn, new york", "queens, new york", "the bronx, new york", "manhattan, new york", "harlem, new york"];
+        string[] names = ["vretstorp town", "viby village", "edsberg village", "fjugesta town", "vintrosa", "marieberg", "adolfsberg, örebro", "västhaga, örebro", "vargerga, örebro", "vivalla, örebro"];
 
         for (var i = 0; i < spyCount.Length; i++)
         {
@@ -32,7 +32,8 @@ public class RoomList
             switch (i)
             {
                 case 0:
-                    room.AddAirplane(1);
+                    room.AddAirplane(2);
+                    room.Coins.Add(new Coin(200, 150, 0));
                     break;
                 case 1:
                     room.AddAirplane(3);
@@ -41,7 +42,7 @@ public class RoomList
                     room.AddAirplane(2);
                     break;
                 case 3:
-                    room.AddAirplane(1);
+                    room.AddAirplane(7);
                     break;
                 case 4:
                     room.AddAirplane(2);
@@ -58,17 +59,17 @@ public class RoomList
 
                     break;
                 case 7:
-                    room.AddAirplane(3);
+                    room.AddAirplane(8);
                     break;
                 case 8:
-                    room.AddAirplane(2);
+                    room.AddAirplane(3);
 
                     for (var c = 0; c < 16; c++)
                         room.Coins.Add(new Coin(7 + 40 * c, 150, c % 4));
 
                     break;
                 case 9:
-                    room.AddAirplane(5);
+                    room.AddAirplane(15);
 
                     for (var c = 0; c < 20; c++)
                         room.Coins.Add(new Coin(7 + 32 * c, 300, c % 4));
