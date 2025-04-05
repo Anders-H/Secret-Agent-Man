@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 using RetroGame;
 using RetroGame.Input;
 using RetroGame.Scene;
@@ -34,6 +33,8 @@ public class HighScoreScene : Scene
 
         if (_gameOverReason == GameOverReason.PlayerFired)
             _gameOverY = 200;
+        else if (_gameOverReason == GameOverReason.PlayerDied)
+            _gameOverY = 0;
     }
 
     public override void Update(GameTime gameTime, ulong ticks)
@@ -83,6 +84,7 @@ public class HighScoreScene : Scene
         switch (_gameOverReason)
         {
             case GameOverReason.PlayerFired:
+            case GameOverReason.PlayerDied:
                 _gameOverY--;
 
                 if (_gameOverY < -360)
@@ -100,6 +102,10 @@ public class HighScoreScene : Scene
         {
             case GameOverReason.PlayerFired:
                 Game1.GameOverGraphics4!.Draw(spriteBatch, 0, 0, 0);
+                Game1.GameOverGraphics3!.Draw(spriteBatch, 0, 0, _gameOverY);
+                break;
+            case GameOverReason.PlayerDied:
+                Game1.GameOverGraphics2!.Draw(spriteBatch, 0, 0, 0);
                 Game1.GameOverGraphics3!.Draw(spriteBatch, 0, 0, _gameOverY);
                 break;
         }

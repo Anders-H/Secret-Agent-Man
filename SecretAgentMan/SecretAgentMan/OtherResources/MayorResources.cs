@@ -7,9 +7,13 @@ namespace SecretAgentMan.OtherResources;
 public static class MayorResources
 {
     public static RetroTexture? MayorTexture { get; set; }
+    public static RetroTexture? MayorExtendedTexture { get; set; }
 
-    public static void LoadContent(GraphicsDevice graphics, ContentManager content) =>
+    public static void LoadContent(GraphicsDevice graphics, ContentManager content)
+    {
         MayorTexture = RetroTexture.LoadContent(graphics, content, 50, 50, 4, "mayor50x50");
+        MayorExtendedTexture = RetroTexture.LoadContent(graphics, content, 50, 50, 4, "mayor50x50");
+    }
 
     public static void SaySpyKilled(int killedSpyCount, int scoreAdded)
     {
