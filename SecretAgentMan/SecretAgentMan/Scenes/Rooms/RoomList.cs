@@ -55,7 +55,7 @@ public class RoomList
                     room.AddAirplane(4);
 
                     for (var c = 0; c < 10; c++)
-                        room.Coins.Add(new Coin(22 + 64 * c, 300, c % 4));
+                        room.Coins.Add(new Coin(22 + 64 * c, 200, c % 4));
 
                     break;
                 case 7:
@@ -72,7 +72,7 @@ public class RoomList
                     room.AddAirplane(15);
 
                     for (var c = 0; c < 20; c++)
-                        room.Coins.Add(new Coin(7 + 32 * c, 300, c % 4));
+                        room.Coins.Add(new Coin(7 + 32 * c, 200, c % 4));
 
                     break;
                 default:

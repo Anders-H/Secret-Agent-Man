@@ -9,8 +9,8 @@ public class IngameFire
 
     public IngameFire()
     {
-        PlayerFire = new FireList();
-        EnemyFire = new FireList();
+        PlayerFire = [];
+        EnemyFire = [];
     }
 
     public void Clear()

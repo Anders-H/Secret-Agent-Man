@@ -2,8 +2,6 @@
 using RetroGame.Input;
 using SecretAgentMan.Scenes;
 using SecretAgentMan.Scenes.Rooms;
-using SharpDX.Direct2D1;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
 namespace SecretAgentMan.Sprites;
 
@@ -27,7 +25,7 @@ public class Player : Character
         var changeAnimationCells = false;
         var isMoving = false;
 
-        if (keyboard.MoveRight())
+        if (keyboard.MoveRightWasd())
         {
             if (!FaceRight)
             {
@@ -51,7 +49,7 @@ public class Player : Character
                 }
             }
         }
-        else if (keyboard.MoveLeft())
+        else if (keyboard.MoveLeftWasd())
         {
             if (FaceRight)
             {
@@ -76,7 +74,7 @@ public class Player : Character
             }
         }
 
-        if (keyboard.MoveUp())
+        if (keyboard.MoveUpWasd())
         {
             isMoving = true;
             Y -= 2;
@@ -84,7 +82,7 @@ public class Player : Character
             if (Y < IngameScene.SpriteUpperLimit)
                 Y = IngameScene.SpriteUpperLimit;
         }
-        else if (keyboard.MoveDown())
+        else if (keyboard.MoveDownWasd())
         {
             isMoving = true;
             Y += 2;

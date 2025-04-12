@@ -5,6 +5,8 @@ using RetroGame;
 using RetroGame.Input;
 using RetroGame.Scene;
 using RetroGame.Text;
+using SecretAgentMan.Scenes.GameOverScenes;
+using SecretAgentMan.Scenes.IntroductionScenes;
 
 namespace SecretAgentMan.Scenes;
 
@@ -109,7 +111,7 @@ public class HighScoreScene : Scene
                 Game1.GameOverGraphics3!.Draw(spriteBatch, 0, 0, _gameOverY);
                 break;
         }
-
+ 
         _textBlock.DirectDraw(spriteBatch, _bestPlayerX, 70, BestPlayer, ColorPalette.Green);
         Game1.HighScore.Draw(spriteBatch, ticks);
         base.Draw(gameTime, ticks, spriteBatch);

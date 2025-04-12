@@ -5,7 +5,7 @@ using RetroGame;
 using RetroGame.Input;
 using RetroGame.Scene;
 
-namespace SecretAgentMan.Scenes;
+namespace SecretAgentMan.Scenes.IntroductionScenes;
 
 public class IntroScene : Scene
 {

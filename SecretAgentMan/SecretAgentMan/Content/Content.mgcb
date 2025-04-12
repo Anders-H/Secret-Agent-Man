@@ -37,7 +37,7 @@
 /processorParam:TextureFormat=Color
 /build:c64fontswe.png
 
-#begin coin14x14.png
+#begin coin10x10.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -47,7 +47,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:coin14x14.png
+/build:coin10x10.png
 
 #begin crt.png
 /importer:TextureImporter
@@ -78,6 +78,30 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:enemy_sfx_coin_3.wav
+
+#begin floppy.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:floppy.png
+
+#begin frame.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:frame.png
 
 #begin game-over.mp3
 /importer:Mp3Importer

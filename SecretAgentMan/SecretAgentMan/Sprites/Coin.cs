@@ -18,11 +18,11 @@ public class Coin : Sprite, IRetroActor
 
     public void Act(ulong ticks)
     {
-        if (ticks % 7 == 0)
+        if (ticks % 6 == 0)
         {
             _cellIndex++;
 
-            if (_cellIndex > 3)
+            if (_cellIndex > 5)
                 _cellIndex = 0;
         }
     }
@@ -33,10 +33,11 @@ public class Coin : Sprite, IRetroActor
         var coinY = sprite.Y + 18;
         var xLimitLeft = IntX + 3;
         var xLimitRight = IntX + 21;
+
         if (coinX < xLimitLeft || coinX > xLimitRight)
             return false;
 
-        if (coinY < IntY || coinY > IntY + 25)
+        if (coinY < (IntY - 5) || coinY > IntY + 25)
             return false;
 
         return true;

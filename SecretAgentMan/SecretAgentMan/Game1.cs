@@ -8,7 +8,7 @@ using RetroGame.HighScore;
 using RetroGame.RetroTextures;
 using RetroGame.Text;
 using SecretAgentMan.OtherResources;
-using SecretAgentMan.Scenes;
+using SecretAgentMan.Scenes.IntroductionScenes;
 
 namespace SecretAgentMan;
 
@@ -33,6 +33,7 @@ public class Game1 : RetroGame.RetroGame
     public static RetroTextureVertical? BackgroundLayer04 { get; set; }
     public static RetroTexture? CoinTexture { get; set; }
     public static RetroTexture? Hud { get; set; }
+    public static RetroTexture? Frame { get; set; }
     public static Decoration Decoration { get; set; }
     public static SoundEffect? EnemyFire { get; set; }
     public static SoundEffect? PlayerFire { get; set; }
@@ -55,7 +56,7 @@ public class Game1 : RetroGame.RetroGame
         TodaysBestScore = 0;
         HighScore = new HighScoreList(640, 380, true, true, 220);
         Decoration = new Decoration();
-        TypeWriter = new TypeWriter(70, 307, 6, ColorPalette.White);
+        TypeWriter = new TypeWriter(70, 298, 6, ColorPalette.White);
     }
 
     public Game1() : base(640, 360, RetroDisplayMode.Fullscreen, false)
@@ -76,11 +77,10 @@ public class Game1 : RetroGame.RetroGame
         BackgroundLayer02 = RetroTextureVertical.LoadContent(GraphicsDevice, Content, 640, 91, 4, "sky-640x91");
         BackgroundLayer03 = RetroTextureVertical.LoadContent(GraphicsDevice, Content, 640, 91, 4, "skyline_bg-640x91");
         BackgroundLayer04 = RetroTextureVertical.LoadContent(GraphicsDevice, Content, 640, 91, 4, "skyline_fg-640x91");
-        CoinTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 14, 14, 4, "coin14x14");
+        CoinTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 10, 10, 6, "coin10x10");
         CharactersTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 25, 25, 32, "player25x25");
-
-        GraveStoneTexture = new RetroTexture(GraphicsDevice, 25, 25, 13);
-        GraveStoneTexture.SetData(Content.Load<Texture2D>("rip25x25"));
+        Frame = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "frame");
+        GraveStoneTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 25, 25, 13, "rip25x25");
 
         WaterTexture = new RetroTextureVertical(GraphicsDevice, 640, 30, 18);
         WaterTexture.SetData(Content.Load<Texture2D>("water640x30"));

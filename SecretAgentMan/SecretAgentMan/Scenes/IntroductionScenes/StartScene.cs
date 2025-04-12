@@ -7,7 +7,7 @@ using RetroGame.Input;
 using RetroGame.Scene;
 using RetroGame.Text;
 
-namespace SecretAgentMan.Scenes;
+namespace SecretAgentMan.Scenes.IntroductionScenes;
 
 public class StartScene : Scene
 {
@@ -22,7 +22,7 @@ public class StartScene : Scene
     private KeyboardStateChecker Keyboard { get; }
     private readonly string _lastScoreString;
     private readonly string _todaysBestScoreString;
-    private bool _highScoreVisible;
+    private StartSceneState _state;
 
     public StartScene(RetroGame.RetroGame parent, int lastScore, int todaysBest) : base(parent)
     {
@@ -31,7 +31,7 @@ public class StartScene : Scene
         _creditsX = 700;
         Keyboard = new KeyboardStateChecker();
         _textBlock = new TextBlock(CharacterSet.Uppercase);
-        _highScoreVisible = false;
+        _state = StartSceneState.Logo;
         AddToAutoUpdate(Keyboard);
     }
 
@@ -69,25 +69,36 @@ public class StartScene : Scene
                 _creditsX = 640;
         }
 
-        if (ticks % 500 == 0)
-            _highScoreVisible = !_highScoreVisible;
+        _state = _state switch
+        {
+            StartSceneState.Logo when ticks % 400 == 0 => StartSceneState.HighScore,
+            StartSceneState.HighScore when ticks % 400 == 0 => StartSceneState.Instructions,
+            StartSceneState.Instructions when ticks % 1400 == 0 => StartSceneState.Logo,
+            _ => _state
+        };
 
         base.Update(gameTime, ticks);
     }
 
     public override void Draw(GameTime gameTime, ulong ticks, SpriteBatch spriteBatch)
     {
-        if (_highScoreVisible)
+        switch (_state)
         {
-            var x = TodaysBestPlayersHeader.Length * 8;
-            x = 320 - x/2;
-            _textBlock.DirectDraw(spriteBatch, x, 32, TodaysBestPlayersHeader, ColorPalette.Yellow);
-            Game1.HighScore.Draw(spriteBatch, ticks);
-        }
-        else
-        {
-            if (ticks > 1 && _logoX != 0 && _logoY != 0)
-                _textBlock.DirectDraw(spriteBatch, _logoX, _logoY, LogoText, ColorPalette.White);
+            case StartSceneState.Logo:
+                if (ticks > 1 && _logoX != 0 && _logoY != 0)
+                    _textBlock.DirectDraw(spriteBatch, _logoX, _logoY, LogoText, ColorPalette.White);
+                break;
+            case StartSceneState.HighScore:
+                var x = TodaysBestPlayersHeader.Length * 8;
+                x = 320 - x / 2;
+                _textBlock.DirectDraw(spriteBatch, x, 32, TodaysBestPlayersHeader, ColorPalette.Yellow);
+                Game1.HighScore.Draw(spriteBatch, ticks);
+                break;
+            case StartSceneState.Instructions:
+                _textBlock.DirectDraw(spriteBatch, 0, 32, "här ska vi ha manualen - eller som ingenjörerna säger: manulen", ColorPalette.White);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
 
         _textBlock.DirectDraw(spriteBatch, 0, 344, _todaysBestScoreString, ColorPalette.LightGrey);

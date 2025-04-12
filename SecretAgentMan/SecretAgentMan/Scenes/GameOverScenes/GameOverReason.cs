@@ -1,4 +1,4 @@
-﻿namespace SecretAgentMan;
+﻿namespace SecretAgentMan.Scenes.GameOverScenes;
 
 public enum GameOverReason
 {

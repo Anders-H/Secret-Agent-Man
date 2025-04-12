@@ -7,7 +7,7 @@ using IngameScene = SecretAgentMan.Scenes.IngameScene;
 
 namespace SecretAgentMan.Sprites;
 
-public class Npc : Character, IRetroActor, IGameFieldThings
+public class Npc : Character, IRetroActor
 {
     private readonly Player? _player;
     private int _ticksSinceDirectionChange;
@@ -60,7 +60,7 @@ public class Npc : Character, IRetroActor, IGameFieldThings
     {
         if (IsGraveStone)
         {
-            if (ticks % 8 == 0 && _graveStoneCellIndex < 12)
+            if (ticks % 6 == 0 && _graveStoneCellIndex < 12)
                 _graveStoneCellIndex++;
 
             return;
@@ -267,9 +267,6 @@ public class Npc : Character, IRetroActor, IGameFieldThings
         return n;
     }
 
-    public new int IntY =>
-        IsGraveStone ? base.IntY - 10 : base.IntY;
-
     public bool PlayerMayNotKill() =>
         Status == StatusInnocent || Status == StatusSpyUndetected;
 
@@ -277,7 +274,7 @@ public class Npc : Character, IRetroActor, IGameFieldThings
     {
         if (IsGraveStone)
         {
-            Game1.GraveStoneTexture?.Draw(spriteBatch, _graveStoneCellIndex, IntX, base.IntY, ColorPalette.White);
+            Game1.GraveStoneTexture?.Draw(spriteBatch, _graveStoneCellIndex, IntX, IntY, ColorPalette.White);
             return;
         }
 
@@ -288,6 +285,6 @@ public class Npc : Character, IRetroActor, IGameFieldThings
     {
         _graveStoneCellIndex = 0;
         IsGraveStone = true;
-        Y += 3;
+        Y += 6;
     }
 }

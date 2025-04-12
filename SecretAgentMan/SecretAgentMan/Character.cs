@@ -56,10 +56,9 @@ public abstract class Character : Sprite
     {
         Game1.EnemyFire!.PlayRandom();
 
-        if (FaceRight)
-            FireList.Add(new Fire(true, isEnemy, IntX + 11, IntY - 5));
-        else
-            FireList.Add(new Fire(false, isEnemy, IntX - 10, IntY - 5));
+        FireList.Add(FaceRight
+            ? new Fire(true, isEnemy, IntX + 11, IntY - 5)
+            : new Fire(false, isEnemy, IntX - 10, IntY - 5));
     }
 
     public bool Hit(Fire fire)

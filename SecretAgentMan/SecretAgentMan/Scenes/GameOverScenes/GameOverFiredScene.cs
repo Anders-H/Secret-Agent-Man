@@ -5,8 +5,9 @@ using RetroGame;
 using RetroGame.Scene;
 using RetroGame.Text;
 using SecretAgentMan.OtherResources;
+using SecretAgentMan.Scenes.IntroductionScenes;
 
-namespace SecretAgentMan.Scenes;
+namespace SecretAgentMan.Scenes.GameOverScenes;
 
 public class GameOverFiredScene : Scene
 {
@@ -25,7 +26,7 @@ public class GameOverFiredScene : Scene
     {
         _isAngry = false;
         _currentMayorCell = 0;
-        _mayorTalkX = 320 - ((MayorTalk.Length * 8) / 2);
+        _mayorTalkX = 320 - MayorTalk.Length * 8 / 2;
         _lastScoreString = $"last score: {Game1.LastScore}";
         _todaysBestScoreString = $"best today: {Game1.TodaysBestScore}";
         _textBlock = new TextBlock(CharacterSet.Uppercase);

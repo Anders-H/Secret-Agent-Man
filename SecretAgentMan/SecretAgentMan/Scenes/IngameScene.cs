@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using RetroGame;
 using SecretAgentMan.OtherResources;
+using SecretAgentMan.Scenes.GameOverScenes;
+using SecretAgentMan.Scenes.IntroductionScenes;
 using SecretAgentMan.Scenes.Rooms;
 using SecretAgentMan.Sprites;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
@@ -30,6 +32,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     {
         _player = new Player(_fire.PlayerFire);
         _roomList = new RoomList(_player, _fire.EnemyFire);
+        Score = 0;
         AddToAutoUpdate(Game1.TypeWriter);
         AddToAutoDraw(Game1.TypeWriter);
         UpdateRoomNameAndCheckClear(0);
@@ -119,7 +122,20 @@ public class IngameScene : RetroGame.Scene.IngameScene
                     Score += 50;
                     break;
                 }
+
+                foreach (var npc in _roomList.GetNpcs(_currentRoomIndex))
+                {
+                    if (coin.Collide(npc))
+                    {
+                        Game1.EnemyCoin!.PlayRandom();
+                        coins.Remove(coin);
+                        Game1.TypeWriter.SetText("coin stolen");
+                        goto OuterBail;
+                    }
+                }
             }
+
+            OuterBail:;
 
             foreach (var npc in _roomList.GetNpcs(_currentRoomIndex))
             {
@@ -213,13 +229,13 @@ public class IngameScene : RetroGame.Scene.IngameScene
     public override void Draw(GameTime gameTime, ulong ticks, SpriteBatch spriteBatch)
     {
         Game1.Decoration.Draw(spriteBatch, _currentRoomIndex);
-        Game1.BackgroundTempTexture?.Draw(spriteBatch, 0, 0, 0, ColorPalette.White);
-        Game1.WaterTexture?.Draw(spriteBatch, _waterFrameIndex, 0, 91, ColorPalette.White);
+        Game1.BackgroundTempTexture?.Draw(spriteBatch, 0, 0, 0);
+        Game1.WaterTexture?.Draw(spriteBatch, _waterFrameIndex, 0, 91);
 
         if (_askQuitMode)
         {
             const string quitText = "press f3 to quit, press f7 to continue.";
-            var quitX = 320 - ((quitText.Length * 8) / 2);
+            var quitX = 320 - quitText.Length * 8 / 2;
             Text.DirectDraw(spriteBatch, quitX, 150, quitText, ColorPalette.White);
         }
         else
@@ -233,9 +249,9 @@ public class IngameScene : RetroGame.Scene.IngameScene
             _roomList.DrawDecorations(spriteBatch, _currentRoomIndex);
         }
 
-        Text.DirectDraw(spriteBatch, 0, 0, _currentRoomName, Color.White);
-        DrawScore(spriteBatch, 480, 0, ColorPalette.White);
-        Game1.Hud?.Draw(spriteBatch, 0, 10, 301);
+        Text.DirectDraw(spriteBatch, 11, 11, _currentRoomName, Color.White);
+        Text.DirectDraw(spriteBatch, 508, 11, ScoreString, ColorPalette.White);
+        Game1.Hud?.Draw(spriteBatch, 0, 10, 292);
 
         if (_gameCompleted)
         {
@@ -243,6 +259,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
             //Text.DirectDraw(spriteBatch, GameOverKilledScene.GameClearX, 150, GameOverKilledScene.GameClearText, ColorPalette.Green);
         }
 
+        Game1.Frame!.Draw(spriteBatch, 0, 0, 0);
         base.Draw(gameTime, ticks, spriteBatch);
     }
 }

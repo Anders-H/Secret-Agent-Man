@@ -4,8 +4,9 @@ using Microsoft.Xna.Framework.Media;
 using RetroGame;
 using RetroGame.Scene;
 using RetroGame.Text;
+using SecretAgentMan.Scenes.IntroductionScenes;
 
-namespace SecretAgentMan.Scenes;
+namespace SecretAgentMan.Scenes.GameOverScenes;
 
 public class GameOverKilledScene : Scene
 {
