@@ -257,13 +257,27 @@ public class Npc : Character, IRetroActor
 
     public static Npc CreateInnocent(List<Fire> enemyFireList, int index)
     {
-        var n = new Npc(StatusInnocent, null, enemyFireList, Speeds[index]);
+        ulong speed;
+
+        if (index < Speeds.Length)
+            speed = Speeds[index];
+        else
+            speed = (ulong)Game1.Random.Next(1, 9);
+
+        var n = new Npc(StatusInnocent, null, enemyFireList, speed);
         return n;
     }
 
     public static Npc CreateSpy(Player player, List<Fire> enemyFireList, int index)
     {
-        var n = new Npc(StatusSpyUndetected, player, enemyFireList, Speeds[index]);
+        ulong speed;
+
+        if (index < Speeds.Length)
+            speed = Speeds[index];
+        else
+            speed = (ulong)Game1.Random.Next(1, 9);
+
+        var n = new Npc(StatusSpyUndetected, player, enemyFireList, speed);
         return n;
     }
 

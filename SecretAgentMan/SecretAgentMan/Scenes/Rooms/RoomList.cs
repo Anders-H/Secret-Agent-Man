@@ -26,6 +26,20 @@ public class RoomList
         for (var i = 0; i < names.Length; i++)
             names[i] = parts[i].ToLower().Trim();
 
+        // Overwrite NPC count.
+        var npcsInConfig = Game1.Settings.GetValue("Level1InnocentNpcCount");
+        parts = npcsInConfig.Split(',');
+
+        for (var i = 0; i < innocentCount.Length; i++)
+            innocentCount[i] = int.Parse(parts[i]);
+
+        // Overwrite spy count.
+        var spysInConfig = Game1.Settings.GetValue("Level1SpyCount");
+        parts = spysInConfig.Split(',');
+
+        for (var i = 0; i < spyCount.Length; i++)
+            spyCount[i] = int.Parse(parts[i]);
+
         for (var i = 0; i < spyCount.Length; i++)
         {
             var room = new Room(names[i]);

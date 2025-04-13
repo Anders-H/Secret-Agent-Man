@@ -4,3 +4,15 @@
 	Vretstorp Town; Viby Village; Edsberg Village; Fjugesta Town; Vintrosa; Marieberg; Adolfsberg, Örebro; Västhaga, Örebro; Vargerga, Örebro; Vivalla, Örebro
 
 <<<End:Setting>>>
+<<<Begin:Setting:Level1InnocentNpcCount>>>
+
+	/* En kommaseparerad lista över antalet oskyldiga NPC:er per rum i level 1 (10 stycken). */
+	1, 1, 2, 3, 4, 4, 6, 10, 15, 25
+
+<<<End:Setting>>>
+<<<Begin:Setting:Level1SpyCount>>>
+
+	/* En kommaseparerad lista över antalet spioner per rum level 1 (10 stycken). */
+	1, 1, 2, 3, 4, 4, 6, 10, 15, 25
+
+<<<End:Setting>>>
