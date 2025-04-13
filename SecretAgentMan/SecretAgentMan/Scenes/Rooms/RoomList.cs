@@ -19,6 +19,13 @@ public class RoomList
         int[] innocentCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         string[] names = ["vretstorp town", "viby village", "edsberg village", "fjugesta town", "vintrosa", "marieberg", "adolfsberg, örebro", "västhaga, örebro", "vargerga, örebro", "vivalla, örebro"];
 
+        // Overwrite names.
+        var namesInConfig = Game1.Settings.GetValue("Level1RoomNames");
+        var parts = namesInConfig.Split(';');
+
+        for (var i = 0; i < names.Length; i++)
+            names[i] = parts[i].ToLower().Trim();
+
         for (var i = 0; i < spyCount.Length; i++)
         {
             var room = new Room(names[i]);

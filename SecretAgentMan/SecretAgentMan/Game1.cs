@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using BroncoSettingsParser;
+using BroncoSettingsParser.ResponseModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
@@ -14,6 +17,7 @@ namespace SecretAgentMan;
 
 public class Game1 : RetroGame.RetroGame
 {
+    public static SettingCollection Settings { get; set; }
     public static RetroTexture? CharactersTexture { get; set; }
     public static RetroTexture? BackgroundTempTexture { get; set; }
     public static RetroTextureVertical? WaterTexture { get; set; }
@@ -72,6 +76,15 @@ public class Game1 : RetroGame.RetroGame
     protected override void LoadContent()
     {
         BackColor = Color.Black;
+
+        var parser = new Parser(new FileInfo(Path.Combine(Tools.ExeFolder.FullName, "config.bronco")));
+        var response = parser.Parse();
+
+        if (response.Status != Status.Success)
+            throw new SystemException("Settings cannot be parsed.");
+
+        Settings = response.Settings;
+
         Hud = RetroTexture.LoadContent(GraphicsDevice, Content, 620, 59, 1, "hud");
         BackgroundLayer01 = RetroTextureVertical.LoadContent(GraphicsDevice, Content, 640, 91, 4, "background-640x91");
         BackgroundLayer02 = RetroTextureVertical.LoadContent(GraphicsDevice, Content, 640, 91, 4, "sky-640x91");

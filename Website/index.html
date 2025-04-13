@@ -1,0 +1,405 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<!--
+
+10 REM   "-----****==== START SCREEN ====****-----"
+20 PRINT "    THIS IS THE OFFICIAL WEBSITE"
+30 PRINT " FOR THE DIGITAL COMPUTER VIDEO GAME"
+40 PRINT
+50 PRINT "   S E C R E T   A G E N T   M A N"
+60 PRINT
+70 PRINT "BY ANDERS HESSELBOM AND MATS J. LARSSON"
+80 END
+
+-->
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <title>Secret Agent Man - The Video Game</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            background-color: #010;
+            color: #00dd00;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 20px;
+            cursor: default;
+        }
+
+        p {
+            margin: 0;
+            padding: 12px 0 0 0;
+            cursor: default;
+        }
+
+        a {
+            text-decoration: none;
+            color: #66ff66;
+            cursor: pointer;
+        }
+
+        a:hover {
+            color: #55ff88;
+            text-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+        }
+
+        .container {
+            width: 75%;
+            min-width: 300px;
+            max-width: 2000px;
+            margin: 0 auto;
+            background-color: #0b1f0b;
+            border-left: #000000 1px solid;
+            border-right: #000000 1px solid;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+            padding: 10px 20px 30px 20px;
+        }
+
+        .imageContainer {
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        img {
+            margin: 0 auto;
+            max-width: 100%;
+        }
+
+        .imgShadow {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+        }
+
+        @media (max-width: 9000px) {
+            html, body {
+                font-size: 29px;
+            }
+
+            p {
+                padding: 19px 0 0 0;
+            }
+        }
+
+        @media (max-width: 8000px) {
+            html, body {
+                font-size: 28px;
+            }
+
+            p {
+                padding: 18px 0 0 0;
+            }
+        }
+
+        @media (max-width: 7000px) {
+            html, body {
+                font-size: 27px;
+            }
+
+            p {
+                padding: 18px 0 0 0;
+            }
+        }
+
+        @media (max-width: 6000px) {
+            html, body {
+                font-size: 26px;
+            }
+
+            p {
+                padding: 18px 0 0 0;
+            }
+        }
+
+        @media (max-width: 3000px) {
+            html, body {
+                font-size: 25px;
+            }
+
+            p {
+                padding: 17px 0 0 0;
+            }
+        }
+
+        @media (max-width: 2000px) {
+            html, body {
+                font-size: 24px;
+            }
+
+            p {
+                padding: 17px 0 0 0;
+            }
+        }
+
+        @media (max-width: 1600px) {
+            html, body {
+                font-size: 23px;
+            }
+
+            p {
+                padding: 17px 0 0 0;
+            }
+        }
+
+        @media (max-width: 1500px) {
+            html, body {
+                font-size: 22px;
+            }
+
+            p {
+                padding: 16px 0 0 0;
+            }
+        }
+
+        @media (max-width: 1400px) {
+            html, body {
+                font-size: 21px;
+            }
+
+            p {
+                padding: 16px 0 0 0;
+            }
+        }
+
+        @media (max-width: 1300px) {
+            html, body {
+                font-size: 20px;
+            }
+
+            p {
+                padding: 16px 0 0 0;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            html, body {
+                font-size: 19px;
+            }
+
+            p {
+                padding: 15px 0 0 0;
+            }
+        }
+
+        @media (max-width: 1100px) {
+            html, body {
+                font-size: 18px;
+            }
+
+            p {
+                padding: 15px 0 0 0;
+            }
+        }
+
+        @media (max-width: 1000px) {
+            html, body {
+                font-size: 17px;
+            }
+
+            p {
+                padding: 15px 0 0 0;
+            }
+        }
+
+        @media (max-width: 950px) {
+            html, body {
+                font-size: 16px;
+            }
+
+            p {
+                padding: 14px 0 0 0;
+            }
+        }
+
+        @media (max-width: 900px) {
+            html, body {
+                font-size: 15px;
+            }
+
+            p {
+                padding: 14px 0 0 0;
+            }
+        }
+
+        @media (max-width: 850px) {
+            html, body {
+                font-size: 14px;
+            }
+
+            p {
+                padding: 14px 0 0 0;
+            }
+        }
+
+        @media (max-width: 800px) {
+            html, body {
+                font-size: 13px;
+            }
+
+            p {
+                padding: 13px 0 0 0;
+            }
+        }
+
+        @media (max-width: 750px) {
+            html, body {
+                font-size: 12px;
+            }
+
+            p {
+                padding: 13px 0 0 0;
+            }
+        }
+
+        @media (max-width: 700px) {
+            html, body {
+                font-size: 11px;
+            }
+
+            p {
+                padding: 13px 0 0 0;
+            }
+        }
+
+        @media (max-width: 600px) {
+            html, body {
+                font-size: 10px;
+            }
+
+            p {
+                padding: 12px 0 0 0;
+            }
+        }
+
+        @media (max-width: 500px) {
+            html, body {
+                font-size: 9px;
+            }
+
+            p {
+                padding: 12px 0 0 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p>
+            <b>=================================</b>
+            <br />
+            <b>SECRET AGENT MAN - THE VIDEO GAME</b>
+            <br />
+            <b>=================================</b>
+        </p>
+        <p>Soon available for the Windows (64-bit) platform, Commodore 64 and Sinclair ZX Spectrum.</p>
+        <p>
+            <div class="imageContainer" style="max-width: 700px;">
+                <img src="logo.png" alt="Secret Agent Man Logo" />
+            </div>
+        </p>
+        <p>
+            <b>---------</b>
+            <br />
+            <b>STORYLINE</b>
+            <br />
+            <b>---------</b>
+        </p>
+        <p>
+            As a secret agent, you are called upon by New York City Mayor Koch to curb the escalating crime rate. Criminal elements are openly roaming among the other citizens,
+            and it is of utmost importance that you eliminate all the criminals in the area, without harming any of the peaceful civilian population.
+        </p>
+        <p>
+            Programming: Anders Hesselbom
+            <br />
+            Sound and graphics: Mats J. Larsson
+        </p>
+        <p>Source code: <a href="https://github.com/Anders-H/Secret-Agent-Man" target="_blank">https://github.com/Anders-H/Secret-Agent-Man</a></p>
+        <p>
+            <b>--------</b>
+            <br />
+            <b>BACKLOG</b>
+            <br />
+            <b>--------</b>
+        </p>
+        <p>
+            Remaining issues to be resolved before release are listed here: <a href="https://github.com/Anders-H/Secret-Agent-Man/issues" target="_blank">https://github.com/Anders-H/Secret-Agent-Man/issues</a>
+        </p>
+        <p>
+            <b>--------</b>
+            <br />
+            <b>DOWNLOAD</b>
+            <br />
+            <b>--------</b>
+        </p>
+        <p>
+            <b>Microsoft Windows (64 bit):</b> Not available yet (release date will be announced during 2025)
+        </p>
+        <p>
+            <b>Commodore 64:</b> Not available yet (release date will be announced during 2027)
+        </p>
+        <p>
+            <b>Sinclair ZX Spectrum:</b> Not available yet (release date will be announced during 2029)
+        </p>
+        <p>
+            <b>----------</b>
+            <br />
+            <b>SUPPORT US</b>
+            <br />
+            <b>----------</b>
+        </p>
+        <p>
+            Buy Anders a cup of coffee (20 SEK):
+        </p>
+        <p>
+            <div class="imageContainer" style="max-width: 500px;">
+                <img src="https://ahesselbom.se/img/swish_solid.jpg" class="imgShadow" alt="Support Anders Hesselbom" style="width: 50%; min-width: 200px; max-width: 500px; border: 2px solid #fff;" />
+            </div>
+        </p>
+        <p>
+            Buy Mats...
+        </p>
+        <p>
+            We are not sure about his priorities, and we do not approve of his lifestyle. More information will be available soon.
+        </p>
+        <p>
+            <b>-------</b>
+            <br />
+            <b>CONTACT</b>
+            <br />
+            <b>-------</b>
+        </p>
+        <p>
+            Anders Hesselbom: X is <a href="https://x.com/ahesselbom" target="_blank">@ahesselbom</a> and email is <a href="mailto:anders@winsoft.se">anders@winsoft.se</a>.
+            <br />
+            Linktree: <a href="https://linktr.ee/hesselbom" target="_blank">https://linktr.ee/hesselbom/</a>
+            <br />
+            Website: <a href="https://ahesselbom.se/" target="_blank">https://ahesselbom.se/</a>
+        </p>
+        <p>
+            <b>---------------</b>
+            <br />
+            <b>CODE OF CONDUCT</b>
+            <br />
+            <b>---------------</b>
+        </p>
+        <p>
+            This attitude is expected from all players of the game and from all contributors:
+        </p>
+        <p>
+            <div style="margin: auto; width: 560px; padding: 10px;">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/YIllOcB5zfU?si=IOfXfj5rOaHk6mOr" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+        </p>
+    </div>
+</body>
+</html>
