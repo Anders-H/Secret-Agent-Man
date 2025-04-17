@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using RetroGame;
 using RetroGame.Input;
 using RetroGame.Scene;
+using RetroGame.Text;
 
 namespace SecretAgentMan.Scenes.IntroductionScenes;
 
@@ -10,15 +12,21 @@ public class IntroScene : Scene
 {
     private const int CellCountX = 40;
     private const int CellCountY = 9;
-    private int _currentCellX = 0;
-    private int _currentCellY = 0;
-    private int _inCurrentCellY = 0;
-    private bool _done = false;
+    private const int TicksBeforeContinue = 1500;
+    private int _currentCellX;
+    private int _currentCellY;
+    private int _inCurrentCellY;
+    private bool _done;
     private KeyboardStateChecker Keyboard { get; }
+    private const string pressFire = "press fire to continue";
+    private readonly int pressFireCenterX;
+    private readonly TextBlock _textBlock;
 
     public IntroScene(RetroGame.RetroGame parent) : base(parent)
     {
         Keyboard = new KeyboardStateChecker();
+        pressFireCenterX = 320 - pressFire.Length * 8 / 2;
+        _textBlock = new TextBlock(CharacterSet.Uppercase);
         AddToAutoUpdate(Keyboard);
     }
 
@@ -43,9 +51,12 @@ public class IntroScene : Scene
             }
         }
 
+        if (ticks == TicksBeforeContinue)
+            Keyboard.ClearState();
+
         if (Keyboard.IsKeyPressed(Keys.Escape))
             Exit();
-        else if (Keyboard.IsFirePressed())
+        else if (ticks > TicksBeforeContinue && Keyboard.IsFirePressed())
             Parent.CurrentScene = new StartScene(Parent, 0, 0);
 
         base.Update(gameTime, ticks);
@@ -68,6 +79,9 @@ public class IntroScene : Scene
             if (_inCurrentCellY > 0)
                 Game1.IntroGraphics!.DrawPart(spriteBatch, _currentCellX * 16, _currentCellY * 16, 16, _inCurrentCellY, _currentCellX * 16, _currentCellY * 16);
         }
+
+        if (ticks > TicksBeforeContinue && ticks % 120 > 60)
+            _textBlock.DirectDraw(spriteBatch, pressFireCenterX, 300, pressFire, ColorPalette.White);
 
         base.Draw(gameTime, ticks, spriteBatch);
     }
