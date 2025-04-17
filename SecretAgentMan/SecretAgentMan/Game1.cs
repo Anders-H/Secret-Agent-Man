@@ -24,9 +24,7 @@ public class Game1 : RetroGame.RetroGame
     public static RetroTexture? AirplaneRightTexture { get; set; }
     public static RetroTexture? AirplaneLeftTexture { get; set; }
     public static RetroTexture? GraveStoneTexture { get; set; }
-    public static RetroTexture? IntroGraphics1 { get; set; }
-    public static RetroTexture? IntroGraphics2 { get; set; }
-    public static RetroTexture? IntroGraphics3 { get; set; }
+    public static RetroTexture? IntroGraphics { get; set; }
     public static RetroTexture? GameOverGraphics1 { get; set; }
     public static RetroTexture? GameOverGraphics2 { get; set; }
     public static RetroTexture? GameOverGraphics3 { get; set; }
@@ -109,16 +107,7 @@ public class Game1 : RetroGame.RetroGame
         GameOverGraphics3 = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "gameover3");
         GameOverGraphics4 = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "gameover4");
         MayorResources.LoadContent(GraphicsDevice, Content);
-
-        IntroGraphics1 = new RetroTexture(GraphicsDevice, 640, 360, 1);
-        IntroGraphics1.SetData(Content.Load<Texture2D>("preloadscreen0"));
-
-        IntroGraphics2 = new RetroTexture(GraphicsDevice, 640, 360, 1);
-        IntroGraphics2.SetData(Content.Load<Texture2D>("preloadscreen1"));
-
-        IntroGraphics3 = new RetroTexture(GraphicsDevice, 640, 360, 1);
-        IntroGraphics3.SetData(Content.Load<Texture2D>("load-screen-360p-nofilter"));
-
+        IntroGraphics = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "load-screen-360p-nofilter");
         EnemyFire!.Initialize("sfx_gun1", "sfx_gun2", "sfx_gun3", "sfx_gun4", "sfx_gun5", "sfx_gun6");
         PlayerFire!.Initialize("sfx_gun7", "sfx_gun8", "sfx_gun9", "sfx_gun10");
         EnemyDie!.Initialize("sfx_enemydeath1", "sfx_enemydeath2", "sfx_enemydeath3");

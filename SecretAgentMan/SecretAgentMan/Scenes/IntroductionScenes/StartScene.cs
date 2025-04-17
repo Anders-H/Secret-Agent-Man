@@ -11,11 +11,7 @@ namespace SecretAgentMan.Scenes.IntroductionScenes;
 
 public class StartScene : Scene
 {
-    private int _logoX;
-    private int _logoY;
-    private double _counter;
-    private const string LogoText = "secret agent man";
-    private const string CreditsText = "programming: anders hesselbom   sound and graphics: mats j. larsson   copyright 1989 havet software company";
+    private const string CreditsText = "programming: anders hesselbom    sound and graphics: mats j. larsson    copyright 1989 havet software company";
     private const string TodaysBestPlayersHeader = "the best secret agents today are";
     private int _creditsX;
     private readonly TextBlock _textBlock;
@@ -55,12 +51,6 @@ public class StartScene : Scene
             return;
         }
 
-        _counter++;
-        const int centerX = 255;
-        const int centerY = 100;
-        _logoX = (int)(centerX + Math.Sin(_counter / 50) * 150.0);
-        _logoY = (int)(centerY + Math.Cos(_counter / 30) * 30.0);
-
         if (ticks % 2 == 0)
         {
             _creditsX--;
@@ -85,8 +75,7 @@ public class StartScene : Scene
         switch (_state)
         {
             case StartSceneState.Logo:
-                if (ticks > 1 && _logoX != 0 && _logoY != 0)
-                    _textBlock.DirectDraw(spriteBatch, _logoX, _logoY, LogoText, ColorPalette.White);
+
                 break;
             case StartSceneState.HighScore:
                 var x = TodaysBestPlayersHeader.Length * 8;
