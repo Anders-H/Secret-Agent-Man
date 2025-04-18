@@ -11,13 +11,14 @@ using RetroGame.HighScore;
 using RetroGame.RetroTextures;
 using RetroGame.Text;
 using SecretAgentMan.OtherResources;
+using SecretAgentMan.Scenes;
 using SecretAgentMan.Scenes.IntroductionScenes;
 
 namespace SecretAgentMan;
 
 public class Game1 : RetroGame.RetroGame
 {
-    public static SettingCollection Settings { get; set; }
+    public static SettingCollection? Settings { get; set; }
     public static RetroTexture? CharactersTexture { get; set; }
     public static RetroTexture? BackgroundTempTexture { get; set; }
     public static RetroTextureVertical? WaterTexture { get; set; }
@@ -36,6 +37,7 @@ public class Game1 : RetroGame.RetroGame
     public static RetroTexture? CoinTexture { get; set; }
     public static RetroTexture? Hud { get; set; }
     public static RetroTexture? Frame { get; set; }
+    public static RetroTexture? BonusLevelFrame { get; set; }
     public static Decoration Decoration { get; set; }
     public static SoundEffect? EnemyFire { get; set; }
     public static SoundEffect? PlayerFire { get; set; }
@@ -50,6 +52,8 @@ public class Game1 : RetroGame.RetroGame
     public static int TodaysBestScore;
     public static HighScoreList HighScore { get; }
     public static TypeWriter TypeWriter { get; }
+    public static IngameScene? CurrentIngameScene { get; set; }
+    public static int BonusRoundSeconds { get; set; }
 
     static Game1()
     {
@@ -59,6 +63,7 @@ public class Game1 : RetroGame.RetroGame
         HighScore = new HighScoreList(640, 380, true, true, 220);
         Decoration = new Decoration();
         TypeWriter = new TypeWriter(70, 298, 6, ColorPalette.White);
+        CurrentIngameScene = null;
     }
 
     public Game1() : base(640, 360, RetroDisplayMode.Fullscreen, false)
@@ -82,6 +87,7 @@ public class Game1 : RetroGame.RetroGame
             throw new SystemException("Settings cannot be parsed.");
 
         Settings = response.Settings;
+        BonusRoundSeconds = int.Parse(Settings.GetValue("BonusRoundSeconds"));
 
         Hud = RetroTexture.LoadContent(GraphicsDevice, Content, 620, 59, 1, "hud");
         BackgroundLayer01 = RetroTextureVertical.LoadContent(GraphicsDevice, Content, 640, 91, 4, "background-640x91");
@@ -91,6 +97,7 @@ public class Game1 : RetroGame.RetroGame
         CoinTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 10, 10, 6, "coin10x10");
         CharactersTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 25, 25, 32, "player25x25");
         Frame = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "frame");
+        BonusLevelFrame = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 2, "bonus-stars-640x360");
         GraveStoneTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 25, 25, 13, "rip25x25");
 
         WaterTexture = new RetroTextureVertical(GraphicsDevice, 640, 30, 18);

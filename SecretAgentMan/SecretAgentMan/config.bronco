@@ -1,4 +1,10 @@
-﻿<<<Begin:Setting:Level1RoomNames>>>
+﻿<<<Begin:Setting:BonusRoundSeconds>>>
+
+	/* Antal sekunder som bonusrundan varar. */
+	10
+
+<<<End:Setting>>>
+<<<Begin:Setting:Level1RoomNames>>>
 
 	/* En semikolonseparerad lista över rummens namn i level 1 (10 stycken). */
 	Vretstorp Town; Viby Village; Edsberg Village; Fjugesta Town; Vintrosa; Marieberg; Adolfsberg, Örebro; Västhaga, Örebro; Vargerga, Örebro; Vivalla, Örebro

@@ -68,11 +68,14 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 if (Keyboard.IsKeyPressed(Keys.Escape))
                     _askQuitMode = true;
 
-                if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F9) && RetroGame.RetroGame.CheatFileAvailable)
+                if (RetroGame.RetroGame.CheatFileAvailable && Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F9))
                     Game1.Cheat = !Game1.Cheat;
 
-                if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F8) && RetroGame.RetroGame.CheatFileAvailable)
+                if (RetroGame.RetroGame.CheatFileAvailable && Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F8))
                     Score += 100;
+
+                if (RetroGame.RetroGame.CheatFileAvailable && Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.B))
+                    Parent.CurrentScene = new BonusLevelScene(Parent);
 
                 if (ticks % 7 == 0)
                 {

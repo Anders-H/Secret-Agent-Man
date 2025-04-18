@@ -51,6 +51,9 @@ public class IntroScene : Scene
             }
         }
 
+        if (RetroGame.RetroGame.CheatFileAvailable && Keyboard.IsFirePressed())
+            Parent.CurrentScene = new StartScene(Parent, 0, 0);
+
         if (ticks == TicksBeforeContinue)
             Keyboard.ClearState();
 

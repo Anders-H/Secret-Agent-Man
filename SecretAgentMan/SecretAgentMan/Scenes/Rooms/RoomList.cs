@@ -19,26 +19,29 @@ public class RoomList
         int[] innocentCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         string[] names = ["vretstorp town", "viby village", "edsberg village", "fjugesta town", "vintrosa", "marieberg", "adolfsberg, örebro", "västhaga, örebro", "vargerga, örebro", "vivalla, örebro"];
 
-        // Overwrite names.
-        var namesInConfig = Game1.Settings.GetValue("Level1RoomNames");
-        var parts = namesInConfig.Split(';');
+        if (Game1.Settings != null)
+        {
+            // Overwrite names.
+            var namesInConfig = Game1.Settings.GetValue("Level1RoomNames");
+            var parts = namesInConfig.Split(';');
 
-        for (var i = 0; i < names.Length; i++)
-            names[i] = parts[i].ToLower().Trim();
+            for (var i = 0; i < names.Length; i++)
+                names[i] = parts[i].ToLower().Trim();
 
-        // Overwrite NPC count.
-        var npcsInConfig = Game1.Settings.GetValue("Level1InnocentNpcCount");
-        parts = npcsInConfig.Split(',');
+            // Overwrite NPC count.
+            var npcsInConfig = Game1.Settings.GetValue("Level1InnocentNpcCount");
+            parts = npcsInConfig.Split(',');
 
-        for (var i = 0; i < innocentCount.Length; i++)
-            innocentCount[i] = int.Parse(parts[i]);
+            for (var i = 0; i < innocentCount.Length; i++)
+                innocentCount[i] = int.Parse(parts[i]);
 
-        // Overwrite spy count.
-        var spysInConfig = Game1.Settings.GetValue("Level1SpyCount");
-        parts = spysInConfig.Split(',');
+            // Overwrite spy count.
+            var spysInConfig = Game1.Settings.GetValue("Level1SpyCount");
+            parts = spysInConfig.Split(',');
 
-        for (var i = 0; i < spyCount.Length; i++)
-            spyCount[i] = int.Parse(parts[i]);
+            for (var i = 0; i < spyCount.Length; i++)
+                spyCount[i] = int.Parse(parts[i]);
+        }
 
         for (var i = 0; i < spyCount.Length; i++)
         {
