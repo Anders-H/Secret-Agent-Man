@@ -1,7 +1,7 @@
 ﻿<<<Begin:Setting:BonusRoundSeconds>>>
 
 	/* Antal sekunder som bonusrundan varar. */
-	10
+	20
 
 <<<End:Setting>>>
 <<<Begin:Setting:Level1RoomNames>>>

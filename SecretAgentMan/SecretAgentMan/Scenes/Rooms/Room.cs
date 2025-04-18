@@ -12,7 +12,7 @@ public class Room
 {
     public string DistrictName { get; }
     public List<Npc> Npcs { get; }
-    public List<Coin> Coins { get; }
+    public CoinList Coins { get; }
     private readonly List<Airplane> _airplanes;
     
     public Room(string districtName)

@@ -1,14 +1,13 @@
 ﻿using RetroGame.Sprites;
 using SecretAgentMan.Sprites;
-using System.Collections.Generic;
 
 namespace SecretAgentMan;
 
 public abstract class Character : Sprite
 {
-    private int[]? _currentAnimation;
-    private int _currentAnimationIndex;
-    protected readonly List<Fire> FireList;
+    private ushort[]? _currentAnimation;
+    private ushort _currentAnimationIndex;
+    protected readonly FireList FireList;
     protected bool FaceRight;
     protected ulong DieAtTicks;
     public const int StatusAlive = 0;
@@ -17,7 +16,7 @@ public abstract class Character : Sprite
     public int CellIndex { get; private set; }
     public int AliveStatus { get; set; }
     
-    protected Character(List<Fire> fireList)
+    protected Character(FireList fireList)
     {
         DieAtTicks = 0;
         FireList = fireList;
@@ -25,7 +24,7 @@ public abstract class Character : Sprite
         FaceRight = true;
     }
 
-    protected int[]? CurrentAnimation
+    protected ushort[]? CurrentAnimation
     {
         get => _currentAnimation;
         set
@@ -35,7 +34,7 @@ public abstract class Character : Sprite
         }
     }
 
-    protected int CurrentAnimationIndex
+    protected ushort CurrentAnimationIndex
     {
         get => _currentAnimationIndex;
         set

@@ -12,7 +12,7 @@ public class RoomList
     private List<Room> Rooms { get; }
     public readonly int SpyCount; 
 
-    public RoomList(Player player, List<Fire> enemyFireList)
+    public RoomList(Player player, FireList enemyFireList)
     {
         Rooms = [];
         int[] spyCount = [1, 1, 2, 3, 4, 4, 6, 10, 15, 25];
@@ -122,7 +122,7 @@ public class RoomList
     public List<Npc> GetNpcs(int room) =>
         Rooms[room].Npcs;
 
-    public List<Coin> GetCoins(int room) =>
+    public CoinList GetCoins(int room) =>
         Rooms[room].Coins;
 
     public void TurnOneDeadNpcToGraveStone(int room)

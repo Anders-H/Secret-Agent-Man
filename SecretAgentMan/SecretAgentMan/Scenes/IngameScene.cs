@@ -75,7 +75,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                     Score += 100;
 
                 if (RetroGame.RetroGame.CheatFileAvailable && Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.B))
-                    Parent.CurrentScene = new BonusLevelScene(Parent);
+                    Parent.CurrentScene = new BonusLevelScene(Parent, Score, AddScore);
 
                 if (ticks % 7 == 0)
                 {
@@ -229,6 +229,9 @@ public class IngameScene : RetroGame.Scene.IngameScene
         base.Update(gameTime, ticks);
     }
 
+    private int AddScore(int points) =>
+        Score += points;
+
     public override void Draw(GameTime gameTime, ulong ticks, SpriteBatch spriteBatch)
     {
         Game1.Decoration.Draw(spriteBatch, _currentRoomIndex);
@@ -244,10 +247,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
         else
         {
             _roomList.DrawBackground(spriteBatch, _currentRoomIndex, Text, _player);
-            
-            foreach (var coin in _roomList.GetCoins(_currentRoomIndex))
-                coin.Draw(spriteBatch);
-
+            _roomList.GetCoins(_currentRoomIndex).Draw(spriteBatch);
             _fire.Draw(spriteBatch);
             _roomList.DrawDecorations(spriteBatch, _currentRoomIndex);
         }

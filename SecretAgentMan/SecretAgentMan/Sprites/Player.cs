@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using RetroGame.Input;
+﻿using RetroGame.Input;
 using SecretAgentMan.Scenes;
 using SecretAgentMan.Scenes.Rooms;
 
@@ -7,11 +6,11 @@ namespace SecretAgentMan.Sprites;
 
 public class Player : Character
 {
-    private readonly int[] _walkRight = [0, 1, 2, 3];
-    private readonly int[] _walkLeft = [4, 5, 6, 7];
-    private readonly int[] _die = [20, 21, 20, 21];
+    private readonly ushort[] _walkRight = [0, 1, 2, 3];
+    private readonly ushort[] _walkLeft = [4, 5, 6, 7];
+    private readonly ushort[] _die = [20, 21, 20, 21];
 
-    public Player(List<Fire> fireList) : base(fireList)
+    public Player(FireList fireList) : base(fireList)
     {
         CurrentAnimation = _walkRight;
         X = 30;
@@ -91,7 +90,68 @@ public class Player : Character
                 Y = IngameScene.SpriteLowerLimit;
         }
 
-        if (keyboard.IsFirePressed() && ticks > 3)
+        if (keyboard.IsFirePressed() && ticks > 2)
+            Fire(false);
+
+        if (changeAnimationCells)
+            CurrentAnimation = FaceRight ? _walkRight : _walkLeft;
+
+        if (isMoving)
+            Tick(ticks);
+    }
+
+    public void PlayerControlBonusRound(ulong ticks, KeyboardStateChecker keyboard)
+    {
+        var changeAnimationCells = false;
+        var isMoving = false;
+
+        if (keyboard.MoveRightWasd())
+        {
+            if (!FaceRight)
+            {
+                FaceRight = true;
+                changeAnimationCells = true;
+            }
+
+            isMoving = true;
+            X += 2;
+
+            if (X > 615)
+                X = 615;
+        }
+        else if (keyboard.MoveLeftWasd())
+        {
+            if (FaceRight)
+            {
+                FaceRight = false;
+                changeAnimationCells = true;
+            }
+
+            isMoving = true;
+            X -= 2;
+
+            if (X < 0)
+                X = 0;
+        }
+
+        if (keyboard.MoveUpWasd())
+        {
+            isMoving = true;
+            Y -= 2;
+
+            if (Y < 0)
+                Y = 0;
+        }
+        else if (keyboard.MoveDownWasd())
+        {
+            isMoving = true;
+            Y += 2;
+
+            if (Y > 334)
+                Y = 334;
+        }
+
+        if (keyboard.IsFirePressed() && ticks > 2)
             Fire(false);
 
         if (changeAnimationCells)
