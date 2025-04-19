@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using RetroGame;
 using RetroGame.Input;
 using RetroGame.Scene;
@@ -28,6 +29,8 @@ public class IntroScene : Scene
         pressFireCenterX = 320 - pressFire.Length * 8 / 2;
         _textBlock = new TextBlock(CharacterSet.Uppercase);
         AddToAutoUpdate(Keyboard);
+        Game1.LoaderSongIsPlaying = true;
+        MediaPlayer.Play(Game1.LoaderSong!);
     }
 
     public override void Update(GameTime gameTime, ulong ticks)

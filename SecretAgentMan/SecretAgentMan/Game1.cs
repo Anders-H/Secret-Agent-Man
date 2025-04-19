@@ -46,6 +46,7 @@ public class Game1 : RetroGame.RetroGame
     public static SoundEffect? EnemyCoin { get; set; }
     public static SoundEffect? PlayerCoin { get; set; }
     public static Song? GameOverSong { get; set; }
+    public static Song? LoaderSong { get; set; }
     public static Random Random;
     public static bool Cheat = false;
     public static int LastScore;
@@ -54,6 +55,7 @@ public class Game1 : RetroGame.RetroGame
     public static TypeWriter TypeWriter { get; }
     public static IngameScene? CurrentIngameScene { get; set; }
     public static int BonusRoundSeconds { get; set; }
+    public static bool LoaderSongIsPlaying { get; set; }
 
     static Game1()
     {
@@ -99,10 +101,8 @@ public class Game1 : RetroGame.RetroGame
         Frame = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "frame");
         BonusLevelFrame = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 2, "bonus-stars-640x360");
         GraveStoneTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 25, 25, 13, "rip25x25");
-
-        WaterTexture = new RetroTextureVertical(GraphicsDevice, 640, 30, 18);
-        WaterTexture.SetData(Content.Load<Texture2D>("water640x30"));
-
+        WaterTexture = RetroTextureVertical.LoadContent(GraphicsDevice, Content, 640, 30, 18, "water640x30");
+        
         AirplaneRightTexture = new RetroTexture(GraphicsDevice, 5, 3, 25);
         AirplaneRightTexture.SetData(Content.Load<Texture2D>("plane5x3"));
 
@@ -122,6 +122,7 @@ public class Game1 : RetroGame.RetroGame
         EnemyCoin!.Initialize("enemy_sfx_coin_1", "enemy_sfx_coin_2", "enemy_sfx_coin_3");
         PlayerCoin!.Initialize("player_sfx_coin_1", "player_sfx_coin_2");
         GameOverSong = Content.Load<Song>("game-over");
+        LoaderSong = Content.Load<Song>("loader");
         CurrentScene = new IntroScene(this);
         base.LoadContent();
     }

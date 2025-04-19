@@ -14,7 +14,8 @@ public class BonusLevelScene : RetroGame.Scene.IngameScene
     private readonly IngameFire _fire = new();
     private readonly Player _player;
     private List<Npc> Npcs { get; }
-    private AddScoreDelegate _addScore;
+    private readonly AddScoreDelegate _addScore;
+    private int _secondsPassed;
     public CoinList Coins { get; }
 
     public BonusLevelScene(RetroGame.RetroGame parent, int score, AddScoreDelegate addScore) : base(parent)
@@ -34,7 +35,9 @@ public class BonusLevelScene : RetroGame.Scene.IngameScene
 
     public override void Update(GameTime gameTime, ulong ticks)
     {
-        if (DateTime.Now.Subtract(_bonusLevelStartTime).TotalSeconds >= Game1.BonusRoundSeconds)
+        _secondsPassed = (int)Math.Ceiling(DateTime.Now.Subtract(_bonusLevelStartTime).TotalSeconds);
+
+        if (_secondsPassed >= Game1.BonusRoundSeconds)
         {
             Parent.CurrentScene = Game1.CurrentIngameScene;
             return;
@@ -69,6 +72,33 @@ public class BonusLevelScene : RetroGame.Scene.IngameScene
 
         OuterBail:;
 
+        _fire.Act(ticks);
+
+        foreach (var npc in Npcs)
+        {
+            foreach (var fire in _fire.PlayerFire)
+            {
+                if (!npc.Hit(fire))
+                    continue;
+
+                _fire.PlayerFire.Remove(fire);
+
+                if (npc.AliveStatus == Character.StatusAlive)
+                {
+                    npc.Die(ticks);
+                    Score = _addScore(5);
+                }
+
+                break;
+            }
+        }
+
+        foreach (var npc in Npcs.Where(npc => npc.AliveStatus == Character.StatusDead && !npc.IsGraveStone))
+        {
+            Npcs.Remove(npc);
+            break;
+        }
+
         _player.PlayerControlBonusRound(ticks, Keyboard);
         base.Update(gameTime, ticks);
     }
@@ -97,7 +127,11 @@ public class BonusLevelScene : RetroGame.Scene.IngameScene
         _fire.Draw(spriteBatch);
         Game1.Frame!.Draw(spriteBatch, 0, 0, 0);
         Game1.BonusLevelFrame!.Draw(spriteBatch, ticks % 20 < 10 ? 0 : 1, 0, 0);
-        Text.DirectDraw(spriteBatch, 508, 11, ScoreString, ColorPalette.White);
+        Text.DirectDraw(spriteBatch, 508, 12, ScoreString, ColorPalette.White);
+
+        if (ticks % 15 < 7)
+            Text.DirectDraw(spriteBatch, 12, 12, (Game1.BonusRoundSeconds - _secondsPassed).ToString(), ColorPalette.White);
+
         base.Draw(gameTime, ticks, spriteBatch);
     }
 }

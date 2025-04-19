@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using RetroGame;
 using SecretAgentMan.OtherResources;
 using SecretAgentMan.Scenes.GameOverScenes;
@@ -36,6 +37,8 @@ public class IngameScene : RetroGame.Scene.IngameScene
         AddToAutoUpdate(Game1.TypeWriter);
         AddToAutoDraw(Game1.TypeWriter);
         UpdateRoomNameAndCheckClear(0);
+        MediaPlayer.Stop();
+        Game1.LoaderSongIsPlaying = false;
     }
 
     private void UpdateRoomNameAndCheckClear(ulong ticks)
@@ -225,7 +228,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
             ScoreManagement.StoreLastScore(Score);
             Parent.CurrentScene = new GameOverKilledScene(Parent);
         }
-        System.Diagnostics.Debug.WriteLine(_player.Y);
+
         base.Update(gameTime, ticks);
     }
 
@@ -252,8 +255,8 @@ public class IngameScene : RetroGame.Scene.IngameScene
             _roomList.DrawDecorations(spriteBatch, _currentRoomIndex);
         }
 
-        Text.DirectDraw(spriteBatch, 11, 11, _currentRoomName, Color.White);
-        Text.DirectDraw(spriteBatch, 508, 11, ScoreString, ColorPalette.White);
+        Text.DirectDraw(spriteBatch, 12, 12, _currentRoomName, Color.White);
+        Text.DirectDraw(spriteBatch, 508, 12, ScoreString, ColorPalette.White);
         Game1.Hud?.Draw(spriteBatch, 0, 10, 292);
 
         if (_gameCompleted)

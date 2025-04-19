@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using RetroGame;
 using RetroGame.Input;
 using RetroGame.Scene;
@@ -29,6 +30,12 @@ public class StartScene : Scene
         _textBlock = new TextBlock(CharacterSet.Uppercase);
         _state = StartSceneState.Logo;
         AddToAutoUpdate(Keyboard);
+
+        if (!Game1.LoaderSongIsPlaying)
+        {
+            Game1.LoaderSongIsPlaying = true;
+            MediaPlayer.Play(Game1.LoaderSong!);
+        }
     }
 
     public override void Update(GameTime gameTime, ulong ticks)

@@ -193,6 +193,12 @@
 /processorParam:TextureFormat=Color
 /build:load-screen-360p-nofilter.png
 
+#begin loader.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:loader.mp3
+
 #begin mayor50x50.png
 /importer:TextureImporter
 /processor:TextureProcessor
