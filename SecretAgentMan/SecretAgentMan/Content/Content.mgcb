@@ -169,6 +169,12 @@
 /processorParam:TextureFormat=Color
 /build:gameover4.png
 
+#begin hiscore.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:hiscore.mp3
+
 #begin hud.png
 /importer:TextureImporter
 /processor:TextureProcessor

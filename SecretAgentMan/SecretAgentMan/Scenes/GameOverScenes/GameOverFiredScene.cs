@@ -37,7 +37,9 @@ public class GameOverFiredScene : Scene
 
     public override void Update(GameTime gameTime, ulong ticks)
     {
-        if (ticks == 350)
+        if (ticks == 100 && Game1.HighScore.Qualify(Game1.LastScore))
+            MediaPlayer.Play(Game1.GameOverSong);
+        if (ticks == 350 && !Game1.HighScore.Qualify(Game1.LastScore))
             MediaPlayer.Play(Game1.GameOverSong);
 
         switch (_cellIndex)

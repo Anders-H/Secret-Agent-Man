@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using RetroGame;
 using RetroGame.Input;
 using RetroGame.Scene;
@@ -37,6 +38,9 @@ public class HighScoreScene : Scene
             _gameOverY = 200;
         else if (_gameOverReason == GameOverReason.PlayerDied)
             _gameOverY = 0;
+
+        MediaPlayer.Stop();
+        MediaPlayer.Play(Game1.HiScoreSong!);
     }
 
     public override void Update(GameTime gameTime, ulong ticks)

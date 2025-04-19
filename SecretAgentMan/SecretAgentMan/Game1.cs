@@ -47,6 +47,7 @@ public class Game1 : RetroGame.RetroGame
     public static SoundEffect? PlayerCoin { get; set; }
     public static Song? GameOverSong { get; set; }
     public static Song? LoaderSong { get; set; }
+    public static Song? HiScoreSong { get; set; }
     public static Random Random;
     public static bool Cheat = false;
     public static int LastScore;
@@ -123,6 +124,7 @@ public class Game1 : RetroGame.RetroGame
         PlayerCoin!.Initialize("player_sfx_coin_1", "player_sfx_coin_2");
         GameOverSong = Content.Load<Song>("game-over");
         LoaderSong = Content.Load<Song>("loader");
+        HiScoreSong = Content.Load<Song>("hiscore");
         CurrentScene = new IntroScene(this);
         base.LoadContent();
     }
