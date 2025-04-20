@@ -38,6 +38,7 @@ public class Game1 : RetroGame.RetroGame
     public static RetroTexture? Frame { get; set; }
     public static RetroTexture? BonusLevelFrame { get; set; }
     public static RetroTexture? BonusMeter { get; set; }
+    public static RetroTexture? MayorStatic { get; set; }
     public static Decoration Decoration { get; set; }
     public static SoundEffect? EnemyFire { get; set; }
     public static SoundEffect? PlayerFire { get; set; }

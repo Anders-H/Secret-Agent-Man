@@ -168,10 +168,12 @@ public class IngameScene : RetroGame.Scene.IngameScene
                                 switch (_innocentKill)
                                 {
                                     case 1:
+                                        MayorResources.DoShortTalk();
                                         Game1.TypeWriter.SetText("you have killed an innocent man!");
                                         Score -= 10;
                                         break;
                                     case 2:
+                                        MayorResources.DoShortTalkAngry();
                                         Game1.TypeWriter.SetText("you cannot just go around and shoot people!");
                                         Score -= 50;
                                         break;
@@ -254,6 +256,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
             }
         }
 
+        MayorResources.Act(ticks);
         base.Update(gameTime, ticks);
     }
 
@@ -314,6 +317,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
             }
         }
         
+        MayorResources.Draw(spriteBatch);
         base.Draw(gameTime, ticks, spriteBatch);
     }
 }

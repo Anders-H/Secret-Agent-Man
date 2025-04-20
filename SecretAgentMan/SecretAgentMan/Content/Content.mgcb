@@ -409,7 +409,7 @@
 /processorParam:TextureFormat=Color
 /build:skyline_fg-640x91.png
 
-#begin Static50x50.png
+#begin static_mayor.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -419,7 +419,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Static50x50.png
+/build:static_mayor.png
 
 #begin water640x30.png
 /importer:TextureImporter
