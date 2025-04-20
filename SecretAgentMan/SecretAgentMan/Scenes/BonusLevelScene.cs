@@ -86,6 +86,7 @@ public class BonusLevelScene : RetroGame.Scene.IngameScene
                 if (npc.AliveStatus == Character.StatusAlive)
                 {
                     npc.Die(ticks);
+                    Game1.EnemyDie!.PlayRandom();
                     Score = _addScore(5);
                 }
 

@@ -3,7 +3,6 @@ using System.IO;
 using BroncoSettingsParser;
 using BroncoSettingsParser.ResponseModel;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using RetroGame;
 using RetroGame.Audio;
@@ -38,6 +37,7 @@ public class Game1 : RetroGame.RetroGame
     public static RetroTexture? Hud { get; set; }
     public static RetroTexture? Frame { get; set; }
     public static RetroTexture? BonusLevelFrame { get; set; }
+    public static RetroTexture? BonusMeter { get; set; }
     public static Decoration Decoration { get; set; }
     public static SoundEffect? EnemyFire { get; set; }
     public static SoundEffect? PlayerFire { get; set; }
@@ -103,13 +103,9 @@ public class Game1 : RetroGame.RetroGame
         BonusLevelFrame = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 2, "bonus-stars-640x360");
         GraveStoneTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 25, 25, 13, "rip25x25");
         WaterTexture = RetroTextureVertical.LoadContent(GraphicsDevice, Content, 640, 30, 18, "water640x30");
-        
-        AirplaneRightTexture = new RetroTexture(GraphicsDevice, 5, 3, 25);
-        AirplaneRightTexture.SetData(Content.Load<Texture2D>("plane5x3"));
-
-        AirplaneLeftTexture = new RetroTexture(GraphicsDevice, 5, 3, 25);
-        AirplaneLeftTexture.SetData(Content.Load<Texture2D>("planeflipped5x3"));
-
+        BonusMeter = RetroTexture.LoadContent(GraphicsDevice, Content, 11, 51, 26, "bonus-meter");
+        AirplaneRightTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 5, 3, 25, "plane5x3");
+        AirplaneLeftTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 5, 3, 25, "planeflipped5x3");
         GameOverGraphics1 = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "gameover1");
         GameOverGraphics2 = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "gameover2");
         GameOverGraphics3 = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "gameover3");

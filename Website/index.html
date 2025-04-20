@@ -49,11 +49,11 @@
             cursor: pointer;
         }
 
-        a:hover {
-            color: #55ff88;
-            text-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
-            cursor: pointer;
-        }
+            a:hover {
+                color: #55ff88;
+                text-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
+                cursor: pointer;
+            }
 
         .container {
             width: 75%;
@@ -290,6 +290,28 @@
                 padding: 12px 0 0 0;
             }
         }
+
+        .video-container {
+            position: relative;
+            overflow: hidden;
+            height: 0;
+            padding-bottom: 56.25%;
+        }
+
+            .video-container iframe,
+            .video-container embed {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                max-width: 100%;
+            }
+
+        .video-wrap {
+            width: 100%;
+            max-width: 600px;
+        }
     </style>
 </head>
 <body>
@@ -395,11 +417,11 @@
         <p>
             This attitude is expected from all players of the game and from all contributors:
         </p>
-        <p>
-            <div style="margin: auto; width: 560px; padding: 10px;">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/YIllOcB5zfU?si=IOfXfj5rOaHk6mOr" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <div class="video-wrap" style="margin: auto; max-width: 560px; padding: 10px;">
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/YIllOcB5zfU?si=IOfXfj5rOaHk6mOr" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
-        </p>
+        </div>
     </div>
 </body>
 </html>

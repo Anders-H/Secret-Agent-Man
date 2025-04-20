@@ -26,6 +26,8 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private int _killedSpyCount;
     private bool _gameCompleted;
     private ulong _gameCompletedAt;
+    private short _currentBonusLevel;
+    private ulong _bonusReached52At;
     public const int SpriteUpperLimit = 98;
     public const int SpriteLowerLimit = 276;
 
@@ -126,6 +128,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                     coins.Remove(coin);
                     Game1.TypeWriter.SetText("coin collected, 50 points awarded");
                     Score += 50;
+                    _currentBonusLevel++;
                     break;
                 }
 
@@ -157,6 +160,10 @@ public class IngameScene : RetroGame.Scene.IngameScene
                             {
                                 npc.Die(ticks);
                                 _innocentKill++;
+                                _currentBonusLevel -= 2;
+
+                                if (_currentBonusLevel < 0)
+                                    _currentBonusLevel = 0;
 
                                 switch (_innocentKill)
                                 {
@@ -187,6 +194,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                                 _fire.Clear();
                                 _gameCompleted = true;
                                 _gameCompletedAt = ticks;
+                                _currentBonusLevel++;
                             }
                             else
                             {
@@ -229,6 +237,23 @@ public class IngameScene : RetroGame.Scene.IngameScene
             Parent.CurrentScene = new GameOverKilledScene(Parent);
         }
 
+        if (!_gameCompleted && _player.AliveStatus == Character.StatusAlive)
+        {
+            if (_currentBonusLevel >= 52 && _bonusReached52At <= 0)
+            {
+                _bonusReached52At = ticks;
+            }
+            else if (_currentBonusLevel >= 52 && _bonusReached52At > 10)
+            {
+                if (ticks - _bonusReached52At > 200)
+                {
+                    _bonusReached52At = 0;
+                    _currentBonusLevel = 0;
+                    Parent.CurrentScene = new BonusLevelScene(Parent, Score, AddScore);
+                }
+            }
+        }
+
         base.Update(gameTime, ticks);
     }
 
@@ -266,6 +291,29 @@ public class IngameScene : RetroGame.Scene.IngameScene
         }
 
         Game1.Frame!.Draw(spriteBatch, 0, 0, 0);
+
+        if (_currentBonusLevel > 0)
+        {
+            var frame = _currentBonusLevel / 2;
+
+            frame = frame switch
+            {
+                < 0 => 0,
+                > 25 => 25,
+                _ => frame
+            };
+
+            if (_bonusReached52At > 10)
+            {
+                if (ticks % 15 < 7)
+                    Game1.BonusMeter!.Draw(spriteBatch, frame, 521, 297);
+            }
+            else
+            {
+                Game1.BonusMeter!.Draw(spriteBatch, frame, 521, 297);
+            }
+        }
+        
         base.Draw(gameTime, ticks, spriteBatch);
     }
 }

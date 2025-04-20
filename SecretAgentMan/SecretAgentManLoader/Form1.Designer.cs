@@ -62,6 +62,7 @@
             StartPosition = FormStartPosition.Manual;
             Text = "Secret Agent Man Loader";
             TopMost = true;
+            FormClosed += Form1_FormClosed;
             Shown += Form1_Shown;
             ((System.ComponentModel.ISupportInitialize)axWindowsMediaPlayer1).EndInit();
             ResumeLayout(false);

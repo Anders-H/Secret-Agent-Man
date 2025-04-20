@@ -25,6 +25,7 @@ public partial class Form1 : Form
 
     private void Form1_Shown(object sender, EventArgs e)
     {
+        Cursor.Hide();
         Refresh();
         timer1.Interval = 1000;
         timer1.Start();
@@ -42,12 +43,17 @@ public partial class Form1 : Form
 
         switch (_seconds)
         {
-            case 10:
+            case 8:
                 Process.Start(_gamePath);
                 break;
             case 15:
                 Close();
                 break;
         }
+    }
+
+    private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+    {
+        Cursor.Show();
     }
 }
