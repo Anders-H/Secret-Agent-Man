@@ -38,7 +38,7 @@ public class Game1 : RetroGame.RetroGame
     public static RetroTexture? Frame { get; set; }
     public static RetroTexture? BonusLevelFrame { get; set; }
     public static RetroTexture? BonusMeter { get; set; }
-    public static RetroTexture? MayorStatic { get; set; }
+    public static RetroTexture? LivesSymbolTexture { get; set; }
     public static Decoration Decoration { get; set; }
     public static SoundEffect? EnemyFire { get; set; }
     public static SoundEffect? PlayerFire { get; set; }
@@ -111,6 +111,7 @@ public class Game1 : RetroGame.RetroGame
         GameOverGraphics2 = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "gameover2");
         GameOverGraphics3 = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "gameover3");
         GameOverGraphics4 = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "gameover4");
+        LivesSymbolTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 11, 7, 1, "lives11x7");
         MayorResources.LoadContent(GraphicsDevice, Content);
         IntroGraphics = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "load-screen-360p-nofilter");
         EnemyFire!.Initialize("sfx_gun1", "sfx_gun2", "sfx_gun3", "sfx_gun4", "sfx_gun5", "sfx_gun6");

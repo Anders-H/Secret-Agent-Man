@@ -10,7 +10,7 @@ public static class MayorResources
 {
     private static CurrentMayorSequence _currentMayorSequence;
     private static int _currentMayorSequenceIndex;
-    private static int _talkCell = 0;
+    private static int _talkCell;
     public static RetroTexture? MayorTexture { get; set; }
     public static RetroTexture? MayorStaticTexture { get; set; }
     private static RetroTexture? _currentTexture;
@@ -30,21 +30,27 @@ public static class MayorResources
         switch (killedSpyCount)
         {
             case 1:
+                DoShortTalk();
                 Game1.TypeWriter.SetText($"first spy eliminated! {scoreAdded} points!");
                 break;
             case 2:
+                DoShortTalk();
                 Game1.TypeWriter.SetText($"second spy eliminated! {scoreAdded} points!");
                 break;
             case 3:
+                DoShortTalk();
                 Game1.TypeWriter.SetText($"third spy eliminated! {scoreAdded} points!");
                 break;
             case 4:
+                DoShortTalk();
                 Game1.TypeWriter.SetText($"fourth spy eliminated! {scoreAdded} points!");
                 break;
             case 5:
+                DoShortTalk();
                 Game1.TypeWriter.SetText($"fifth spy eliminated! {scoreAdded} points!");
                 break;
             default:
+                DoShortTalk();
                 Game1.TypeWriter.SetText($"spy number {killedSpyCount} eliminated! {scoreAdded} points!");
                 break;
         }
@@ -58,7 +64,8 @@ public static class MayorResources
 
     public static void DoShortTalkAngry()
     {
-
+        _currentMayorSequence = CurrentMayorSequence.ShortTalkAngry;
+        _talkCell = 0;
     }
 
     public static void DoLongTalk()
@@ -106,33 +113,38 @@ public static class MayorResources
                         case 13:
                         case 14:
                         case 15:
-                        case 16:
-                        case 17:
-                        case 18:
-                        case 19:
-                        case 20:
-                        case 21:
-                        case 22:
                             _currentMayorSequenceIndex = 8 + _talkCell;
                             break;
-                        case 23:
+                        case 16:
                             _currentTexture = MayorTexture;
                             _currentMayorSequenceIndex = 0;
                             break;
+                        case 17:
+                            _currentMayorSequenceIndex = 0;
+                            break;
+                        case 18:
+                        case 19:
+                            _currentMayorSequenceIndex = 1;
+                            break;
+                        case 20:
+                        case 21:
+                            _currentMayorSequenceIndex = 0;
+                            break;
+                        case 22:
+                        case 23:
+                            _currentMayorSequenceIndex = 1;
+                            break;
                         case 24:
-                            _currentMayorSequenceIndex = 0;
-                            break;
                         case 25:
-                        case 26:
-                            _currentMayorSequenceIndex = 1;
-                            break;
-                        case 27:
-                        case 28:
                             _currentMayorSequenceIndex = 0;
                             break;
-                        case 29:
-                        case 30:
+                        case 26:
+                        case 27:
                             _currentMayorSequenceIndex = 1;
+                            break;
+                        case 28:
+                        case 29:
+                            _currentMayorSequenceIndex = 0;
                             break;
                         default:
                             _currentTexture = MayorStaticTexture;
@@ -146,6 +158,71 @@ public static class MayorResources
 
                 break;
             case CurrentMayorSequence.ShortTalkAngry:
+
+                if (ticks % 8 == 0)
+                {
+                    switch (_talkCell)
+                    {
+                        case 0:
+                            _currentTexture = MayorStaticTexture;
+                            _currentMayorSequenceIndex = 8;
+                            break;
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 5:
+                        case 6:
+                        case 7:
+                        case 8:
+                        case 9:
+                        case 10:
+                        case 11:
+                        case 12:
+                        case 13:
+                        case 14:
+                        case 15:
+                            _currentMayorSequenceIndex = 8 + _talkCell;
+                            break;
+                        case 16:
+                            _currentTexture = MayorTexture;
+                            _currentMayorSequenceIndex = 0;
+                            break;
+                        case 17:
+                            _currentMayorSequenceIndex = 0;
+                            break;
+                        case 18:
+                        case 19:
+                            _currentMayorSequenceIndex = 1;
+                            break;
+                        case 20:
+                        case 21:
+                            _currentMayorSequenceIndex = 0;
+                            break;
+                        case 22:
+                        case 24:
+                        case 26:
+                        case 28:
+                        case 30:
+                            _currentMayorSequenceIndex = 2;
+                            break;
+                        case 23:
+                        case 25:
+                        case 27:
+                        case 29:
+                        case 31:
+                            _currentMayorSequenceIndex = 3;
+                            break;
+                        default:
+                            _currentTexture = MayorStaticTexture;
+                            _currentMayorSequenceIndex = 0;
+                            _currentMayorSequence = CurrentMayorSequence.None;
+                            break;
+                    }
+
+                    _talkCell++;
+                }
+
                 break;
             case CurrentMayorSequence.LongTalk:
                 break;

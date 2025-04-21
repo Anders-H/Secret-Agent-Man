@@ -199,6 +199,18 @@
 /processorParam:TextureFormat=Color
 /build:hud.png
 
+#begin lives11x7.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:lives11x7.png
+
 #begin load-screen-360p-nofilter.png
 /importer:TextureImporter
 /processor:TextureProcessor

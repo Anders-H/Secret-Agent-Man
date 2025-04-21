@@ -28,6 +28,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private ulong _gameCompletedAt;
     private short _currentBonusLevel;
     private ulong _bonusReached52At;
+    private int _lives;
     public const int SpriteUpperLimit = 98;
     public const int SpriteLowerLimit = 276;
 
@@ -39,6 +40,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
         AddToAutoUpdate(Game1.TypeWriter);
         AddToAutoDraw(Game1.TypeWriter);
         UpdateRoomNameAndCheckClear(0);
+        _lives = 2;
         MediaPlayer.Stop();
         Game1.LoaderSongIsPlaying = false;
     }
@@ -286,6 +288,26 @@ public class IngameScene : RetroGame.Scene.IngameScene
         Text.DirectDraw(spriteBatch, 12, 12, _currentRoomName, Color.White);
         Text.DirectDraw(spriteBatch, 508, 12, ScoreString, ColorPalette.White);
         Game1.Hud?.Draw(spriteBatch, 0, 10, 292);
+        Text.DirectDraw(spriteBatch, 544, 299, "lives", ColorPalette.White);
+        Text.DirectDraw(spriteBatch, 544, 307, "faults", ColorPalette.White);
+        Text.DirectDraw(spriteBatch, 544, 315, "ammo", ColorPalette.White);
+
+        switch (_lives)
+        {
+            case 2:
+                Game1.LivesSymbolTexture!.Draw(spriteBatch, 0, 590, 298);
+                Game1.LivesSymbolTexture!.Draw(spriteBatch, 0, 602, 298);
+
+                if (ticks % 40 > 20)
+                    Game1.LivesSymbolTexture!.Draw(spriteBatch, 0, 614, 298);
+
+                break;
+            case 1:
+                break;
+            case 0:
+                break;
+        }
+
 
         if (_gameCompleted)
         {
