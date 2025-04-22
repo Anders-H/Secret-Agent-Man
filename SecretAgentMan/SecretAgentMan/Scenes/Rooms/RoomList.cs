@@ -10,37 +10,101 @@ namespace SecretAgentMan.Scenes.Rooms;
 public class RoomList
 {
     private List<Room> Rooms { get; }
-    public readonly int SpyCount; 
+    public readonly int SpyCount;
 
-    public RoomList(Player player, FireList enemyFireList)
+    public RoomList(Player player, FireList enemyFireList, int zeroBasedLevel)
     {
         Rooms = [];
         int[] spyCount = [1, 1, 2, 3, 4, 4, 6, 10, 15, 25];
         int[] innocentCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-        string[] names = ["vretstorp town", "viby village", "edsberg village", "fjugesta town", "vintrosa", "marieberg", "adolfsberg, örebro", "västhaga, örebro", "vargerga, örebro", "vivalla, örebro"];
+        string[] names =
+        [
+            "vretstorp town", "viby village", "edsberg village", "fjugesta town", "vintrosa", "marieberg",
+            "adolfsberg, örebro", "västhaga, örebro", "vargerga, örebro", "vivalla, örebro"
+        ];
 
-        if (Game1.Settings != null)
+        switch (zeroBasedLevel)
         {
-            // Overwrite names.
-            var namesInConfig = Game1.Settings.GetValue("Level1RoomNames");
-            var parts = namesInConfig.Split(';');
+            case 0:
+                if (Game1.Settings != null)
+                {
+                    // Overwrite names.
+                    var namesInConfig = Game1.Settings.GetValue("Level1RoomNames");
+                    var parts = namesInConfig.Split(';');
 
-            for (var i = 0; i < names.Length; i++)
-                names[i] = parts[i].ToLower().Trim();
+                    for (var i = 0; i < names.Length; i++)
+                        names[i] = parts[i].ToLower().Trim();
 
-            // Overwrite NPC count.
-            var npcsInConfig = Game1.Settings.GetValue("Level1InnocentNpcCount");
-            parts = npcsInConfig.Split(',');
+                    // Overwrite NPC count.
+                    var npcsInConfig = Game1.Settings.GetValue("Level1InnocentNpcCount");
+                    parts = npcsInConfig.Split(',');
 
-            for (var i = 0; i < innocentCount.Length; i++)
-                innocentCount[i] = int.Parse(parts[i]);
+                    for (var i = 0; i < innocentCount.Length; i++)
+                        innocentCount[i] = int.Parse(parts[i]);
 
-            // Overwrite spy count.
-            var spysInConfig = Game1.Settings.GetValue("Level1SpyCount");
-            parts = spysInConfig.Split(',');
+                    // Overwrite spy count.
+                    var spysInConfig = Game1.Settings.GetValue("Level1SpyCount");
+                    parts = spysInConfig.Split(',');
 
-            for (var i = 0; i < spyCount.Length; i++)
-                spyCount[i] = int.Parse(parts[i]);
+                    for (var i = 0; i < spyCount.Length; i++)
+                        spyCount[i] = int.Parse(parts[i]);
+                }
+
+                break;
+            case 1:
+                if (Game1.Settings != null)
+                {
+                    // Overwrite names.
+                    var namesInConfig = Game1.Settings.GetValue("Level2RoomNames");
+                    var parts = namesInConfig.Split(';');
+
+                    for (var i = 0; i < names.Length; i++)
+                        names[i] = parts[i].ToLower().Trim();
+
+                    // Overwrite NPC count.
+                    var npcsInConfig = Game1.Settings.GetValue("Level2InnocentNpcCount");
+                    parts = npcsInConfig.Split(',');
+
+                    for (var i = 0; i < innocentCount.Length; i++)
+                        innocentCount[i] = int.Parse(parts[i]);
+
+                    // Overwrite spy count.
+                    var spysInConfig = Game1.Settings.GetValue("Level2SpyCount");
+                    parts = spysInConfig.Split(',');
+
+                    for (var i = 0; i < spyCount.Length; i++)
+                        spyCount[i] = int.Parse(parts[i]);
+                }
+
+                break;
+            case 2:
+                if (Game1.Settings != null)
+                {
+                    // Overwrite names.
+                    var namesInConfig = Game1.Settings.GetValue("Level3RoomNames");
+                    var parts = namesInConfig.Split(';');
+
+                    for (var i = 0; i < names.Length; i++)
+                        names[i] = parts[i].ToLower().Trim();
+
+                    // Overwrite NPC count.
+                    var npcsInConfig = Game1.Settings.GetValue("Level3InnocentNpcCount");
+                    parts = npcsInConfig.Split(',');
+
+                    for (var i = 0; i < innocentCount.Length; i++)
+                        innocentCount[i] = int.Parse(parts[i]);
+
+                    // Overwrite spy count.
+                    var spysInConfig = Game1.Settings.GetValue("Level3SpyCount");
+                    parts = spysInConfig.Split(',');
+
+                    for (var i = 0; i < spyCount.Length; i++)
+                        spyCount[i] = int.Parse(parts[i]);
+                }
+
+                break;
+            default:
+                throw new SystemException("What level?!?");
         }
 
         for (var i = 0; i < spyCount.Length; i++)

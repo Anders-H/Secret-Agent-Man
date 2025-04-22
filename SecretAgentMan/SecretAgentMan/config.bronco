@@ -7,18 +7,54 @@
 <<<Begin:Setting:Level1RoomNames>>>
 
 	/* En semikolonseparerad lista över rummens namn i level 1 (10 stycken). */
-	Vretstorp Town; Viby Village; Edsberg Village; Fjugesta Town; Vintrosa; Marieberg; Adolfsberg, Örebro; Västhaga, Örebro; Vargerga, Örebro; Vivalla, Örebro
+	Schuylkill Haven; Kutztown; Allentown; Easton; Morristown; Manhattan New York, Brooklyn, New York, New York; Staten Island, New York; The Bronx, New York
 
 <<<End:Setting>>>
 <<<Begin:Setting:Level1InnocentNpcCount>>>
 
 	/* En kommaseparerad lista över antalet oskyldiga NPC:er per rum i level 1 (10 stycken). */
-	1, 1, 2, 3, 4, 4, 6, 10, 15, 25
+	1, 1, 2, 3, 4, 4, 5, 6, 7, 8
 
 <<<End:Setting>>>
 <<<Begin:Setting:Level1SpyCount>>>
 
 	/* En kommaseparerad lista över antalet spioner per rum level 1 (10 stycken). */
+	1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+
+<<<End:Setting>>>
+<<<Begin:Setting:Level2RoomNames>>>
+
+	/* En semikolonseparerad lista över rummens namn i level 1 (10 stycken). */
+	Vretstorp Town; Viby Village; Edsberg Village; Fjugesta Town; Vintrosa; Marieberg; Adolfsberg, Örebro; Västhaga, Örebro; Vargerga, Örebro; Vivalla, Örebro
+
+<<<End:Setting>>>
+<<<Begin:Setting:Level2InnocentNpcCount>>>
+
+	/* En kommaseparerad lista över antalet oskyldiga NPC:er per rum i level 1 (10 stycken). */
+	2, 3, 4, 5, 6, 7, 8, 10, 15, 25
+
+<<<End:Setting>>>
+<<<Begin:Setting:Level2SpyCount>>>
+
+	/* En kommaseparerad lista över antalet spioner per rum level 1 (10 stycken). */
 	1, 1, 2, 3, 4, 4, 6, 10, 15, 25
+
+<<<End:Setting>>>
+<<<Begin:Setting:Level3RoomNames>>>
+
+	/* En semikolonseparerad lista över rummens namn i level 1 (10 stycken). */
+	Namn 1; Namn 2; Namn 3; Namn 4; Namn 5; Namn 6; Namn 7; Namn 8; Namn 9; Namn 10
+
+<<<End:Setting>>>
+<<<Begin:Setting:Level3InnocentNpcCount>>>
+
+	/* En kommaseparerad lista över antalet oskyldiga NPC:er per rum i level 1 (10 stycken). */
+	4, 6, 8, 10, 12, 14, 16, 20, 30, 50
+
+<<<End:Setting>>>
+<<<Begin:Setting:Level3SpyCount>>>
+
+	/* En kommaseparerad lista över antalet spioner per rum level 1 (10 stycken). */
+	2, 2, 4, 6, 8, 9, 12, 20, 100, 250
 
 <<<End:Setting>>>

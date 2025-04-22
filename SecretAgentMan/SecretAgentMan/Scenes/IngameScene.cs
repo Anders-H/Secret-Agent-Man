@@ -29,13 +29,14 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private short _currentBonusLevel;
     private ulong _bonusReached52At;
     private int _lives;
+    private int _zeroBasedLevel;
     public const int SpriteUpperLimit = 98;
     public const int SpriteLowerLimit = 276;
 
-    public IngameScene(RetroGame.RetroGame parent) : base(parent)
+    public IngameScene(RetroGame.RetroGame parent, int zeroBasedLevel) : base(parent)
     {
         _player = new Player(_fire.PlayerFire);
-        _roomList = new RoomList(_player, _fire.EnemyFire);
+        _roomList = new RoomList(_player, _fire.EnemyFire, zeroBasedLevel);
         Score = 0;
         AddToAutoUpdate(Game1.TypeWriter);
         AddToAutoDraw(Game1.TypeWriter);
@@ -43,6 +44,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
         _lives = 2;
         MediaPlayer.Stop();
         Game1.LoaderSongIsPlaying = false;
+        _zeroBasedLevel = zeroBasedLevel;
     }
 
     private void UpdateRoomNameAndCheckClear(ulong ticks)
