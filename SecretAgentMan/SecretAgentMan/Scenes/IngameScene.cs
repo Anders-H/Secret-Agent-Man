@@ -30,13 +30,14 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private ulong _bonusReached52At;
     private int _lives;
     private int _zeroBasedLevel;
+    private string _levelString;
     public const int SpriteUpperLimit = 98;
     public const int SpriteLowerLimit = 276;
 
-    public IngameScene(RetroGame.RetroGame parent, int zeroBasedLevel) : base(parent)
+    public IngameScene(RetroGame.RetroGame parent) : base(parent)
     {
         _player = new Player(_fire.PlayerFire);
-        _roomList = new RoomList(_player, _fire.EnemyFire, zeroBasedLevel);
+        _roomList = new RoomList(_player, _fire.EnemyFire, 0);
         Score = 0;
         AddToAutoUpdate(Game1.TypeWriter);
         AddToAutoDraw(Game1.TypeWriter);
@@ -44,7 +45,17 @@ public class IngameScene : RetroGame.Scene.IngameScene
         _lives = 2;
         MediaPlayer.Stop();
         Game1.LoaderSongIsPlaying = false;
-        _zeroBasedLevel = zeroBasedLevel;
+        ZeroBasedLevel = 0;
+    }
+
+    private int ZeroBasedLevel
+    {
+        get => _zeroBasedLevel;
+        set
+        {
+            _zeroBasedLevel = value;
+            _levelString = $"level    {_zeroBasedLevel + 1}";
+        }
     }
 
     private void UpdateRoomNameAndCheckClear(ulong ticks)
@@ -293,6 +304,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
         Text.DirectDraw(spriteBatch, 544, 299, "lives", ColorPalette.White);
         Text.DirectDraw(spriteBatch, 544, 307, "faults", ColorPalette.White);
         Text.DirectDraw(spriteBatch, 544, 315, "ammo", ColorPalette.White);
+        Text.DirectDraw(spriteBatch, 544, 323, _levelString, ColorPalette.White);
 
         switch (_lives)
         {

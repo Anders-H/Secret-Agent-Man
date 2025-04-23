@@ -7,7 +7,7 @@
 <<<Begin:Setting:Level1RoomNames>>>
 
 	/* En semikolonseparerad lista över rummens namn i level 1 (10 stycken). */
-	Schuylkill Haven; Kutztown; Allentown; Easton; Morristown; Manhattan New York, Brooklyn, New York, New York; Staten Island, New York; The Bronx, New York
+	Schuylkill Haven; Kutztown; Allentown; Easton; Morristown; Long Island, New York; Manhattan, New York; Brooklyn, New York; Staten Island, New York; The Bronx, New York
 
 <<<End:Setting>>>
 <<<Begin:Setting:Level1InnocentNpcCount>>>
