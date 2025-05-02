@@ -2,6 +2,7 @@
 using RetroGame;
 using RetroGame.Scene;
 using RetroGame.Sprites;
+using SecretAgentMan.OtherResources;
 
 namespace SecretAgentMan.Sprites;
 
@@ -49,8 +50,8 @@ public class Airplane : Sprite, IRetroActor
     public void Draw(SpriteBatch spriteBatch)
     {
         if (_faceRight)
-            Game1.AirplaneRightTexture?.Draw(spriteBatch, _cellIndex, IntX, IntY, ColorPalette.White);
+            IngameBackgroundResources.AirplaneRightTexture?.Draw(spriteBatch, _cellIndex, IntX, IntY, ColorPalette.White);
         else
-            Game1.AirplaneLeftTexture?.Draw(spriteBatch, _cellIndex, IntX, IntY, ColorPalette.White);
+            IngameBackgroundResources.AirplaneLeftTexture?.Draw(spriteBatch, _cellIndex, IntX, IntY, ColorPalette.White);
     }
 }

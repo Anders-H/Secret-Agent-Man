@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RetroGame;
+using SecretAgentMan.OtherResources;
 using SecretAgentMan.Sprites;
 
 namespace SecretAgentMan.Scenes;
@@ -113,7 +114,7 @@ public class BonusLevelScene : RetroGame.Scene.IngameScene
         {
             if (!playerIsDrawn && _player.Y >= lastY && _player.Y <= t.IntY)
             {
-                _player.Draw(spriteBatch, Game1.CharactersTexture, _player.CellIndex, Color.White);
+                _player.Draw(spriteBatch, IngameBackgroundResources.CharactersTexture, _player.CellIndex, Color.White);
                 playerIsDrawn = true;
             }
 
@@ -122,7 +123,7 @@ public class BonusLevelScene : RetroGame.Scene.IngameScene
         }
 
         if (!playerIsDrawn)
-            _player.Draw(spriteBatch, Game1.CharactersTexture, _player.CellIndex, Color.White);
+            _player.Draw(spriteBatch, IngameBackgroundResources.CharactersTexture, _player.CellIndex, Color.White);
 
         Coins.Draw(spriteBatch);
         _fire.Draw(spriteBatch);

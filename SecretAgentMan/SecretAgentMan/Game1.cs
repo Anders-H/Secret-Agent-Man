@@ -18,21 +18,12 @@ namespace SecretAgentMan;
 public class Game1 : RetroGame.RetroGame
 {
     public static SettingCollection? Settings { get; set; }
-    public static RetroTexture? CharactersTexture { get; set; }
-    public static RetroTexture? BackgroundTempTexture { get; set; }
-    public static RetroTextureVertical? WaterTexture { get; set; }
-    public static RetroTexture? AirplaneRightTexture { get; set; }
-    public static RetroTexture? AirplaneLeftTexture { get; set; }
     public static RetroTexture? GraveStoneTexture { get; set; }
     public static RetroTexture? IntroGraphics { get; set; }
     public static RetroTexture? GameOverGraphics1 { get; set; }
     public static RetroTexture? GameOverGraphics2 { get; set; }
     public static RetroTexture? GameOverGraphics3 { get; set; }
     public static RetroTexture? GameOverGraphics4 { get; set; }
-    public static RetroTextureVertical? BackgroundLayer01 { get; set; }
-    public static RetroTextureVertical? BackgroundLayer02 { get; set; }
-    public static RetroTextureVertical? BackgroundLayer03 { get; set; }
-    public static RetroTextureVertical? BackgroundLayer04 { get; set; }
     public static RetroTexture? CoinTexture { get; set; }
     public static RetroTexture? Hud { get; set; }
     public static RetroTexture? Frame { get; set; }
@@ -40,6 +31,9 @@ public class Game1 : RetroGame.RetroGame
     public static RetroTexture? BonusMeter { get; set; }
     public static RetroTexture? LivesSymbolTexture { get; set; }
     public static RetroTexture? AmmoTexture { get; set; }
+    public static RetroTexture? StartScreenFrame { get; set; }
+    public static RetroTexture? StartScreenGun { get; set; }
+    public static RetroTexture? StartScreenLogo { get; set; }
     public static Decoration Decoration { get; set; }
     public static SoundEffect? EnemyFire { get; set; }
     public static SoundEffect? PlayerFire { get; set; }
@@ -95,25 +89,21 @@ public class Game1 : RetroGame.RetroGame
         BonusRoundSeconds = int.Parse(Settings.GetValue("BonusRoundSeconds"));
 
         Hud = RetroTexture.LoadContent(GraphicsDevice, Content, 620, 59, 1, "hud");
-        BackgroundLayer01 = RetroTextureVertical.LoadContent(GraphicsDevice, Content, 640, 91, 4, "background-640x91");
-        BackgroundLayer02 = RetroTextureVertical.LoadContent(GraphicsDevice, Content, 640, 91, 4, "sky-640x91");
-        BackgroundLayer03 = RetroTextureVertical.LoadContent(GraphicsDevice, Content, 640, 91, 4, "skyline_bg-640x91");
-        BackgroundLayer04 = RetroTextureVertical.LoadContent(GraphicsDevice, Content, 640, 91, 4, "skyline_fg-640x91");
         CoinTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 10, 10, 6, "coin10x10");
-        CharactersTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 25, 25, 32, "player25x25");
         Frame = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "frame");
         BonusLevelFrame = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 2, "bonus-stars-640x360");
         GraveStoneTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 25, 25, 13, "rip25x25");
-        WaterTexture = RetroTextureVertical.LoadContent(GraphicsDevice, Content, 640, 30, 18, "water640x30");
         BonusMeter = RetroTexture.LoadContent(GraphicsDevice, Content, 11, 51, 26, "bonus-meter");
-        AirplaneRightTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 5, 3, 25, "plane5x3");
-        AirplaneLeftTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 5, 3, 25, "planeflipped5x3");
         GameOverGraphics1 = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "gameover1");
         GameOverGraphics2 = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "gameover2");
         GameOverGraphics3 = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "gameover3");
         GameOverGraphics4 = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "gameover4");
         LivesSymbolTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 11, 7, 1, "lives11x7");
         AmmoTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 4, 7, 1, "ammo4x7");
+        StartScreenFrame = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "start-screen-frame");
+        StartScreenGun = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "start-screen-gun");
+        StartScreenLogo = RetroTexture.LoadContent(GraphicsDevice, Content, 433, 54, 15, "start-screen-logo433x54");
+        IngameBackgroundResources.LoadContent(GraphicsDevice, Content);
         MayorResources.LoadContent(GraphicsDevice, Content);
         IntroGraphics = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "load-screen-360p-nofilter");
         EnemyFire!.Initialize("sfx_gun1", "sfx_gun2", "sfx_gun3", "sfx_gun4", "sfx_gun5", "sfx_gun6");

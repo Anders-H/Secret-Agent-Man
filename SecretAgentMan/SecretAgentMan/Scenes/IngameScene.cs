@@ -107,7 +107,6 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
                     if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F))
                         _player.ResetBulletsLeft();
-
                 }
 
                 if (ticks % 7 == 0)
@@ -293,8 +292,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     public override void Draw(GameTime gameTime, ulong ticks, SpriteBatch spriteBatch)
     {
         Game1.Decoration.Draw(spriteBatch, _currentRoomIndex);
-        Game1.BackgroundTempTexture?.Draw(spriteBatch, 0, 0, 0);
-        Game1.WaterTexture?.Draw(spriteBatch, _waterFrameIndex, 0, 91);
+        IngameBackgroundResources.WaterTexture?.Draw(spriteBatch, _waterFrameIndex, 0, 91);
 
         if (_askQuitMode)
         {

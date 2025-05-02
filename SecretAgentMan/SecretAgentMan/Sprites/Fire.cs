@@ -2,6 +2,7 @@
 using RetroGame;
 using RetroGame.Scene;
 using RetroGame.Sprites;
+using SecretAgentMan.OtherResources;
 
 namespace SecretAgentMan.Sprites;
 
@@ -41,7 +42,7 @@ public class Fire : Sprite, IRetroActor
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        Game1.CharactersTexture?.Draw(spriteBatch, _currentAnimation[_currentAnimationIndex], IntX, IntY, ColorPalette.White);
+        IngameBackgroundResources.CharactersTexture?.Draw(spriteBatch, _currentAnimation[_currentAnimationIndex], IntX, IntY, ColorPalette.White);
     }
 
     public bool IsDead =>

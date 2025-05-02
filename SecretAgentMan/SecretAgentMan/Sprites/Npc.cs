@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using RetroGame;
 using RetroGame.Scene;
+using SecretAgentMan.OtherResources;
 using IngameScene = SecretAgentMan.Scenes.IngameScene;
 
 namespace SecretAgentMan.Sprites;
@@ -434,7 +435,7 @@ public class Npc : Character, IRetroActor
             return;
         }
 
-        Draw(spriteBatch, Game1.CharactersTexture, CellIndex, ColorPalette.White);
+        Draw(spriteBatch, IngameBackgroundResources.CharactersTexture, CellIndex, ColorPalette.White);
     }
 
     public void TurnToGraveStone()

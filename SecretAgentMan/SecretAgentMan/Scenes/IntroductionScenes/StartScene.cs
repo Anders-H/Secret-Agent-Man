@@ -20,9 +20,15 @@ public class StartScene : Scene
     private readonly string _lastScoreString;
     private readonly string _todaysBestScoreString;
     private StartSceneState _state;
+    private int _frameX;
+    private int _gunX;
+    private int _logoY;
 
     public StartScene(RetroGame.RetroGame parent, int lastScore, int todaysBest) : base(parent)
     {
+        _frameX = -641;
+        _gunX = 610;
+        _logoY = -60;
         _lastScoreString = $"last score: {lastScore}";
         _todaysBestScoreString = $"best today: {todaysBest}";
         _creditsX = 700;
@@ -69,11 +75,41 @@ public class StartScene : Scene
 
         _state = _state switch
         {
-            StartSceneState.Logo when ticks % 400 == 0 => StartSceneState.HighScore,
-            StartSceneState.HighScore when ticks % 400 == 0 => StartSceneState.Instructions,
-            StartSceneState.Instructions when ticks % 1400 == 0 => StartSceneState.Logo,
+            StartSceneState.Logo when ticks % 700 == 0 => StartSceneState.HighScore,
+            StartSceneState.HighScore when ticks % 700 == 0 => StartSceneState.Instructions,
+            StartSceneState.Instructions when ticks % 1700 == 0 => StartSceneState.Logo,
             _ => _state
         };
+
+        switch (_state)
+        {
+            case StartSceneState.Logo:
+                _frameX += 2;
+
+                if (_frameX > 0)
+                    _frameX = 0;
+
+                _gunX--;
+
+                if (_gunX < 0)
+                    _gunX = 0;
+
+                if (ticks % 2 == 0)
+                {
+                    _logoY++;
+
+                    if (_logoY > 50)
+                        _logoY = 50;
+                }
+
+                break;
+            case StartSceneState.HighScore:
+                break;
+            case StartSceneState.Instructions:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
 
         base.Update(gameTime, ticks);
     }
@@ -83,9 +119,11 @@ public class StartScene : Scene
         switch (_state)
         {
             case StartSceneState.Logo:
-
+                Game1.StartScreenGun!.Draw(spriteBatch, 0, _gunX, 0);
+                Game1.StartScreenFrame!.Draw(spriteBatch, 0, _frameX, 0);
                 break;
             case StartSceneState.HighScore:
+                Game1.StartScreenFrame!.Draw(spriteBatch, 0, _frameX, 0);
                 var x = TodaysBestPlayersHeader.Length * 8;
                 x = 320 - x / 2;
                 _textBlock.DirectDraw(spriteBatch, x, 32, TodaysBestPlayersHeader, ColorPalette.Yellow);

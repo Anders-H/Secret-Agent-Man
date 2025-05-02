@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RetroGame;
 using RetroGame.Text;
+using SecretAgentMan.OtherResources;
 using SecretAgentMan.Sprites;
 
 namespace SecretAgentMan.Scenes.Rooms;
@@ -47,7 +48,7 @@ public class Room
         {
             if (!playerIsDrawn && player.Y >= lastY && player.Y <= t.IntY)
             {
-                player.Draw(spriteBatch, Game1.CharactersTexture, player.CellIndex, Color.White);
+                player.Draw(spriteBatch, IngameBackgroundResources.CharactersTexture, player.CellIndex, Color.White);
                 playerIsDrawn = true;
             }
 
@@ -56,7 +57,7 @@ public class Room
         }
 
         if (!playerIsDrawn)
-            player.Draw(spriteBatch, Game1.CharactersTexture, player.CellIndex, Color.White);
+            player.Draw(spriteBatch, IngameBackgroundResources.CharactersTexture, player.CellIndex, Color.White);
 
         if (Game1.Cheat)
         {
