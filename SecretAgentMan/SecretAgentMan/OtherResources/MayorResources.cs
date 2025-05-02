@@ -30,27 +30,21 @@ public static class MayorResources
         switch (killedSpyCount)
         {
             case 1:
-                DoShortTalk();
                 Game1.TypeWriter.SetText($"first spy eliminated! {scoreAdded} points!");
                 break;
             case 2:
-                DoShortTalk();
                 Game1.TypeWriter.SetText($"second spy eliminated! {scoreAdded} points!");
                 break;
             case 3:
-                DoShortTalk();
                 Game1.TypeWriter.SetText($"third spy eliminated! {scoreAdded} points!");
                 break;
             case 4:
-                DoShortTalk();
                 Game1.TypeWriter.SetText($"fourth spy eliminated! {scoreAdded} points!");
                 break;
             case 5:
-                DoShortTalk();
                 Game1.TypeWriter.SetText($"fifth spy eliminated! {scoreAdded} points!");
                 break;
             default:
-                DoShortTalk();
                 Game1.TypeWriter.SetText($"spy number {killedSpyCount} eliminated! {scoreAdded} points!");
                 break;
         }

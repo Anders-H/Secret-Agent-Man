@@ -9,12 +9,20 @@ public class Player : Character
     private readonly ushort[] _walkRight = [0, 1, 2, 3];
     private readonly ushort[] _walkLeft = [4, 5, 6, 7];
     private readonly ushort[] _die = [20, 21, 20, 21];
+    private const int MaxBullets = 10;
+    public int BulletsLeft { get; private set; }
 
     public Player(FireList fireList) : base(fireList)
     {
+        BulletsLeft = MaxBullets;
         CurrentAnimation = _walkRight;
         X = 30;
         Y = 250;
+    }
+
+    public void ResetBulletsLeft()
+    {
+        BulletsLeft = MaxBullets;
     }
 
     public void PlayerControl(ulong ticks, KeyboardStateChecker keyboard, int currentRoomIndex, out bool nextRoom, out bool previousRoom, RoomList rooms)
@@ -91,7 +99,13 @@ public class Player : Character
         }
 
         if (keyboard.IsFirePressed() && ticks > 2)
-            Fire(false);
+        {
+            if (BulletsLeft > 0)
+            {
+                Fire(true);
+                BulletsLeft--;
+            }
+        }
 
         if (changeAnimationCells)
             CurrentAnimation = FaceRight ? _walkRight : _walkLeft;
@@ -152,7 +166,7 @@ public class Player : Character
         }
 
         if (keyboard.IsFirePressed() && ticks > 2)
-            Fire(false);
+            Fire(true);
 
         if (changeAnimationCells)
             CurrentAnimation = FaceRight ? _walkRight : _walkLeft;

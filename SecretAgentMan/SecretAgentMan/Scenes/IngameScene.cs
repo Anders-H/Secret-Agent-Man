@@ -63,7 +63,10 @@ public class IngameScene : RetroGame.Scene.IngameScene
         _currentRoomName = _roomList.GetDistrictName(_currentRoomIndex);
 
         if (_roomList.RoomIsClear(_currentRoomIndex) && ticks > 200)
+        {
+            MayorResources.DoShortTalk();
             Game1.TypeWriter.SetText("this area is clear");
+        }
     }
 
     public override void Update(GameTime gameTime, ulong ticks)
@@ -88,14 +91,24 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 if (Keyboard.IsKeyPressed(Keys.Escape))
                     _askQuitMode = true;
 
-                if (RetroGame.RetroGame.CheatFileAvailable && Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F9))
-                    Game1.Cheat = !Game1.Cheat;
+                if (RetroGame.RetroGame.CheatFileAvailable)
+                {
+                    if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F9))
+                        Game1.Cheat = !Game1.Cheat;
 
-                if (RetroGame.RetroGame.CheatFileAvailable && Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F8))
-                    Score += 100;
+                    if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F8))
+                        Score += 100;
 
-                if (RetroGame.RetroGame.CheatFileAvailable && Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.B))
-                    Parent.CurrentScene = new BonusLevelScene(Parent, Score, AddScore);
+                    if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.B))
+                        Parent.CurrentScene = new BonusLevelScene(Parent, Score, AddScore);
+
+                    if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.W))
+                        Parent.CurrentScene = new CutScene1(Parent);
+
+                    if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F))
+                        _player.ResetBulletsLeft();
+
+                }
 
                 if (ticks % 7 == 0)
                 {
@@ -141,7 +154,6 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 {
                     Game1.PlayerCoin!.PlayRandom();
                     coins.Remove(coin);
-                    Game1.TypeWriter.SetText("coin collected, 50 points awarded");
                     Score += 50;
                     _currentBonusLevel++;
                     break;
@@ -153,7 +165,6 @@ public class IngameScene : RetroGame.Scene.IngameScene
                     {
                         Game1.EnemyCoin!.PlayRandom();
                         coins.Remove(coin);
-                        Game1.TypeWriter.SetText("coin stolen");
                         goto OuterBail;
                     }
                 }
@@ -232,6 +243,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
             if (_gameCompleted && ticks > _gameCompletedAt + 500)
             {
+                // TODO: Next level or game completed.
                 ScoreManagement.StoreLastScore(Score);
                 Parent.CurrentScene = new GameOverKilledScene(Parent); // TODO: Detta ska vara game completed.
                 return;
@@ -304,16 +316,28 @@ public class IngameScene : RetroGame.Scene.IngameScene
         Text.DirectDraw(spriteBatch, 544, 299, "lives", ColorPalette.White);
         Text.DirectDraw(spriteBatch, 544, 307, "faults", ColorPalette.White);
         Text.DirectDraw(spriteBatch, 544, 315, "ammo", ColorPalette.White);
+
+        if (_player.BulletsLeft > 0)
+        {
+            var ammoX = 621;
+
+            for (var x = 0; x < _player.BulletsLeft; x++)
+            {
+                Game1.AmmoTexture!.Draw(spriteBatch, 0, ammoX, 315);
+                ammoX -= 5;
+            }
+        }
+
         Text.DirectDraw(spriteBatch, 544, 323, _levelString, ColorPalette.White);
 
         switch (_lives)
         {
             case 2:
                 Game1.LivesSymbolTexture!.Draw(spriteBatch, 0, 590, 298);
-                Game1.LivesSymbolTexture!.Draw(spriteBatch, 0, 602, 298);
+                Game1.LivesSymbolTexture.Draw(spriteBatch, 0, 602, 298);
 
                 if (ticks % 40 > 20)
-                    Game1.LivesSymbolTexture!.Draw(spriteBatch, 0, 614, 298);
+                    Game1.LivesSymbolTexture.Draw(spriteBatch, 0, 614, 298);
 
                 break;
             case 1:
