@@ -19,14 +19,17 @@ public class IntroScene : Scene
     private int _inCurrentCellY;
     private bool _done;
     private KeyboardStateChecker Keyboard { get; }
-    private const string pressFire = "press fire to continue";
-    private readonly int pressFireCenterX;
+    private const string LoadingPleaseWait = "loading, please wait...";
+    private readonly int _loadingPleaseWaitCenterX;
+    private const string PressFire = "press fire to continue";
+    private readonly int _pressFireCenterX;
     private readonly TextBlock _textBlock;
 
     public IntroScene(RetroGame.RetroGame parent) : base(parent)
     {
         Keyboard = new KeyboardStateChecker();
-        pressFireCenterX = 320 - pressFire.Length * 8 / 2;
+        _pressFireCenterX = 320 - PressFire.Length * 8 / 2;
+        _loadingPleaseWaitCenterX = 320 - LoadingPleaseWait.Length * 8 / 2;
         _textBlock = new TextBlock(CharacterSet.Uppercase);
         AddToAutoUpdate(Keyboard);
         Game1.LoaderSongIsPlaying = true;
@@ -62,7 +65,7 @@ public class IntroScene : Scene
 
         if (Keyboard.IsKeyPressed(Keys.Escape))
             Exit();
-        else if (ticks > TicksBeforeContinue && Keyboard.IsFirePressed())
+        else if (ticks > TicksBeforeContinue * 2 && Keyboard.IsFirePressed())
             Parent.CurrentScene = new StartScene(Parent, 0, 0);
 
         base.Update(gameTime, ticks);
@@ -87,7 +90,9 @@ public class IntroScene : Scene
         }
 
         if (ticks > TicksBeforeContinue && ticks % 120 > 60)
-            _textBlock.DirectDraw(spriteBatch, pressFireCenterX, 300, pressFire, ColorPalette.White);
+            _textBlock.DirectDraw(spriteBatch, _loadingPleaseWaitCenterX, 300, LoadingPleaseWait, ColorPalette.White);
+        else if (ticks > TicksBeforeContinue * 2 && ticks % 120 > 60)
+            _textBlock.DirectDraw(spriteBatch, _pressFireCenterX, 300, PressFire, ColorPalette.White);
 
         base.Draw(gameTime, ticks, spriteBatch);
     }

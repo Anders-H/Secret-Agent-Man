@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -23,12 +24,24 @@ public class StartScene : Scene
     private int _frameX;
     private int _gunX;
     private int _logoY;
+    private readonly List<int> _logoImageList;
+    private int _logoImageListIndex;
 
     public StartScene(RetroGame.RetroGame parent, int lastScore, int todaysBest) : base(parent)
     {
         _frameX = -641;
         _gunX = 610;
         _logoY = -60;
+
+        _logoImageList =
+        [
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0,
+            14, 14, 13, 13, 12, 12, 11, 11, 10, 10, 9, 9, 8, 8, 7, 7, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1, 0,
+            14, 0, 13, 0, 12, 0, 11, 0, 10, 0, 9, 0, 8, 0, 7, 0, 6, 0, 5, 0, 4, 0, 3, 0, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        ];
+
         _lastScoreString = $"last score: {lastScore}";
         _todaysBestScoreString = $"best today: {todaysBest}";
         _creditsX = 700;
@@ -84,6 +97,7 @@ public class StartScene : Scene
         switch (_state)
         {
             case StartSceneState.Logo:
+            case StartSceneState.HighScore:
                 _frameX += 2;
 
                 if (_frameX > 0)
@@ -98,12 +112,18 @@ public class StartScene : Scene
                 {
                     _logoY++;
 
-                    if (_logoY > 50)
-                        _logoY = 50;
+                    if (_logoY > 30)
+                        _logoY = 30;
                 }
 
-                break;
-            case StartSceneState.HighScore:
+                if (ticks % 3 == 0)
+                {
+                    _logoImageListIndex++;
+
+                    if (_logoImageListIndex >= _logoImageList.Count)
+                        _logoImageListIndex = 0;
+                }
+
                 break;
             case StartSceneState.Instructions:
                 break;
@@ -120,13 +140,15 @@ public class StartScene : Scene
         {
             case StartSceneState.Logo:
                 Game1.StartScreenGun!.Draw(spriteBatch, 0, _gunX, 0);
+                Game1.StartScreenLogo!.Draw(spriteBatch, _logoImageList[_logoImageListIndex], 99, _logoY);
                 Game1.StartScreenFrame!.Draw(spriteBatch, 0, _frameX, 0);
                 break;
             case StartSceneState.HighScore:
+                Game1.StartScreenLogo!.Draw(spriteBatch, _logoImageList[_logoImageListIndex], 99, _logoY);
                 Game1.StartScreenFrame!.Draw(spriteBatch, 0, _frameX, 0);
                 var x = TodaysBestPlayersHeader.Length * 8;
                 x = 320 - x / 2;
-                _textBlock.DirectDraw(spriteBatch, x, 32, TodaysBestPlayersHeader, ColorPalette.Yellow);
+                _textBlock.DirectDraw(spriteBatch, x, 190, TodaysBestPlayersHeader, ColorPalette.Yellow);
                 Game1.HighScore.Draw(spriteBatch, ticks);
                 break;
             case StartSceneState.Instructions:
