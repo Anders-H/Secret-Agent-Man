@@ -67,15 +67,15 @@ public class GameOverKilledScene : Scene
         switch (_cellIndex)
         {
             case 0:
-                Game1.GameOverGraphics2!.DrawPart(spriteBatch, 0, 360 - _wipe, 640, 360, 0, 360 - _wipe);
+                GameOverFiredScene.GameOverGraphics2!.DrawPart(spriteBatch, 0, 360 - _wipe, 640, 360, 0, 360 - _wipe);
                 break;
             case 1:
-                Game1.GameOverGraphics3!.Draw(spriteBatch, 0, 0, _wipe);
-                Game1.GameOverGraphics2!.Draw(spriteBatch, 0, 0, 0);
+                GameOverFiredScene.GameOverGraphics3!.Draw(spriteBatch, 0, 0, _wipe);
+                GameOverFiredScene.GameOverGraphics2!.Draw(spriteBatch, 0, 0, 0);
                 break;
             case 2:
-                Game1.GameOverGraphics3!.Draw(spriteBatch, 0, 0, 0);
-                Game1.GameOverGraphics2!.Draw(spriteBatch, 0, 0, 0);
+                GameOverFiredScene.GameOverGraphics3!.Draw(spriteBatch, 0, 0, 0);
+                GameOverFiredScene.GameOverGraphics2!.Draw(spriteBatch, 0, 0, 0);
                 break;
         }
 

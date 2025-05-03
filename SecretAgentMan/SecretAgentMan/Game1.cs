@@ -11,6 +11,7 @@ using RetroGame.RetroTextures;
 using RetroGame.Text;
 using SecretAgentMan.OtherResources;
 using SecretAgentMan.Scenes;
+using SecretAgentMan.Scenes.GameOverScenes;
 using SecretAgentMan.Scenes.IntroductionScenes;
 
 namespace SecretAgentMan;
@@ -20,10 +21,6 @@ public class Game1 : RetroGame.RetroGame
     public static SettingCollection? Settings { get; set; }
     public static RetroTexture? GraveStoneTexture { get; set; }
     public static RetroTexture? IntroGraphics { get; set; }
-    public static RetroTexture? GameOverGraphics1 { get; set; }
-    public static RetroTexture? GameOverGraphics2 { get; set; }
-    public static RetroTexture? GameOverGraphics3 { get; set; }
-    public static RetroTexture? GameOverGraphics4 { get; set; }
     public static RetroTexture? CoinTexture { get; set; }
     public static RetroTexture? Hud { get; set; }
     public static RetroTexture? Frame { get; set; }
@@ -94,15 +91,12 @@ public class Game1 : RetroGame.RetroGame
         BonusLevelFrame = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 2, "bonus-stars-640x360");
         GraveStoneTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 25, 25, 13, "rip25x25");
         BonusMeter = RetroTexture.LoadContent(GraphicsDevice, Content, 11, 51, 26, "bonus-meter");
-        GameOverGraphics1 = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "gameover1");
-        GameOverGraphics2 = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "gameover2");
-        GameOverGraphics3 = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "gameover3");
-        GameOverGraphics4 = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "gameover4");
         LivesSymbolTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 11, 7, 1, "lives11x7");
         AmmoTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 4, 7, 1, "ammo4x7");
         StartScreenFrame = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "start-screen-frame");
         StartScreenGun = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "start-screen-gun");
         StartScreenLogo = RetroTexture.LoadContent(GraphicsDevice, Content, 433, 54, 15, "start-screen-logo433x54");
+        GameOverFiredScene.LoadResources(GraphicsDevice, Content);
         IngameBackgroundResources.LoadContent(GraphicsDevice, Content);
         MayorResources.LoadContent(GraphicsDevice, Content);
         IntroGraphics = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "load-screen-360p-nofilter");

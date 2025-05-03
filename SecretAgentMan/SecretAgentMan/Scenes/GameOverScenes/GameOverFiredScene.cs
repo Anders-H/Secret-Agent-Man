@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using RetroGame;
+using RetroGame.RetroTextures;
 using RetroGame.Scene;
 using RetroGame.Text;
 using SecretAgentMan.OtherResources;
@@ -11,6 +13,10 @@ namespace SecretAgentMan.Scenes.GameOverScenes;
 
 public class GameOverFiredScene : Scene
 {
+    public static RetroTexture? GameOverGraphics1 { get; set; }
+    public static RetroTexture? GameOverGraphics2 { get; set; }
+    public static RetroTexture? GameOverGraphics3 { get; set; }
+    public static RetroTexture? GameOverGraphics4 { get; set; }
     private const string MayorTalk = "another innocent civilian killed. this ends now!";
     private readonly int _mayorTalkX;
     private int _mayorTalkCharacterCount;
@@ -33,6 +39,14 @@ public class GameOverFiredScene : Scene
 
         if (MediaPlayer.State == MediaState.Playing)
             MediaPlayer.Stop();
+    }
+
+    public static void LoadResources(GraphicsDevice graphicsDevice, ContentManager content)
+    {
+        GameOverGraphics1 = RetroTexture.LoadContent(graphicsDevice, content, 640, 360, 1, "gameover1");
+        GameOverGraphics2 = RetroTexture.LoadContent(graphicsDevice, content, 640, 360, 1, "gameover2");
+        GameOverGraphics3 = RetroTexture.LoadContent(graphicsDevice, content, 640, 360, 1, "gameover3");
+        GameOverGraphics4 = RetroTexture.LoadContent(graphicsDevice, content, 640, 360, 1, "gameover4");
     }
 
     public override void Update(GameTime gameTime, ulong ticks)
@@ -108,7 +122,7 @@ public class GameOverFiredScene : Scene
     public override void Draw(GameTime gameTime, ulong ticks, SpriteBatch spriteBatch)
     {
         if (_cellIndex == 0)
-            Game1.GameOverGraphics1!.DrawPart(spriteBatch, 640 - _wipe, 0, _wipe, 380, 640 - _wipe, 0);
+            GameOverGraphics1!.DrawPart(spriteBatch, 640 - _wipe, 0, _wipe, 380, 640 - _wipe, 0);
 
         if (ticks < 280)
             MayorResources.MayorTexture?.Draw(spriteBatch, _currentMayorCell, 295, 145, ColorPalette.White);
@@ -118,13 +132,13 @@ public class GameOverFiredScene : Scene
         
         if (_cellIndex == 1)
         {
-            Game1.GameOverGraphics4!.DrawPart(spriteBatch, 0, 0, 640, _wipe, 0, 0);
-            Game1.GameOverGraphics1!.DrawPart(spriteBatch, 0, 0, 640, 380 - _wipe, 0, 0);
+            GameOverGraphics4!.DrawPart(spriteBatch, 0, 0, 640, _wipe, 0, 0);
+            GameOverGraphics1!.DrawPart(spriteBatch, 0, 0, 640, 380 - _wipe, 0, 0);
         }
         else if (_cellIndex > 1)
         {
-            Game1.GameOverGraphics4!.Draw(spriteBatch, 0, 0, 0);
-            Game1.GameOverGraphics3!.Draw(spriteBatch, 0, 0, _wipe);
+            GameOverGraphics4!.Draw(spriteBatch, 0, 0, 0);
+            GameOverGraphics3!.Draw(spriteBatch, 0, 0, _wipe);
         }
 
         _textBlock.DirectDraw(spriteBatch, 0, 344, _todaysBestScoreString, ColorPalette.LightGrey);

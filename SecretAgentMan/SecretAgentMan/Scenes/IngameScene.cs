@@ -286,8 +286,8 @@ public class IngameScene : RetroGame.Scene.IngameScene
         base.Update(gameTime, ticks);
     }
 
-    private int AddScore(int points) =>
-        Score += points;
+    public int AddScore(int points) =>
+        DirectAddScore(points);
 
     public override void Draw(GameTime gameTime, ulong ticks, SpriteBatch spriteBatch)
     {

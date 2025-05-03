@@ -107,12 +107,12 @@ public class HighScoreScene : Scene
         switch (_gameOverReason)
         {
             case GameOverReason.PlayerFired:
-                Game1.GameOverGraphics4!.Draw(spriteBatch, 0, 0, 0);
-                Game1.GameOverGraphics3!.Draw(spriteBatch, 0, 0, _gameOverY);
+                GameOverFiredScene.GameOverGraphics4!.Draw(spriteBatch, 0, 0, 0);
+                GameOverFiredScene.GameOverGraphics3!.Draw(spriteBatch, 0, 0, _gameOverY);
                 break;
             case GameOverReason.PlayerDied:
-                Game1.GameOverGraphics2!.Draw(spriteBatch, 0, 0, 0);
-                Game1.GameOverGraphics3!.Draw(spriteBatch, 0, 0, _gameOverY);
+                GameOverFiredScene.GameOverGraphics2!.Draw(spriteBatch, 0, 0, 0);
+                GameOverFiredScene.GameOverGraphics3!.Draw(spriteBatch, 0, 0, _gameOverY);
                 break;
         }
  

@@ -13,6 +13,8 @@ namespace SecretAgentMan.Scenes.IntroductionScenes;
 
 public class StartScene : Scene
 {
+    private int _frameVisiblePart;
+    private uint _partTick;
     private const string CreditsText = "programming: anders hesselbom    sound and graphics: mats j. larsson    copyright 1989 havet software company";
     private const string TodaysBestPlayersHeader = "the best secret agents today are";
     private int _creditsX;
@@ -21,15 +23,14 @@ public class StartScene : Scene
     private readonly string _lastScoreString;
     private readonly string _todaysBestScoreString;
     private StartSceneState _state;
-    private int _frameX;
     private int _gunX;
     private int _logoY;
     private readonly List<int> _logoImageList;
     private int _logoImageListIndex;
+    private TypeWriter? _typeWriter;
 
     public StartScene(RetroGame.RetroGame parent, int lastScore, int todaysBest) : base(parent)
     {
-        _frameX = -641;
         _gunX = 610;
         _logoY = -60;
 
@@ -86,23 +87,31 @@ public class StartScene : Scene
                 _creditsX = 640;
         }
 
-        _state = _state switch
+
+        if (ticks % 4 == 0)
+            _frameVisiblePart++;
+
+        _partTick++;
+
+        switch (_state)
         {
-            StartSceneState.Logo when ticks % 700 == 0 => StartSceneState.HighScore,
-            StartSceneState.HighScore when ticks % 700 == 0 => StartSceneState.Instructions,
-            StartSceneState.Instructions when ticks % 1700 == 0 => StartSceneState.Logo,
-            _ => _state
-        };
+            case StartSceneState.Logo when _partTick % 800 == 0:
+                _state = StartSceneState.HighScore;
+                break;
+            case StartSceneState.HighScore when _partTick % 800 == 0:
+                _state = StartSceneState.Instructions;
+                CreateInstructions();
+                break;
+            case StartSceneState.Instructions when _partTick % 4000 == 0:
+                _partTick = 0;
+                _state = StartSceneState.Logo;
+                break;
+        }
 
         switch (_state)
         {
             case StartSceneState.Logo:
             case StartSceneState.HighScore:
-                _frameX += 2;
-
-                if (_frameX > 0)
-                    _frameX = 0;
-
                 _gunX--;
 
                 if (_gunX < 0)
@@ -116,6 +125,9 @@ public class StartScene : Scene
                         _logoY = 30;
                 }
 
+                break;
+            case StartSceneState.Instructions:
+                
                 if (ticks % 3 == 0)
                 {
                     _logoImageListIndex++;
@@ -124,8 +136,7 @@ public class StartScene : Scene
                         _logoImageListIndex = 0;
                 }
 
-                break;
-            case StartSceneState.Instructions:
+                _typeWriter!.Act(_partTick);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -134,29 +145,52 @@ public class StartScene : Scene
         base.Update(gameTime, ticks);
     }
 
+    private void CreateInstructions()
+    {
+        _typeWriter = new TypeWriter(13, 13, 30, ColorPalette.White);
+        
+        _typeWriter.SetText(
+            "as a secret agent, you are called upon by new york city mayor koch to curb",
+            "the escalating crime rate. criminal elements are openly roaming among the",
+            "other citizens, and it is of utmost importance that you eliminate all the",
+            "criminals in the area, without harming any of the peaceful civilian",
+            "population.",
+            "",
+            "you may not kill any civilians, you need to kill all criminal elements. to",
+            "reach the next level, all criminals must be eliminated.",
+            "",
+            "there is bonus items placed out for you, and additional tasks may be given",
+            "to you during game play - pay careful attention to what mayor koch has to",
+            "say. good luck, and be careful out there!"
+        );
+    }
+
     public override void Draw(GameTime gameTime, ulong ticks, SpriteBatch spriteBatch)
     {
         switch (_state)
         {
             case StartSceneState.Logo:
                 Game1.StartScreenGun!.Draw(spriteBatch, 0, _gunX, 0);
-                Game1.StartScreenLogo!.Draw(spriteBatch, _logoImageList[_logoImageListIndex], 99, _logoY);
-                Game1.StartScreenFrame!.Draw(spriteBatch, 0, _frameX, 0);
                 break;
             case StartSceneState.HighScore:
-                Game1.StartScreenLogo!.Draw(spriteBatch, _logoImageList[_logoImageListIndex], 99, _logoY);
-                Game1.StartScreenFrame!.Draw(spriteBatch, 0, _frameX, 0);
                 var x = TodaysBestPlayersHeader.Length * 8;
                 x = 320 - x / 2;
                 _textBlock.DirectDraw(spriteBatch, x, 190, TodaysBestPlayersHeader, ColorPalette.Yellow);
                 Game1.HighScore.Draw(spriteBatch, ticks);
                 break;
             case StartSceneState.Instructions:
-                _textBlock.DirectDraw(spriteBatch, 0, 32, "här ska vi ha manualen - eller som ingenjörerna säger: manulen", ColorPalette.White);
+                _typeWriter!.Draw(spriteBatch, ticks);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
+
+        Game1.StartScreenLogo!.Draw(spriteBatch, _logoImageList[_logoImageListIndex], 99, _logoY);
+
+        if (_frameVisiblePart < 360)
+            Game1.StartScreenFrame!.DrawPart(spriteBatch, 0, 0, 640, _frameVisiblePart, 0, 0);
+        else
+            Game1.StartScreenFrame!.Draw(spriteBatch, 0, 0, 0);
 
         _textBlock.DirectDraw(spriteBatch, 0, 344, _todaysBestScoreString, ColorPalette.LightGrey);
         _textBlock.DirectDraw(spriteBatch, 0, 336, _lastScoreString, ColorPalette.LightGrey);
