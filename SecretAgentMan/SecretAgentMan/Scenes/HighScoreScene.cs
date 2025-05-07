@@ -32,7 +32,7 @@ public class HighScoreScene : Scene
         _editMode = false;
         _textBlock = new TextBlock(CharacterSet.Uppercase);
         AddToAutoUpdate(Keyboard);
-        Game1.HighScore.ResetVisuals();
+        Game1.HighScore.ResetVisuals(Game1.HighScoreEditY);
 
         if (_gameOverReason == GameOverReason.PlayerFired)
             _gameOverY = 200;

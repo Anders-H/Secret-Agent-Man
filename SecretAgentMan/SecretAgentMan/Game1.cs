@@ -46,6 +46,8 @@ public class Game1 : RetroGame.RetroGame
     public static int LastScore;
     public static int TodaysBestScore;
     public static HighScoreList HighScore { get; }
+    public const int HighScoreEditY = 220;
+    public const int HighScoreViewY = 164;
     public static TypeWriter TypeWriter { get; }
     public static IngameScene? CurrentIngameScene { get; set; }
     public static int BonusRoundSeconds { get; set; }
@@ -56,7 +58,7 @@ public class Game1 : RetroGame.RetroGame
         Random = new Random();
         LastScore = 0;
         TodaysBestScore = 0;
-        HighScore = new HighScoreList(640, 380, true, true, 220);
+        HighScore = new HighScoreList(640, 380, true, true, HighScoreViewY);
         Decoration = new Decoration();
         TypeWriter = new TypeWriter(70, 298, 6, ColorPalette.White);
         CurrentIngameScene = null;

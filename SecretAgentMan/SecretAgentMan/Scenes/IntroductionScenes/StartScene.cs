@@ -50,6 +50,7 @@ public class StartScene : Scene
         _textBlock = new TextBlock(CharacterSet.Uppercase);
         _state = StartSceneState.Logo;
         AddToAutoUpdate(Keyboard);
+        Game1.HighScore.ResetVisuals(Game1.HighScoreViewY);
 
         if (!Game1.LoaderSongIsPlaying)
         {
@@ -88,9 +89,7 @@ public class StartScene : Scene
         }
 
 
-        if (ticks % 4 == 0)
-            _frameVisiblePart++;
-
+        _frameVisiblePart += 2;
         _partTick++;
 
         switch (_state)
@@ -147,21 +146,24 @@ public class StartScene : Scene
 
     private void CreateInstructions()
     {
-        _typeWriter = new TypeWriter(13, 13, 30, ColorPalette.White);
+        _typeWriter = new TypeWriter(100, 14, 30, ColorPalette.White);
         
         _typeWriter.SetText(
-            "as a secret agent, you are called upon by new york city mayor koch to curb",
-            "the escalating crime rate. criminal elements are openly roaming among the",
-            "other citizens, and it is of utmost importance that you eliminate all the",
-            "criminals in the area, without harming any of the peaceful civilian",
-            "population.",
+            "as a secret agent, you are called upon by new york",
+            "city mayor koch to curb the escalating crime rate.",
+            "criminal elements are openly roaming among the other",
+            "citizens, and it is of utmost importance that you",
+            "eliminate all the criminals in the area, without",
+            "harming any of the peaceful civilian population.",
             "",
-            "you may not kill any civilians, you need to kill all criminal elements. to",
-            "reach the next level, all criminals must be eliminated.",
+            "you may not kill any civilians, you need to kill all",
+            "criminal elements. to reach the next level, all",
+            "criminals must be eliminated.",
             "",
-            "there is bonus items placed out for you, and additional tasks may be given",
-            "to you during game play - pay careful attention to what mayor koch has to",
-            "say. good luck, and be careful out there!"
+            "there is bonus items placed out for you, and",
+            "additional tasks may be given to you during gameplay -",
+            "pay careful attention to what mayor koch has to say.",
+            "good luck, and be careful out there!"
         );
     }
 
@@ -175,7 +177,7 @@ public class StartScene : Scene
             case StartSceneState.HighScore:
                 var x = TodaysBestPlayersHeader.Length * 8;
                 x = 320 - x / 2;
-                _textBlock.DirectDraw(spriteBatch, x, 190, TodaysBestPlayersHeader, ColorPalette.Yellow);
+                _textBlock.DirectDraw(spriteBatch, x, 134, TodaysBestPlayersHeader, ColorPalette.Yellow);
                 Game1.HighScore.Draw(spriteBatch, ticks);
                 break;
             case StartSceneState.Instructions:

@@ -12,8 +12,8 @@ namespace SecretAgentMan.Scenes.IntroductionScenes;
 public class IntroScene : Scene
 {
     private const int CellCountX = 40;
-    private const int CellCountY = 9;
-    private const int TicksBeforeContinue = 1500;
+    private const int CellCountY = 23;
+    private const int TicksBeforeContinue = 3500;
     private int _currentCellX;
     private int _currentCellY;
     private int _inCurrentCellY;
@@ -24,6 +24,7 @@ public class IntroScene : Scene
     private const string PressFire = "press fire to continue";
     private readonly int _pressFireCenterX;
     private readonly TextBlock _textBlock;
+    private bool _canContinue;
 
     public IntroScene(RetroGame.RetroGame parent) : base(parent)
     {
@@ -63,9 +64,11 @@ public class IntroScene : Scene
         if (ticks == TicksBeforeContinue)
             Keyboard.ClearState();
 
+        _canContinue = ticks > TicksBeforeContinue;
+
         if (Keyboard.IsKeyPressed(Keys.Escape))
             Exit();
-        else if (ticks > TicksBeforeContinue * 2 && Keyboard.IsFirePressed())
+        else if (_done || (_canContinue && Keyboard.IsFirePressed()))
             Parent.CurrentScene = new StartScene(Parent, 0, 0);
 
         base.Update(gameTime, ticks);
@@ -89,10 +92,16 @@ public class IntroScene : Scene
                 Game1.IntroGraphics!.DrawPart(spriteBatch, _currentCellX * 16, _currentCellY * 16, 16, _inCurrentCellY, _currentCellX * 16, _currentCellY * 16);
         }
 
-        if (ticks > TicksBeforeContinue && ticks % 120 > 60)
-            _textBlock.DirectDraw(spriteBatch, _loadingPleaseWaitCenterX, 300, LoadingPleaseWait, ColorPalette.White);
-        else if (ticks > TicksBeforeContinue * 2 && ticks % 120 > 60)
-            _textBlock.DirectDraw(spriteBatch, _pressFireCenterX, 300, PressFire, ColorPalette.White);
+        if (ticks % 80 < 40)
+        {
+            if (ticks > 600)
+            {
+                if (_canContinue)
+                    _textBlock.DirectDraw(spriteBatch, _pressFireCenterX, 300, PressFire, ColorPalette.White);
+                else
+                    _textBlock.DirectDraw(spriteBatch, _loadingPleaseWaitCenterX, 300, LoadingPleaseWait, ColorPalette.White);
+            }
+        }
 
         base.Draw(gameTime, ticks, spriteBatch);
     }
