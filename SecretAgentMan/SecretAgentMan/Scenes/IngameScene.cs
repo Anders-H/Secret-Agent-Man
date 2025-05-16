@@ -30,7 +30,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private ulong _bonusReached52At;
     private int _lives;
     private int _zeroBasedLevel;
-    private string _levelString;
+    private string _levelString = "";
     public const int SpriteUpperLimit = 98;
     public const int SpriteLowerLimit = 276;
 
@@ -313,8 +313,22 @@ public class IngameScene : RetroGame.Scene.IngameScene
         Game1.Hud?.Draw(spriteBatch, 0, 10, 292);
         Text.DirectDraw(spriteBatch, 544, 299, "lives", ColorPalette.White);
         Text.DirectDraw(spriteBatch, 544, 307, "faults", ColorPalette.White);
-        Text.DirectDraw(spriteBatch, 544, 315, "ammo", ColorPalette.White);
-
+        switch (_player.BulletsLeft)
+        {
+            case 0:
+                Text.DirectDraw(spriteBatch, 544, 315, "ammo", ticks % 16 < 8 ? ColorPalette.White : ColorPalette.Red);
+                break;
+            case 1:
+                Text.DirectDraw(spriteBatch, 544, 315, "ammo", ticks % 18 < 9 ? ColorPalette.White : ColorPalette.Orange);
+                break;
+            case 2:
+                Text.DirectDraw(spriteBatch, 544, 315, "ammo", ticks % 20 < 10 ? ColorPalette.White : ColorPalette.Yellow);
+                break;
+            default:
+                Text.DirectDraw(spriteBatch, 544, 315, "ammo", ColorPalette.White);
+                break;
+        }
+        
         if (_player.BulletsLeft > 0)
         {
             var ammoX = 621;

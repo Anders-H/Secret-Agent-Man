@@ -38,6 +38,7 @@ public class Game1 : RetroGame.RetroGame
     public static SoundEffect? PlayerDie { get; set; }
     public static SoundEffect? EnemyCoin { get; set; }
     public static SoundEffect? PlayerCoin { get; set; }
+    public static SoundEffect? FireNoAmmo { get; set; }
     public static Song? GameOverSong { get; set; }
     public static Song? LoaderSong { get; set; }
     public static Song? HiScoreSong { get; set; }
@@ -72,6 +73,7 @@ public class Game1 : RetroGame.RetroGame
         PlayerDie = new SoundEffect(this);
         EnemyCoin = new SoundEffect(this);
         PlayerCoin = new SoundEffect(this);
+        FireNoAmmo = new SoundEffect(this);
     }
 
     protected override void LoadContent()
@@ -108,6 +110,7 @@ public class Game1 : RetroGame.RetroGame
         PlayerDie!.Initialize("sfx_playerdeath");
         EnemyCoin!.Initialize("enemy_sfx_coin_1", "enemy_sfx_coin_2", "enemy_sfx_coin_3");
         PlayerCoin!.Initialize("player_sfx_coin_1", "player_sfx_coin_2");
+        FireNoAmmo!.Initialize("sfx_noammo2");
         GameOverSong = Content.Load<Song>("game-over");
         LoaderSong = Content.Load<Song>("loader");
         HiScoreSong = Content.Load<Song>("hiscore");

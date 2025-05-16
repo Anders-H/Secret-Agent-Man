@@ -105,6 +105,10 @@ public class Player : Character
                 Fire(true);
                 BulletsLeft--;
             }
+            else
+            {
+                Game1.FireNoAmmo!.PlayNext();
+            }
         }
 
         if (changeAnimationCells)

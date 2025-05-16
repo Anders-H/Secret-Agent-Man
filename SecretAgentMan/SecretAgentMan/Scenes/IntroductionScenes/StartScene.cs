@@ -27,7 +27,7 @@ public class StartScene : Scene
     private int _logoY;
     private readonly List<int> _logoImageList;
     private int _logoImageListIndex;
-    private TypeWriter? _typeWriter;
+    private TextBlockStaticVerticalCenter? _typeWriter;
 
     public StartScene(RetroGame.RetroGame parent, int lastScore, int todaysBest) : base(parent)
     {
@@ -89,19 +89,19 @@ public class StartScene : Scene
         }
 
 
-        _frameVisiblePart += 2;
+        _frameVisiblePart += 4;
         _partTick++;
 
         switch (_state)
         {
-            case StartSceneState.Logo when _partTick % 800 == 0:
+            case StartSceneState.Logo when _partTick % 750 == 0:
                 _state = StartSceneState.HighScore;
                 break;
-            case StartSceneState.HighScore when _partTick % 800 == 0:
+            case StartSceneState.HighScore when _partTick % 750 == 0:
                 _state = StartSceneState.Instructions;
                 CreateInstructions();
                 break;
-            case StartSceneState.Instructions when _partTick % 4000 == 0:
+            case StartSceneState.Instructions when _partTick % 3000 == 0:
                 _partTick = 0;
                 _state = StartSceneState.Logo;
                 break;
@@ -111,14 +111,14 @@ public class StartScene : Scene
         {
             case StartSceneState.Logo:
             case StartSceneState.HighScore:
-                _gunX--;
+                _gunX -= 2;
 
                 if (_gunX < 0)
                     _gunX = 0;
 
                 if (ticks % 2 == 0)
                 {
-                    _logoY++;
+                    _logoY += 2;
 
                     if (_logoY > 30)
                         _logoY = 30;
@@ -146,25 +146,29 @@ public class StartScene : Scene
 
     private void CreateInstructions()
     {
-        _typeWriter = new TypeWriter(100, 14, 30, ColorPalette.White);
-        
-        _typeWriter.SetText(
-            "as a secret agent, you are called upon by new york",
-            "city mayor koch to curb the escalating crime rate.",
-            "criminal elements are openly roaming among the other",
-            "citizens, and it is of utmost importance that you",
-            "eliminate all the criminals in the area, without",
-            "harming any of the peaceful civilian population.",
+        _typeWriter = new TextBlockStaticVerticalCenter(640, 110,
+            "AS A SECRET AGENT, YOU ARE CALLED UPON",
+            "BY NEW YORK CITY MAYOR KOCH TO CURB THE",
+            "ESCALATING CRIME RATE.",
             "",
-            "you may not kill any civilians, you need to kill all",
-            "criminal elements. to reach the next level, all",
-            "criminals must be eliminated.",
+            "CRIMINAL ELEMENTS ARE OPENLY ROAMING",
+            "AMONG THE OTHER CITIZENS, AND IT IS OF",
+            "UTMOST IMPORTANCE THAT YOU ELIMINATE",
+            "ALL THE CRIMINALS IN THE AREA, WITHOUT",
+            "HARMING ANY OF THE PEACEFUL CIVILIAN",
+            "POPULATION.",
             "",
-            "there is bonus items placed out for you, and",
-            "additional tasks may be given to you during gameplay -",
-            "pay careful attention to what mayor koch has to say.",
-            "good luck, and be careful out there!"
-        );
+            "YOU MAY NOT KILL ANY CIVILIANS, YOU",
+            "NEED TO KILL ALL CRIMINAL ELEMENTS.",
+            "",
+            "TO REACH THE NEXT LEVEL, ALL CRIMINALS",
+            "MUST BE ELIMINATED.",
+            "",
+            "THERE ARE BONUS ITEMS PLACED OUT FOR",
+            "YOU, AND ADDITIONAL TASKS MAY BE GIVEN",
+            "TO YOU DURING GAMEPLAY - PAY CAREFUL",
+            "ATTENTION TO WHAT MAYOR KOCH HAS TO SAY.",
+            "GOOD LUCK, AND BE CAREFUL OUT THERE!");
     }
 
     public override void Draw(GameTime gameTime, ulong ticks, SpriteBatch spriteBatch)
@@ -194,8 +198,8 @@ public class StartScene : Scene
         else
             Game1.StartScreenFrame!.Draw(spriteBatch, 0, 0, 0);
 
-        _textBlock.DirectDraw(spriteBatch, 0, 344, _todaysBestScoreString, ColorPalette.LightGrey);
-        _textBlock.DirectDraw(spriteBatch, 0, 336, _lastScoreString, ColorPalette.LightGrey);
+        _textBlock.DirectDraw(spriteBatch, 11, 342, _todaysBestScoreString, ColorPalette.LightGrey);
+        _textBlock.DirectDraw(spriteBatch, 11, 334, _lastScoreString, ColorPalette.LightGrey);
         _textBlock.DirectDraw(spriteBatch, _creditsX, 352, CreditsText, ColorPalette.Green);
         base.Draw(gameTime, ticks, spriteBatch);
     }
