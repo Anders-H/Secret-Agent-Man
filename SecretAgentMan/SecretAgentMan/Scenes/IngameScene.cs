@@ -24,8 +24,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private readonly IngameFire _fire = new();
     private int _waterFrameIndex;
     private int _killedSpyCount;
-    private bool _gameCompleted;
-    private ulong _gameCompletedAt;
+    private GameEventPointer _gameCompleted = new();
     private short _currentBonusLevel;
     private ulong _bonusReached52At;
     private int _lives;
@@ -50,7 +49,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
     private int ZeroBasedLevel
     {
-        get => _zeroBasedLevel;
+        //get => _zeroBasedLevel;
         set
         {
             _zeroBasedLevel = value;
@@ -151,7 +150,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
                 if (coin.Collide(_player))
                 {
-                    Game1.PlayerCoin!.PlayRandom();
+                    SoundEffects.PlayerCoin!.PlayRandom();
                     coins.Remove(coin);
                     Score += 50;
                     _currentBonusLevel++;
@@ -162,7 +161,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 {
                     if (coin.Collide(npc))
                     {
-                        Game1.EnemyCoin!.PlayRandom();
+                        SoundEffects.EnemyCoin!.PlayRandom();
                         coins.Remove(coin);
                         goto OuterBail;
                     }
@@ -219,8 +218,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                             {
                                 Game1.TypeWriter.SetText($"all spies eliminated! {scoreAdded} points! well done!");
                                 _fire.Clear();
-                                _gameCompleted = true;
-                                _gameCompletedAt = ticks;
+                                _gameCompleted.Occure(ticks);
                                 _currentBonusLevel++;
                             }
                             else
@@ -240,7 +238,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 return;
             }
 
-            if (_gameCompleted && ticks > _gameCompletedAt + 500)
+            if (_gameCompleted.OccuredTicksAgo(ticks, 500))
             {
                 // TODO: Next level or game completed.
                 ScoreManagement.StoreLastScore(Score);
@@ -248,7 +246,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 return;
             }
 
-            if (!_gameCompleted)
+            if (!_gameCompleted.Occured)
             {
                 _fire.RemoveOneDeadFire();
                 _roomList.TurnOneDeadNpcToGraveStone(_currentRoomIndex);
@@ -265,7 +263,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
             Parent.CurrentScene = new GameOverKilledScene(Parent);
         }
 
-        if (!_gameCompleted && _player.AliveStatus == Character.StatusAlive)
+        if (!_gameCompleted.Occured && _player.AliveStatus == Character.StatusAlive)
         {
             if (_currentBonusLevel >= 52 && _bonusReached52At <= 0)
             {
@@ -359,7 +357,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
         }
 
 
-        if (_gameCompleted)
+        if (_gameCompleted.Occured)
         {
             //TODO: Övergång till game completed.
             //Text.DirectDraw(spriteBatch, GameOverKilledScene.GameClearX, 150, GameOverKilledScene.GameClearText, ColorPalette.Green);

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Media;
 using RetroGame;
 using RetroGame.Scene;
 using RetroGame.Text;
+using SecretAgentMan.OtherResources;
 using SecretAgentMan.Scenes.IntroductionScenes;
 
 namespace SecretAgentMan.Scenes.GameOverScenes;
@@ -25,7 +26,7 @@ public class GameOverKilledScene : Scene
         if (MediaPlayer.State == MediaState.Playing)
             MediaPlayer.Stop();
 
-        MediaPlayer.Play(Game1.GameOverSong);
+        MediaPlayer.Play(Songs.GameOverSong);
     }
 
     public override void Update(GameTime gameTime, ulong ticks)

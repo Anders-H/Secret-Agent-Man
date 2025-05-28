@@ -1,4 +1,5 @@
 ﻿using RetroGame.Input;
+using SecretAgentMan.OtherResources;
 using SecretAgentMan.Scenes;
 using SecretAgentMan.Scenes.Rooms;
 
@@ -107,7 +108,7 @@ public class Player : Character
             }
             else
             {
-                Game1.FireNoAmmo!.PlayNext();
+                SoundEffects.FireNoAmmo!.PlayNext();
             }
         }
 
@@ -193,7 +194,7 @@ public class Player : Character
 
     private void Die(ulong ticks)
     {
-        Game1.PlayerDie!.PlayNext();
+        SoundEffects.PlayerDie!.PlayNext();
         CurrentAnimation = _die;
         AliveStatus = StatusDying;
         DieAtTicks = ticks;

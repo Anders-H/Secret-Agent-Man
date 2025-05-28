@@ -53,7 +53,7 @@ public class BonusLevelScene : RetroGame.Scene.IngameScene
 
             if (coin.Collide(_player))
             {
-                Game1.PlayerCoin!.PlayRandom();
+                SoundEffects.PlayerCoin!.PlayRandom();
                 Coins.Remove(coin);
                 _addScore(50);
                 Score += 50;
@@ -64,7 +64,7 @@ public class BonusLevelScene : RetroGame.Scene.IngameScene
             {
                 if (coin.Collide(npc))
                 {
-                    Game1.EnemyCoin!.PlayRandom();
+                    SoundEffects.EnemyCoin!.PlayRandom();
                     Coins.Remove(coin);
                     goto OuterBail;
                 }
@@ -87,7 +87,7 @@ public class BonusLevelScene : RetroGame.Scene.IngameScene
                 if (npc.AliveStatus == Character.StatusAlive)
                 {
                     npc.Die(ticks);
-                    Game1.EnemyDie!.PlayRandom();
+                    SoundEffects.EnemyDie!.PlayRandom();
                     Score = _addScore(5);
                 }
 

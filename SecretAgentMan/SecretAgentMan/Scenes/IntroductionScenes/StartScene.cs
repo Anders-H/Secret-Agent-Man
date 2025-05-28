@@ -8,6 +8,7 @@ using RetroGame;
 using RetroGame.Input;
 using RetroGame.Scene;
 using RetroGame.Text;
+using SecretAgentMan.OtherResources;
 
 namespace SecretAgentMan.Scenes.IntroductionScenes;
 
@@ -55,7 +56,7 @@ public class StartScene : Scene
         if (!Game1.LoaderSongIsPlaying)
         {
             Game1.LoaderSongIsPlaying = true;
-            MediaPlayer.Play(Game1.LoaderSong!);
+            MediaPlayer.Play(Songs.LoaderSong!);
         }
     }
 
@@ -188,7 +189,7 @@ public class StartScene : Scene
                 _typeWriter!.Draw(spriteBatch, ticks);
                 break;
             default:
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException("StartScene.Draw: _state");
         }
 
         Game1.StartScreenLogo!.Draw(spriteBatch, _logoImageList[_logoImageListIndex], 99, _logoY);

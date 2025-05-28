@@ -6,6 +6,7 @@ using RetroGame;
 using RetroGame.Input;
 using RetroGame.Scene;
 using RetroGame.Text;
+using SecretAgentMan.OtherResources;
 
 namespace SecretAgentMan.Scenes.IntroductionScenes;
 
@@ -34,12 +35,12 @@ public class IntroScene : Scene
         _textBlock = new TextBlock(CharacterSet.Uppercase);
         AddToAutoUpdate(Keyboard);
         Game1.LoaderSongIsPlaying = true;
-        MediaPlayer.Play(Game1.LoaderSong!);
+        MediaPlayer.Play(Songs.LoaderSong!);
     }
 
     public override void Update(GameTime gameTime, ulong ticks)
     {
-        _inCurrentCellY += 2;
+        _inCurrentCellY += 6;
 
         if (_inCurrentCellY > 16)
         {
@@ -96,7 +97,7 @@ public class IntroScene : Scene
         {
             if (ticks > 600)
             {
-                if (_canContinue)
+                if (_done) //(_canContinue)
                     _textBlock.DirectDraw(spriteBatch, _pressFireCenterX, 300, PressFire, ColorPalette.White);
                 else
                     _textBlock.DirectDraw(spriteBatch, _loadingPleaseWaitCenterX, 300, LoadingPleaseWait, ColorPalette.White);

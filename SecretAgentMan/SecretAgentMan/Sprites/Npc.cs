@@ -334,7 +334,7 @@ public class Npc : Character, IRetroActor
 
         if (Status != StatusInnocent & _ticksSinceGunToggle > 150)
         {
-            if (Game1.Random.Next(550) == 100)
+            if (Game1.Random.Next(_gunUp ? 550 : 110) == 100)
             {
                 _gunUp = !_gunUp;
 
@@ -376,7 +376,7 @@ public class Npc : Character, IRetroActor
 
     public void Die(ulong ticks)
     {
-        Game1.EnemyDie!.PlayRandom();
+        SoundEffects.EnemyDie!.PlayRandom();
         CurrentAnimation = _die;
         AliveStatus = StatusDying;
         DieAtTicks = ticks;

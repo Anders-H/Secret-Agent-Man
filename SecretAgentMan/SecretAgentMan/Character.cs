@@ -1,4 +1,5 @@
 ﻿using RetroGame.Sprites;
+using SecretAgentMan.OtherResources;
 using SecretAgentMan.Sprites;
 
 namespace SecretAgentMan;
@@ -53,7 +54,7 @@ public abstract class Character : Sprite
 
     protected void Fire(bool isEnemy)
     {
-        Game1.EnemyFire!.PlayRandom();
+        SoundEffects.EnemyFire!.PlayRandom();
 
         FireList.Add(FaceRight
             ? new Fire(true, isEnemy, IntX + 11, IntY - 5)

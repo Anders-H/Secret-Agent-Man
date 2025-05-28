@@ -6,6 +6,7 @@ using RetroGame;
 using RetroGame.Input;
 using RetroGame.Scene;
 using RetroGame.Text;
+using SecretAgentMan.OtherResources;
 using SecretAgentMan.Scenes.GameOverScenes;
 using SecretAgentMan.Scenes.IntroductionScenes;
 
@@ -14,8 +15,8 @@ namespace SecretAgentMan.Scenes;
 public class HighScoreScene : Scene
 {
     private readonly int _score;
-    private bool _editMode;
-    private ulong _editEndAt;
+    private bool _qualify;
+    private GameEventPointer _editEnded = new();
     private readonly TextBlock _textBlock;
     private KeyboardStateChecker Keyboard { get; }
     private const string BestPlayer = "you are one of the best players today. enter your name in the highscore list! well done, sir!";
@@ -29,7 +30,6 @@ public class HighScoreScene : Scene
         _bestPlayerX = 650;
         Keyboard = new KeyboardStateChecker();
         _score = score;
-        _editMode = false;
         _textBlock = new TextBlock(CharacterSet.Uppercase);
         AddToAutoUpdate(Keyboard);
         Game1.HighScore.ResetVisuals(Game1.HighScoreEditY);
@@ -40,7 +40,7 @@ public class HighScoreScene : Scene
             _gameOverY = 0;
 
         MediaPlayer.Stop();
-        MediaPlayer.Play(Game1.HiScoreSong!);
+        MediaPlayer.Play(Songs.HiScoreSong!);
     }
 
     public override void Update(GameTime gameTime, ulong ticks)
@@ -61,29 +61,25 @@ public class HighScoreScene : Scene
         
         if (ticks == 3)
         {
-            if (Game1.HighScore.Qualify(_score))
+            _qualify = Game1.HighScore.Qualify(_score);
+
+            if (_qualify)
             {
                 Game1.HighScore.BeginEdit(_score);
-                _editMode = true;
                 return;
             }
         }
 
-        if (_editMode)
+        if (ticks > 3 && _qualify)
         {
             if (Game1.HighScore.StillEditing)
-            {
                 Game1.HighScore.Edit(Keyboard);
-            }
             else
-            {
-                _editMode = false;
-                _editEndAt = ticks;
-            }
+                _editEnded.Occure(ticks);
         }
         else
         {
-            if (Keyboard.IsKeyPressed(Keys.Escape) || Keyboard.IsFirePressed() || ticks - _editEndAt > 100)
+            if (Keyboard.IsKeyPressed(Keys.Escape) || Keyboard.IsFirePressed() || _editEnded.OccuredTicksAgo(ticks, 100))
                 Parent.CurrentScene = new StartScene(Parent, _score, Game1.TodaysBestScore);
         }
 
