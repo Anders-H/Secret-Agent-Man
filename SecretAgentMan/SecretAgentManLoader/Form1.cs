@@ -6,7 +6,7 @@ public partial class Form1 : Form
 {
     private readonly string _videoPath;
     private readonly string _gamePath;
-    private int _seconds = 0;
+    private int _seconds;
 
     public Form1()
     {

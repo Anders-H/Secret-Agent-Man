@@ -189,7 +189,7 @@ public class StartScene : Scene
                 _typeWriter!.Draw(spriteBatch, ticks);
                 break;
             default:
-                throw new ArgumentOutOfRangeException("StartScene.Draw: _state");
+                throw new ArgumentOutOfRangeException($"StartScene.Draw: {_state}");
         }
 
         Game1.StartScreenLogo!.Draw(spriteBatch, _logoImageList[_logoImageListIndex], 99, _logoY);

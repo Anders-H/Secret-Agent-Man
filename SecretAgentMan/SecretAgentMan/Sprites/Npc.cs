@@ -420,7 +420,7 @@ public class Npc : Character, IRetroActor
         else
             speed = (ulong)Game1.Random.Next(1, 9);
 
-        var n = new Npc(StatusBonus, null, new FireList(), speed);
+        var n = new Npc(StatusBonus, null, [], speed);
         return n;
     }
 
