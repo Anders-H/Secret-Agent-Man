@@ -30,10 +30,16 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
             timer1 = new System.Windows.Forms.Timer(components);
+            axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
             ((System.ComponentModel.ISupportInitialize)axWindowsMediaPlayer1).BeginInit();
             SuspendLayout();
+            // 
+            // timer1
+            // 
+            timer1.Enabled = true;
+            timer1.Interval = 1000;
+            timer1.Tick += timer1_Tick;
             // 
             // axWindowsMediaPlayer1
             // 
@@ -45,11 +51,6 @@
             axWindowsMediaPlayer1.Size = new Size(800, 450);
             axWindowsMediaPlayer1.TabIndex = 0;
             // 
-            // timer1
-            // 
-            timer1.Interval = 1000;
-            timer1.Tick += timer1_Tick;
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -58,9 +59,10 @@
             Controls.Add(axWindowsMediaPlayer1);
             FormBorderStyle = FormBorderStyle.None;
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "Form1";
-            StartPosition = FormStartPosition.Manual;
-            Text = "Secret Agent Man Loader";
+            Text = "Secret Agent Man";
             TopMost = true;
             FormClosed += Form1_FormClosed;
             Shown += Form1_Shown;
@@ -70,7 +72,7 @@
 
         #endregion
 
-        private AxWMPLib.AxWindowsMediaPlayer axWindowsMediaPlayer1;
         private System.Windows.Forms.Timer timer1;
+        private AxWMPLib.AxWindowsMediaPlayer axWindowsMediaPlayer1;
     }
 }
