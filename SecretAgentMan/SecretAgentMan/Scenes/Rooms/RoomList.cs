@@ -122,9 +122,19 @@ public class RoomList
                 case 0:
                     room.AddAirplane(2);
                     room.Coins.Add(new Coin(200, 150, 0));
+                    room.Ammos.Add(new AmmoBox(90, 200));
+                    room.Ammos.Add(new AmmoBox(112, 200));
+                    room.Ammos.Add(new AmmoBox(134, 200));
+                    room.Ammos.Add(new AmmoBox(156, 200));
+                    room.Ammos.Add(new AmmoBox(178, 200));
                     break;
                 case 1:
                     room.AddAirplane(3);
+                    room.Ammos.Add(new AmmoBox(90, 200));
+                    room.Ammos.Add(new AmmoBox(112, 200));
+                    room.Ammos.Add(new AmmoBox(134, 200));
+                    room.Ammos.Add(new AmmoBox(156, 200));
+                    room.Ammos.Add(new AmmoBox(178, 200));
                     break;
                 case 2:
                     room.AddAirplane(2);
@@ -188,6 +198,9 @@ public class RoomList
 
     public CoinList GetCoins(int room) =>
         Rooms[room].Coins;
+
+    public List<AmmoBox> GetAmmos(int room) =>
+        Rooms[room].Ammos;
 
     public void TurnOneDeadNpcToGraveStone(int room)
     {

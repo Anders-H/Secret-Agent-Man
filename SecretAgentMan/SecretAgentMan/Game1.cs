@@ -11,6 +11,7 @@ using SecretAgentMan.OtherResources;
 using SecretAgentMan.Scenes;
 using SecretAgentMan.Scenes.GameOverScenes;
 using SecretAgentMan.Scenes.IntroductionScenes;
+using SecretAgentMan.Sprites;
 
 namespace SecretAgentMan;
 
@@ -19,7 +20,6 @@ public class Game1 : RetroGame.RetroGame
     public static SettingCollection? Settings { get; set; }
     public static RetroTexture? GraveStoneTexture { get; set; }
     public static RetroTexture? IntroGraphics { get; set; }
-    public static RetroTexture? CoinTexture { get; set; }
     public static RetroTexture? Hud { get; set; }
     public static RetroTexture? Frame { get; set; }
     public static RetroTexture? BonusLevelFrame { get; set; }
@@ -72,7 +72,6 @@ public class Game1 : RetroGame.RetroGame
         BonusRoundSeconds = int.Parse(Settings.GetValue("BonusRoundSeconds"));
 
         Hud = RetroTexture.LoadContent(GraphicsDevice, Content, 620, 59, 1, "hud");
-        CoinTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 10, 10, 6, "coin10x10");
         Frame = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "frame");
         BonusLevelFrame = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 2, "bonus-stars-640x360");
         GraveStoneTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 25, 25, 13, "rip25x25");
@@ -82,10 +81,12 @@ public class Game1 : RetroGame.RetroGame
         StartScreenFrame = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "start-screen-frame");
         StartScreenGun = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "start-screen-gun");
         StartScreenLogo = RetroTexture.LoadContent(GraphicsDevice, Content, 433, 54, 15, "start-screen-logo433x54");
+        IntroGraphics = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "load-screen-360p-nofilter");
+        Coin.LoadContent(GraphicsDevice, Content);
+        AmmoBox.LoadContent(GraphicsDevice, Content);
         GameOverFiredScene.LoadResources(GraphicsDevice, Content);
         IngameBackgroundResources.LoadContent(GraphicsDevice, Content);
         MayorResources.LoadContent(GraphicsDevice, Content);
-        IntroGraphics = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "load-screen-360p-nofilter");
         SoundEffects.LoadSoundEffects();
         Songs.LoadSongs(Content);
         CurrentScene = new IntroScene(this);

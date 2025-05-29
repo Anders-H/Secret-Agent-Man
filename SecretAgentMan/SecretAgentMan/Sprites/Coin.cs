@@ -1,5 +1,7 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using RetroGame;
+using RetroGame.RetroTextures;
 using RetroGame.Scene;
 using RetroGame.Sprites;
 
@@ -8,12 +10,18 @@ namespace SecretAgentMan.Sprites;
 public class Coin : Sprite, IRetroActor
 {
     private int _cellIndex;
+    private static RetroTexture? CoinTexture { get; set; }
 
     public Coin(int x, int y, int cellIndexStart)
     {
         _cellIndex = cellIndexStart;
         X = x;
         Y = y;
+    }
+
+    public static void LoadContent(GraphicsDevice graphicsDevice, ContentManager content)
+    {
+        CoinTexture = RetroTexture.LoadContent(graphicsDevice, content, 10, 10, 6, "coin10x10");
     }
 
     public void Act(ulong ticks)
@@ -44,5 +52,5 @@ public class Coin : Sprite, IRetroActor
     }
 
     public void Draw(SpriteBatch spriteBatch) =>
-        Game1.CoinTexture?.Draw(spriteBatch, _cellIndex, IntX, IntY, ColorPalette.White);
+        CoinTexture?.Draw(spriteBatch, _cellIndex, IntX, IntY, ColorPalette.White);
 }

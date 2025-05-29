@@ -163,12 +163,37 @@ public class IngameScene : RetroGame.Scene.IngameScene
                     {
                         SoundEffects.EnemyCoin!.PlayRandom();
                         coins.Remove(coin);
-                        goto OuterBail;
+                        goto CoinOuterBail;
                     }
                 }
             }
 
-            OuterBail:;
+            CoinOuterBail:;
+
+            var ammos = _roomList.GetAmmos(_currentRoomIndex);
+
+            if (_player.AmmoBoxes < 4)
+            {
+                foreach (var ammo in ammos)
+                {
+                    if (ammo.Collide(_player))
+                    {
+                        SoundEffects.AmmoBox!.PlayNext();
+                        ammos.Remove(ammo);
+
+                        if (_player.BulletsLeft <= 0 && _player.AmmoBoxes <= 0)
+                        {
+                            _player.BulletsLeft = Player.MaxBullets;
+                        }
+                        else
+                        {
+                            _player.AmmoBoxes++;
+                        }
+
+                        break;
+                    }
+                }
+            }
 
             foreach (var npc in _roomList.GetNpcs(_currentRoomIndex))
             {
@@ -302,6 +327,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
         {
             _roomList.DrawBackground(spriteBatch, _currentRoomIndex, Text, _player);
             _roomList.GetCoins(_currentRoomIndex).Draw(spriteBatch);
+            _roomList.GetAmmos(_currentRoomIndex).ForEach(x => x.Draw(spriteBatch));
             _fire.Draw(spriteBatch);
             _roomList.DrawDecorations(spriteBatch, _currentRoomIndex);
         }
@@ -311,22 +337,30 @@ public class IngameScene : RetroGame.Scene.IngameScene
         Game1.Hud?.Draw(spriteBatch, 0, 10, 292);
         Text.DirectDraw(spriteBatch, 544, 299, "lives", ColorPalette.White);
         Text.DirectDraw(spriteBatch, 544, 307, "faults", ColorPalette.White);
-        switch (_player.BulletsLeft)
-        {
-            case 0:
-                Text.DirectDraw(spriteBatch, 544, 315, "ammo", ticks % 16 < 8 ? ColorPalette.White : ColorPalette.Red);
-                break;
-            case 1:
-                Text.DirectDraw(spriteBatch, 544, 315, "ammo", ticks % 18 < 9 ? ColorPalette.White : ColorPalette.Orange);
-                break;
-            case 2:
-                Text.DirectDraw(spriteBatch, 544, 315, "ammo", ticks % 20 < 10 ? ColorPalette.White : ColorPalette.Yellow);
-                break;
-            default:
-                Text.DirectDraw(spriteBatch, 544, 315, "ammo", ColorPalette.White);
-                break;
-        }
         
+        if (_player.AmmoBoxes <= 0)
+        {
+            switch (_player.BulletsLeft)
+            {
+                case 0:
+                    Text.DirectDraw(spriteBatch, 544, 315, "ammo", ticks % 16 < 8 ? ColorPalette.White : ColorPalette.Red);
+                    break;
+                case 1:
+                    Text.DirectDraw(spriteBatch, 544, 315, "ammo", ticks % 18 < 9 ? ColorPalette.White : ColorPalette.Orange);
+                    break;
+                case 2:
+                    Text.DirectDraw(spriteBatch, 544, 315, "ammo", ticks % 20 < 10 ? ColorPalette.White : ColorPalette.Yellow);
+                    break;
+                default:
+                    Text.DirectDraw(spriteBatch, 544, 315, "ammo", ColorPalette.White);
+                    break;
+            }
+        }
+        else
+        {
+            Text.DirectDraw(spriteBatch, 544, 315, "ammo", ColorPalette.White);
+        }
+
         if (_player.BulletsLeft > 0)
         {
             var ammoX = 621;
@@ -351,11 +385,40 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
                 break;
             case 1:
+                Game1.LivesSymbolTexture!.Draw(spriteBatch, 0, 590, 298);
+                
+                if (ticks % 40 > 20)
+                    Game1.LivesSymbolTexture.Draw(spriteBatch, 0, 602, 298);
+
                 break;
             case 0:
+                if (ticks % 40 > 20)
+                    Game1.LivesSymbolTexture!.Draw(spriteBatch, 0, 590, 298);
+
                 break;
         }
 
+        switch (_player.AmmoBoxes)
+        {
+            case 4:
+                AmmoBox.AmmoBoxTexture!.Draw(spriteBatch, 0, 543, 335);
+                AmmoBox.AmmoBoxTexture.Draw(spriteBatch, 0, 564, 335);
+                AmmoBox.AmmoBoxTexture.Draw(spriteBatch, 0, 585, 335);
+                AmmoBox.AmmoBoxTexture.Draw(spriteBatch, 0, 606, 335);
+                break;
+            case 3:
+                AmmoBox.AmmoBoxTexture!.Draw(spriteBatch, 0, 543, 335);
+                AmmoBox.AmmoBoxTexture.Draw(spriteBatch, 0, 564, 335);
+                AmmoBox.AmmoBoxTexture.Draw(spriteBatch, 0, 585, 335);
+                break;
+            case 2:
+                AmmoBox.AmmoBoxTexture!.Draw(spriteBatch, 0, 543, 335);
+                AmmoBox.AmmoBoxTexture.Draw(spriteBatch, 0, 564, 335);
+                break;
+            case 1:
+                AmmoBox.AmmoBoxTexture!.Draw(spriteBatch, 0, 543, 335);
+                break;
+        }
 
         if (_gameCompleted.Occured)
         {

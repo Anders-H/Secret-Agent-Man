@@ -14,6 +14,7 @@ public class Room
     public string DistrictName { get; }
     public List<Npc> Npcs { get; }
     public CoinList Coins { get; }
+    public List<AmmoBox> Ammos { get; }
     private readonly List<Airplane> _airplanes;
     
     public Room(string districtName)
@@ -22,6 +23,7 @@ public class Room
         DistrictName = districtName;
         Npcs = [];
         Coins = [];
+        Ammos = [];
     }
 
     public void AddAirplane(int count)
