@@ -22,6 +22,8 @@
 	1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 
 <<<End:Setting>>>
+<<<Begin:Setting:Level1Objects>>>
+<<<End:Setting>>>
 <<<Begin:Setting:Level2RoomNames>>>
 
 	/* En semikolonseparerad lista över rummens namn i level 1 (10 stycken). */
@@ -40,6 +42,8 @@
 	1, 1, 2, 3, 4, 4, 6, 10, 15, 25
 
 <<<End:Setting>>>
+<<<Begin:Setting:Level2Objects>>>
+<<<End:Setting>>>
 <<<Begin:Setting:Level3RoomNames>>>
 
 	/* En semikolonseparerad lista över rummens namn i level 1 (10 stycken). */
@@ -57,4 +61,6 @@
 	/* En kommaseparerad lista över antalet spioner per rum level 1 (10 stycken). */
 	2, 2, 4, 6, 8, 9, 12, 20, 100, 250
 
+<<<End:Setting>>>
+<<<Begin:Setting:Level3Objects>>>
 <<<End:Setting>>>
