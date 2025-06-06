@@ -77,7 +77,7 @@ public class StartScene : Scene
         if ((Keyboard.IsFirePressed() || Keyboard.IsPadButtonPressed(Buttons.Start) ) && ticks > 11)
         {
             Game1.CurrentIngameScene = new IngameScene(Parent);
-            Parent.CurrentScene = Game1.CurrentIngameScene;
+            Parent.CurrentScene = new SignScene(Parent, "level 1", Game1.CurrentIngameScene);
             return;
         }
 
