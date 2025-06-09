@@ -40,7 +40,7 @@ public class BonusLevelScene : RetroGame.Scene.IngameScene
 
         if (_secondsPassed >= Game1.BonusRoundSeconds)
         {
-            Parent.CurrentScene = Game1.CurrentIngameScene;
+            Parent.CurrentScene = new SignScene(Parent, "game continues", Game1.CurrentIngameScene!);
             return;
         }
 

@@ -58,7 +58,7 @@ public class HighScoreScene : Scene
             Keyboard.ClearState();
             return;
         }
-        
+
         if (ticks == 3)
         {
             _qualify = Game1.HighScore.Qualify(_score);
@@ -73,14 +73,18 @@ public class HighScoreScene : Scene
         if (ticks > 3 && _qualify)
         {
             if (Game1.HighScore.StillEditing)
+            {
                 Game1.HighScore.Edit(Keyboard);
+            }
             else
+            {
                 _editEnded.Occure(ticks);
+                _qualify = false;
+            }
         }
-        else
+        else if (_editEnded.OccuredTicksAgo(ticks, 100) && (Keyboard.IsKeyPressed(Keys.Escape) || Keyboard.IsFirePressed()))
         {
-            if (Keyboard.IsKeyPressed(Keys.Escape) || Keyboard.IsFirePressed() || _editEnded.OccuredTicksAgo(ticks, 100))
-                Parent.CurrentScene = new StartScene(Parent, _score, Game1.TodaysBestScore);
+            Parent.CurrentScene = new StartScene(Parent, _score, Game1.TodaysBestScore);
         }
 
         switch (_gameOverReason)
@@ -91,7 +95,7 @@ public class HighScoreScene : Scene
 
                 if (_gameOverY < -360)
                     _gameOverY = -360;
-                
+
                 break;
         }
 
@@ -111,7 +115,7 @@ public class HighScoreScene : Scene
                 GameOverFiredScene.GameOverGraphics3!.Draw(spriteBatch, 0, 0, _gameOverY);
                 break;
         }
- 
+
         _textBlock.DirectDraw(spriteBatch, _bestPlayerX, 70, BestPlayer, ColorPalette.Green);
         Game1.HighScore.Draw(spriteBatch, ticks);
         base.Draw(gameTime, ticks, spriteBatch);

@@ -99,7 +99,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                         Score += 100;
 
                     if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.B))
-                        Parent.CurrentScene = new BonusLevelScene(Parent, Score, AddScore);
+                        Parent.CurrentScene = new SignScene(Parent, "bonus", new BonusLevelScene(Parent, Score, AddScore));
 
                     if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.W))
                         Parent.CurrentScene = new CutScene1(Parent);// TODO
@@ -300,7 +300,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 {
                     _bonusReached52At = 0;
                     _currentBonusLevel = 0;
-                    Parent.CurrentScene = new BonusLevelScene(Parent, Score, AddScore);
+                    Parent.CurrentScene = new SignScene(Parent, "bonus", new BonusLevelScene(Parent, Score, AddScore));
                 }
             }
         }
