@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using RetroGame;
 using SecretAgentMan.OtherResources;
 using SecretAgentMan.Sprites;
@@ -32,6 +33,12 @@ public class BonusLevelScene : RetroGame.Scene.IngameScene
 
         Coins.CreateBonusRoundSquare();
         _bonusLevelStartTime = DateTime.Now;
+        MediaPlayer.Stop();
+    }
+
+    public override void BeginScene()
+    {
+        MediaPlayer.Play(Songs.BonusLevelSong!);
     }
 
     public override void Update(GameTime gameTime, ulong ticks)

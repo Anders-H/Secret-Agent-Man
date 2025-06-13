@@ -53,11 +53,8 @@ public class StartScene : Scene
         AddToAutoUpdate(Keyboard);
         Game1.HighScore.ResetVisuals(Game1.HighScoreViewY);
 
-        if (!Game1.LoaderSongIsPlaying)
-        {
-            Game1.LoaderSongIsPlaying = true;
+        if (MediaPlayer.State != MediaState.Playing)
             MediaPlayer.Play(Songs.LoaderSong!);
-        }
     }
 
     public override void Update(GameTime gameTime, ulong ticks)

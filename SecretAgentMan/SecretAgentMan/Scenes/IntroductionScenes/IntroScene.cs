@@ -34,7 +34,6 @@ public class IntroScene : Scene
         _loadingPleaseWaitCenterX = 320 - LoadingPleaseWait.Length * 8 / 2;
         _textBlock = new TextBlock(CharacterSet.Uppercase);
         AddToAutoUpdate(Keyboard);
-        Game1.LoaderSongIsPlaying = true;
         MediaPlayer.Play(Songs.LoaderSong!);
     }
 

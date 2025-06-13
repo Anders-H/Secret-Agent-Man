@@ -43,7 +43,6 @@ public class IngameScene : RetroGame.Scene.IngameScene
         UpdateRoomNameAndCheckClear(0);
         _lives = 2;
         MediaPlayer.Stop();
-        Game1.LoaderSongIsPlaying = false;
         ZeroBasedLevel = 0;
     }
 
@@ -102,7 +101,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                         Parent.CurrentScene = new SignScene(Parent, "bonus", new BonusLevelScene(Parent, Score, AddScore));
 
                     if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.W))
-                        Parent.CurrentScene = new CutScene1(Parent);// TODO
+                        Parent.CurrentScene = new SignScene(Parent, "intermission", new CutScene1(Parent));
 
                     if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F))
                         _player.ResetBulletsLeft();

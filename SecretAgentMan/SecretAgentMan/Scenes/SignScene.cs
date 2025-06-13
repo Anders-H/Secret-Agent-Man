@@ -23,7 +23,10 @@ public class SignScene : RetroGame.Scene.IngameScene
     public override void Update(GameTime gameTime, ulong ticks)
     {
         if (ticks > 120)
+        {
             Parent.CurrentScene = _nextScene;
+            _nextScene.BeginScene();
+        }
 
         if (ticks%2 == 0)
             _currentChar++;
