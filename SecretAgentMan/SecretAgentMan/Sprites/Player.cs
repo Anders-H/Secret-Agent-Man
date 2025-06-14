@@ -10,18 +10,27 @@ public class Player : Character
     private readonly ushort[] _walkRight = [0, 1, 2, 3];
     private readonly ushort[] _walkLeft = [4, 5, 6, 7];
     private readonly ushort[] _die = [20, 21, 20, 21];
+    private bool _changeAnimationCells;
+    private bool _isMoving;
+    private int _speed;
     public const int MaxBullets = 10;
     public int BulletsLeft { get; set; }
     public int AmmoBoxes { get; set; }
 
     public Player(FireList fireList) : base(fireList)
     {
+        _speed = 2;
+        _changeAnimationCells = false;
+        _isMoving = false;
         AmmoBoxes = 0;
         BulletsLeft = MaxBullets;
         CurrentAnimation = _walkRight;
         X = 30;
         Y = 250;
     }
+
+    public void TweakPlayerSpeed(int secretAgentManManipulatedSpeed) =>
+        _speed = secretAgentManManipulatedSpeed;
 
     public void ResetBulletsLeft()
     {
@@ -32,19 +41,10 @@ public class Player : Character
     {
         nextRoom = false;
         previousRoom = false;
-        var changeAnimationCells = false;
-        var isMoving = false;
 
         if (keyboard.MoveRightWasd())
         {
-            if (!FaceRight)
-            {
-                FaceRight = true;
-                changeAnimationCells = true;
-            }
-
-            isMoving = true;
-            X += 2;
+            MoveRight();
 
             if (X > 615)
             {
@@ -61,14 +61,7 @@ public class Player : Character
         }
         else if (keyboard.MoveLeftWasd())
         {
-            if (FaceRight)
-            {
-                FaceRight = false;
-                changeAnimationCells = true;
-            }
-
-            isMoving = true;
-            X -= 2;
+            MoveLeft();
 
             if (X < 0)
             {
@@ -86,16 +79,16 @@ public class Player : Character
 
         if (keyboard.MoveUpWasd())
         {
-            isMoving = true;
-            Y -= 2;
+            _isMoving = true;
+            Y -= _speed;
 
             if (Y < IngameScene.SpriteUpperLimit)
                 Y = IngameScene.SpriteUpperLimit;
         }
         else if (keyboard.MoveDownWasd())
         {
-            isMoving = true;
-            Y += 2;
+            _isMoving = true;
+            Y += _speed;
 
             if (Y > IngameScene.SpriteLowerLimit)
                 Y = IngameScene.SpriteLowerLimit;
@@ -120,42 +113,30 @@ public class Player : Character
             }
         }
 
-        if (changeAnimationCells)
+        if (_changeAnimationCells)
             CurrentAnimation = FaceRight ? _walkRight : _walkLeft;
 
-        if (isMoving)
+        if (_isMoving)
             Tick(ticks);
+    }
+
+    public void CutSceneFire()
+    {
+        Fire(false);
     }
 
     public void PlayerControlBonusRound(ulong ticks, KeyboardStateChecker keyboard)
     {
-        var changeAnimationCells = false;
-        var isMoving = false;
-
         if (keyboard.MoveRightWasd())
         {
-            if (!FaceRight)
-            {
-                FaceRight = true;
-                changeAnimationCells = true;
-            }
-
-            isMoving = true;
-            X += 2;
+            MoveRight();
 
             if (X > 615)
                 X = 615;
         }
         else if (keyboard.MoveLeftWasd())
         {
-            if (FaceRight)
-            {
-                FaceRight = false;
-                changeAnimationCells = true;
-            }
-
-            isMoving = true;
-            X -= 2;
+            MoveLeft();
 
             if (X < 0)
                 X = 0;
@@ -163,16 +144,16 @@ public class Player : Character
 
         if (keyboard.MoveUpWasd())
         {
-            isMoving = true;
-            Y -= 2;
+            _isMoving = true;
+            Y -= _speed;
 
             if (Y < 0)
                 Y = 0;
         }
         else if (keyboard.MoveDownWasd())
         {
-            isMoving = true;
-            Y += 2;
+            _isMoving = true;
+            Y += _speed;
 
             if (Y > 334)
                 Y = 334;
@@ -181,11 +162,35 @@ public class Player : Character
         if (keyboard.IsFirePressed() && ticks > 2)
             Fire(true);
 
-        if (changeAnimationCells)
+        if (_changeAnimationCells)
             CurrentAnimation = FaceRight ? _walkRight : _walkLeft;
 
-        if (isMoving)
+        if (_isMoving)
             Tick(ticks);
+    }
+
+    public void MoveLeft()
+    {
+        if (FaceRight)
+        {
+            FaceRight = false;
+            _changeAnimationCells = true;
+        }
+
+        _isMoving = true;
+        X -= _speed;
+    }
+
+    public void MoveRight()
+    {
+        if (!FaceRight)
+        {
+            FaceRight = true;
+            _changeAnimationCells = true;
+        }
+
+        _isMoving = true;
+        X += _speed;
     }
 
     public void DieIfHit(FireList enemyFire, ulong ticks)

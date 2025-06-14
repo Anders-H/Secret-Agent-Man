@@ -25,6 +25,7 @@ public class Npc : Character, IRetroActor
     private readonly ulong _speed;
     private int _graveStoneCellIndex;
     public int Status { get; private set; }
+    public const ushort StatusCutScene = 20;
     public const ushort StatusBonus = 10;
     public const ushort StatusInnocent = 0;
     public const ushort StatusSpyUndetected = 1;
@@ -48,6 +49,12 @@ public class Npc : Character, IRetroActor
             CurrentAnimation = _walkLeftWithGun;
             X = 639 + Game1.Random.Next(500);
             Y = Game1.Random.Next(0, 334);
+        }
+        else if (Status == StatusCutScene)
+        {
+            _gunUp = true;
+            FaceRight = false;
+            CurrentAnimation = _walkLeftWithGun;
         }
         else
         {
@@ -156,6 +163,15 @@ public class Npc : Character, IRetroActor
                     AliveStatus = StatusDead;
             }
         }
+    }
+
+    public void ActCutScene(ulong ticks)
+    {
+        if (ticks % (_speed + 1) == 0)
+            X -= 1;
+
+        if (ticks % (_speed + 9) == 0)
+            CurrentAnimationIndex++;
     }
 
     public void ActBonus(ulong ticks)

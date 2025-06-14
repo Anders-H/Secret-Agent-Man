@@ -101,7 +101,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                         Parent.CurrentScene = new SignScene(Parent, "bonus", new BonusLevelScene(Parent, Score, AddScore));
 
                     if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.W))
-                        Parent.CurrentScene = new SignScene(Parent, "intermission", new CutScene1(Parent));
+                        Parent.CurrentScene = new SignScene(Parent, "act i", new CutScene1(Parent));
 
                     if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F))
                         _player.ResetBulletsLeft();
