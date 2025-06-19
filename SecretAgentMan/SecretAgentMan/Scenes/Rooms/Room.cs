@@ -14,7 +14,7 @@ public class Room
     public string DistrictName { get; }
     public List<Npc> Npcs { get; }
     public CoinList Coins { get; }
-    public List<AmmoBox> Ammos { get; }
+    public AmmoBoxList Ammos { get; }
     private readonly List<Airplane> _airplanes;
     
     public Room(string districtName)

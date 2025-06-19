@@ -199,7 +199,7 @@ public class RoomList
     public CoinList GetCoins(int room) =>
         Rooms[room].Coins;
 
-    public List<AmmoBox> GetAmmos(int room) =>
+    public AmmoBoxList GetAmmos(int room) =>
         Rooms[room].Ammos;
 
     public void TurnOneDeadNpcToGraveStone(int room)

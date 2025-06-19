@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework.Graphics;
+using SecretAgentMan.OtherResources;
+using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 
 namespace SecretAgentMan.Sprites;
 
@@ -27,5 +28,35 @@ public class CoinList : List<Coin>
     {
         foreach (var coin in this)
             coin.Draw(spriteBatch);
+    }
+
+    public bool Act(ulong ticks, Player player, List<Npc> npcs)
+    {
+        var hit = false;
+
+        foreach (var coin in this)
+        {
+            coin.Act(ticks);
+
+            if (coin.Collide(player))
+            {
+                SoundEffects.PlayerCoin!.PlayRandom();
+                Remove(coin);
+                hit = true;
+                break;
+            }
+
+            foreach (var npc in npcs)
+            {
+                if (coin.Collide(npc))
+                {
+                    SoundEffects.EnemyCoin!.PlayRandom();
+                    Remove(coin);
+                    return hit;
+                }
+            }
+        }
+
+        return hit;
     }
 }

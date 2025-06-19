@@ -181,6 +181,17 @@ public class Player : Character
         X -= _speed;
     }
 
+    public void MoveLeftForce()
+    {
+        FaceRight = false;
+
+        if (CurrentAnimation != _walkLeft)
+            CurrentAnimation = _walkLeft;
+        
+        _isMoving = true;
+        X -= _speed;
+    }
+
     public void MoveRight()
     {
         if (!FaceRight)
@@ -188,6 +199,17 @@ public class Player : Character
             FaceRight = true;
             _changeAnimationCells = true;
         }
+
+        _isMoving = true;
+        X += _speed;
+    }
+
+    public void MoveRightForce()
+    {
+        FaceRight = true;
+
+        if (CurrentAnimation != _walkRight)
+            CurrentAnimation = _walkRight;
 
         _isMoving = true;
         X += _speed;

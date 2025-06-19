@@ -101,7 +101,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                         Parent.CurrentScene = new SignScene(Parent, "bonus", new BonusLevelScene(Parent, Score, AddScore));
 
                     if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.W))
-                        Parent.CurrentScene = new SignScene(Parent, "act i", new CutScene1(Parent));
+                        Parent.CurrentScene = new SignScene(Parent, "act i", new CutScene1(Parent, new SignScene(Parent, "bla bla bla", Game1.CurrentIngameScene!)));
 
                     if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F))
                         _player.ResetBulletsLeft();
@@ -141,58 +141,14 @@ public class IngameScene : RetroGame.Scene.IngameScene
             }
 
             _fire.Act(ticks);
-            var coins = _roomList.GetCoins(_currentRoomIndex);
 
-            foreach (var coin in coins)
+            if (_roomList.GetCoins(_currentRoomIndex).Act(ticks, _player, _roomList.GetNpcs(_currentRoomIndex)))
             {
-                coin.Act(ticks);
-
-                if (coin.Collide(_player))
-                {
-                    SoundEffects.PlayerCoin!.PlayRandom();
-                    coins.Remove(coin);
-                    Score += 50;
-                    _currentBonusLevel++;
-                    break;
-                }
-
-                foreach (var npc in _roomList.GetNpcs(_currentRoomIndex))
-                {
-                    if (coin.Collide(npc))
-                    {
-                        SoundEffects.EnemyCoin!.PlayRandom();
-                        coins.Remove(coin);
-                        goto CoinOuterBail;
-                    }
-                }
+                Score += 50;
+                _currentBonusLevel++;
             }
 
-            CoinOuterBail:;
-
-            var ammos = _roomList.GetAmmos(_currentRoomIndex);
-
-            if (_player.AmmoBoxes < 4)
-            {
-                foreach (var ammo in ammos)
-                {
-                    if (ammo.Collide(_player))
-                    {
-                        SoundEffects.AmmoBox!.PlayNext();
-                        ammos.Remove(ammo);
-
-                        if (_player.BulletsLeft <= 0 && _player.AmmoBoxes <= 0)
-                        {
-                            _player.BulletsLeft = Player.MaxBullets;
-                        }
-                        else
-                        {
-                            _player.AmmoBoxes++;
-                        }
-
-                        break;
-                    }
-                }
-            }
+            _roomList.GetAmmos(_currentRoomIndex).Act(_player);
 
             foreach (var npc in _roomList.GetNpcs(_currentRoomIndex))
             {
@@ -397,28 +353,8 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 break;
         }
 
-        switch (_player.AmmoBoxes)
-        {
-            case 4:
-                AmmoBox.AmmoBoxTexture!.Draw(spriteBatch, 0, 543, 335);
-                AmmoBox.AmmoBoxTexture.Draw(spriteBatch, 0, 564, 335);
-                AmmoBox.AmmoBoxTexture.Draw(spriteBatch, 0, 585, 335);
-                AmmoBox.AmmoBoxTexture.Draw(spriteBatch, 0, 606, 335);
-                break;
-            case 3:
-                AmmoBox.AmmoBoxTexture!.Draw(spriteBatch, 0, 543, 335);
-                AmmoBox.AmmoBoxTexture.Draw(spriteBatch, 0, 564, 335);
-                AmmoBox.AmmoBoxTexture.Draw(spriteBatch, 0, 585, 335);
-                break;
-            case 2:
-                AmmoBox.AmmoBoxTexture!.Draw(spriteBatch, 0, 543, 335);
-                AmmoBox.AmmoBoxTexture.Draw(spriteBatch, 0, 564, 335);
-                break;
-            case 1:
-                AmmoBox.AmmoBoxTexture!.Draw(spriteBatch, 0, 543, 335);
-                break;
-        }
-
+        _roomList.GetAmmos(_currentRoomIndex).DrawPanel(_player, spriteBatch);
+        
         if (_gameCompleted.Occured)
         {
             //TODO: Övergång till game completed.
