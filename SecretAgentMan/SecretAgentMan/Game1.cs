@@ -29,6 +29,7 @@ public class Game1 : RetroGame.RetroGame
     public static RetroTexture? StartScreenFrame { get; set; }
     public static RetroTexture? StartScreenGun { get; set; }
     public static RetroTexture? StartScreenLogo { get; set; }
+    public static RetroTexture? CreditTexture { get; set; }
     public static RetroTexture? CutSceneFrame { get; set; }
     public static Decoration Decoration { get; set; }
     public static Random Random;
@@ -82,6 +83,7 @@ public class Game1 : RetroGame.RetroGame
         StartScreenGun = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "start-screen-gun");
         StartScreenLogo = RetroTexture.LoadContent(GraphicsDevice, Content, 433, 54, 15, "start-screen-logo433x54");
         IntroGraphics = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "load-screen-360p-nofilter");
+        CreditTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 326, 158, 1, "start-screen-portraits");
         CutSceneFrame = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "cutsceneframe");
         Coin.LoadContent(GraphicsDevice, Content);
         AmmoBox.LoadContent(GraphicsDevice, Content);

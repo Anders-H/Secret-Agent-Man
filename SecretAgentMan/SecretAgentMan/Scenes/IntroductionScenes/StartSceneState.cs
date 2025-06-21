@@ -4,5 +4,6 @@ public enum StartSceneState
 {
     Logo,
     HighScore,
-    Instructions
+    Instructions,
+    Credits
 }

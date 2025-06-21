@@ -517,6 +517,18 @@
 /processorParam:TextureFormat=Color
 /build:start-screen-logo433x54.png
 
+#begin start-screen-portraits.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:start-screen-portraits.png
+
 #begin static_mayor.png
 /importer:TextureImporter
 /processor:TextureProcessor

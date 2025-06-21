@@ -16,7 +16,7 @@ public class StartScene : Scene
 {
     private int _frameVisiblePart;
     private uint _partTick;
-    private const string CreditsText = "programming: anders hesselbom    sound and graphics: mats j. larsson    copyright 1989 havet software company";
+    private const string CreditsText = "programming: anders hesselbom    sound, graphics and music: mats j. larsson    copyright 1989 havet software company";
     private const string TodaysBestPlayersHeader = "the best secret agents today are";
     private int _creditsX;
     private readonly TextBlock _textBlock;
@@ -101,6 +101,9 @@ public class StartScene : Scene
                 break;
             case StartSceneState.Instructions when _partTick % 3000 == 0:
                 _partTick = 0;
+                _state = StartSceneState.Credits;
+                break;
+            case StartSceneState.Credits when _partTick % 750 == 0:
                 _state = StartSceneState.Logo;
                 break;
         }
@@ -134,6 +137,8 @@ public class StartScene : Scene
                 }
 
                 _typeWriter!.Act(_partTick);
+                break;
+            case StartSceneState.Credits:
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -184,6 +189,9 @@ public class StartScene : Scene
                 break;
             case StartSceneState.Instructions:
                 _typeWriter!.Draw(spriteBatch, ticks);
+                break;
+            case StartSceneState.Credits:
+                Game1.CreditTexture!.Draw(spriteBatch, 0, 156, 110);
                 break;
             default:
                 throw new ArgumentOutOfRangeException($"StartScene.Draw: {_state}");
