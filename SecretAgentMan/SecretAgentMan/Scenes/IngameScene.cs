@@ -234,8 +234,8 @@ public class IngameScene : RetroGame.Scene.IngameScene
             }
         }
 
-        if (_player.AliveStatus == Character.StatusDying)
-            _player.Tick(ticks);
+        //if (_player.AliveStatus == Character.StatusDying)
+        //    _player.Tick(ticks);
 
         if (_player.AliveStatus == Character.StatusDead)
         {

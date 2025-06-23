@@ -1,4 +1,5 @@
-﻿using RetroGame.Input;
+﻿using System.DirectoryServices.ActiveDirectory;
+using RetroGame.Input;
 using SecretAgentMan.OtherResources;
 using SecretAgentMan.Scenes;
 using SecretAgentMan.Scenes.Rooms;
@@ -114,10 +115,18 @@ public class Player : Character
         }
 
         if (_changeAnimationCells)
+        {
             CurrentAnimation = FaceRight ? _walkRight : _walkLeft;
+            _changeAnimationCells = false;
+        }
 
         if (_isMoving)
+        {
             Tick(ticks);
+
+            if (AliveStatus == StatusAlive)
+                _isMoving = false;
+        }
     }
 
     public void CutSceneFire()
@@ -163,10 +172,15 @@ public class Player : Character
             Fire(true);
 
         if (_changeAnimationCells)
+        {
             CurrentAnimation = FaceRight ? _walkRight : _walkLeft;
+            _changeAnimationCells = false;
+        }
 
         if (_isMoving)
             Tick(ticks);
+
+        _isMoving = false;
     }
 
     public void MoveLeft()
