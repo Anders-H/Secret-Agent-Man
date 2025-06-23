@@ -247,6 +247,12 @@
 /processorParam:TextureFormat=Color
 /build:hud.png
 
+#begin ingame.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:ingame.mp3
+
 #begin lives11x7.png
 /importer:TextureImporter
 /processor:TextureProcessor

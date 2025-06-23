@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Security.Permissions;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using RetroGame;
@@ -46,6 +47,11 @@ public class IngameScene : RetroGame.Scene.IngameScene
         ZeroBasedLevel = 0;
     }
 
+    public override void BeginScene()
+    {
+        MediaPlayer.Play(Songs.IngameSong!);
+    }
+
     private int ZeroBasedLevel
     {
         //get => _zeroBasedLevel;
@@ -75,6 +81,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
             {
                 if (Keyboard.IsKeyPressed(Keys.F3))
                 {
+                    MediaPlayer.Stop();
                     Parent.CurrentScene = new StartScene(Parent, Game1.LastScore, Game1.TodaysBestScore);
                     return;
                 }
@@ -98,10 +105,16 @@ public class IngameScene : RetroGame.Scene.IngameScene
                         Score += 100;
 
                     if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.B))
+                    {
+                        MediaPlayer.Stop();
                         Parent.CurrentScene = new SignScene(Parent, "bonus", new BonusLevelScene(Parent, Score, AddScore));
+                    }
 
                     if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.W))
+                    {
+                        MediaPlayer.Stop();
                         Parent.CurrentScene = new SignScene(Parent, "act i", new CutScene1(Parent, new SignScene(Parent, "bla bla bla", Game1.CurrentIngameScene!)));
+                    }
 
                     if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F))
                         _player.ResetBulletsLeft();
@@ -214,6 +227,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
             if (_innocentKill >= 3 && ticks > _lastInnocentKillAt + 100)
             {
                 ScoreManagement.StoreLastScore(Score);
+                MediaPlayer.Stop();
                 Parent.CurrentScene = new GameOverFiredScene(Parent);
                 return;
             }
@@ -222,6 +236,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
             {
                 // TODO: Next level or game completed.
                 ScoreManagement.StoreLastScore(Score);
+                MediaPlayer.Stop();
                 Parent.CurrentScene = new GameOverKilledScene(Parent); // TODO: Detta ska vara game completed.
                 return;
             }
@@ -240,6 +255,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
         if (_player.AliveStatus == Character.StatusDead)
         {
             ScoreManagement.StoreLastScore(Score);
+            MediaPlayer.Stop();
             Parent.CurrentScene = new GameOverKilledScene(Parent);
         }
 
@@ -255,6 +271,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 {
                     _bonusReached52At = 0;
                     _currentBonusLevel = 0;
+                    MediaPlayer.Stop();
                     Parent.CurrentScene = new SignScene(Parent, "bonus", new BonusLevelScene(Parent, Score, AddScore));
                 }
             }
