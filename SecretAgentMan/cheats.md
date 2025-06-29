@@ -13,3 +13,4 @@ Cheats are implemented for testing, and will not be available in the final produ
 - Skip to bonus level: **Right Shigt+B**
 - Complete current level (and play cut scene if applicable): **Right Shift+W**
 - Get new bullets immediatly: **Right Shift+F**
+- Lose one life: **Right Shift+D**

@@ -211,8 +211,8 @@ public class RoomList
         }
     }
 
-    public void DrawBackground(SpriteBatch spriteBatch, int room, TextBlock text, Player player) =>
-        Rooms[room].Draw(spriteBatch, text, player);
+    public void DrawBackground(SpriteBatch spriteBatch, int room, TextBlock text, Player player, bool shouldDrawPlayer) =>
+        Rooms[room].Draw(spriteBatch, text, player, shouldDrawPlayer);
 
     public void DrawDecorations(SpriteBatch spriteBatch, int room) =>
         Rooms[room].DrawAirPlanes(spriteBatch);

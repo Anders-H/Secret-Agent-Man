@@ -1,5 +1,4 @@
-﻿using System.Security.Permissions;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using RetroGame;
@@ -29,6 +28,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private short _currentBonusLevel;
     private ulong _bonusReached52At;
     private int _lives;
+    private ulong _diedAt = 0;
     private int _zeroBasedLevel;
     private string _levelString = "";
     public const int SpriteUpperLimit = 98;
@@ -118,6 +118,9 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
                     if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F))
                         _player.ResetBulletsLeft();
+
+                    if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.D))
+                        _player.Die(ticks);
                 }
 
                 if (ticks % 7 == 0)
@@ -249,14 +252,23 @@ public class IngameScene : RetroGame.Scene.IngameScene
             }
         }
 
-        //if (_player.AliveStatus == Character.StatusDying)
-        //    _player.Tick(ticks);
+        if (_player.AliveStatus == Character.StatusDying)
+            _player.Tick(ticks);
 
         if (_player.AliveStatus == Character.StatusDead)
         {
-            ScoreManagement.StoreLastScore(Score);
-            MediaPlayer.Stop();
-            Parent.CurrentScene = new GameOverKilledScene(Parent);
+            if (_lives > 0)
+            {
+                _lives--;
+                _diedAt = ticks;
+                _player.AliveStatus = Character.StatusAlive;
+            }
+            else
+            {
+                ScoreManagement.StoreLastScore(Score);
+                MediaPlayer.Stop();
+                Parent.CurrentScene = new GameOverKilledScene(Parent);
+            }
         }
 
         if (!_gameCompleted.Occured && _player.AliveStatus == Character.StatusAlive)
@@ -297,7 +309,17 @@ public class IngameScene : RetroGame.Scene.IngameScene
         }
         else
         {
-            _roomList.DrawBackground(spriteBatch, _currentRoomIndex, Text, _player);
+            var shouldDrawPlayer = true;
+
+            if (_diedAt > 0 && ticks < _diedAt + 50)
+            {
+                if (_player.RestoreToLookRight())
+                    _fire.Clear();
+
+                shouldDrawPlayer = ticks % 7 == 0;
+            }
+
+            _roomList.DrawBackground(spriteBatch, _currentRoomIndex, Text, _player, shouldDrawPlayer);
             _roomList.GetCoins(_currentRoomIndex).Draw(spriteBatch);
             _roomList.GetAmmos(_currentRoomIndex).ForEach(x => x.Draw(spriteBatch));
             _fire.Draw(spriteBatch);

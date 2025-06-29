@@ -41,17 +41,20 @@ public class Room
             airplane.Act(ticks);
     }
 
-    public void Draw(SpriteBatch spriteBatch, TextBlock textBlock, Player player)
+    public void Draw(SpriteBatch spriteBatch, TextBlock textBlock, Player player, bool shouldDrawPlayer)
     {
-        var playerIsDrawn = false;
+        var playerIsDrawn = !shouldDrawPlayer;
         var lastY = IngameScene.SpriteUpperLimit - 1;
 
         foreach (var t in Npcs.OrderBy(x => x.IntY))
         {
             if (!playerIsDrawn && player.Y >= lastY && player.Y <= t.IntY)
             {
-                player.Draw(spriteBatch, IngameBackgroundResources.CharactersTexture, player.CellIndex, Color.White);
-                playerIsDrawn = true;
+                if (shouldDrawPlayer)
+                {
+                    player.Draw(spriteBatch, IngameBackgroundResources.CharactersTexture, player.CellIndex, Color.White);
+                    playerIsDrawn = true;
+                }
             }
 
             t.Draw(spriteBatch);

@@ -1,5 +1,4 @@
-﻿using System.DirectoryServices.ActiveDirectory;
-using RetroGame.Input;
+﻿using RetroGame.Input;
 using SecretAgentMan.OtherResources;
 using SecretAgentMan.Scenes;
 using SecretAgentMan.Scenes.Rooms;
@@ -36,6 +35,17 @@ public class Player : Character
     public void ResetBulletsLeft()
     {
         BulletsLeft = MaxBullets;
+    }
+
+    public bool RestoreToLookRight()
+    {
+        if (CurrentAnimation != _die)
+            return false;
+
+        CurrentAnimation = _walkRight;
+        FaceRight = true;
+        CurrentAnimationIndex = 0;
+        return true;
     }
 
     public void PlayerControl(ulong ticks, KeyboardStateChecker keyboard, int currentRoomIndex, out bool nextRoom, out bool previousRoom, RoomList rooms)
@@ -241,7 +251,11 @@ public class Player : Character
         }
     }
 
-    private void Die(ulong ticks)
+    /// <summary>
+    /// Exposed for testing - do not call directly.
+    /// </summary>
+    /// <param name="ticks"></param>
+    public void Die(ulong ticks)
     {
         SoundEffects.PlayerDie!.PlayNext();
         CurrentAnimation = _die;
