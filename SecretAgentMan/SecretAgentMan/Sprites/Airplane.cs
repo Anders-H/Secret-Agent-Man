@@ -14,7 +14,7 @@ public class Airplane : Sprite, IRetroActor
 
     public Airplane()
     {
-        _cellIndex = -1;
+        _cellIndex = 0;
         _speed = (ulong)Game1.Random.Next(4, 14);
         _faceRight = Game1.Random.Next(0, 2) == 0;
         X = Game1.Random.Next(-300, 940);

@@ -7,7 +7,7 @@
 <<<Begin:Setting:Level1RoomNames>>>
 
 	/* En semikolonseparerad lista över rummens namn i level 1 (10 stycken). */
-	Schuylkill Haven; Kutztown; Allentown; Easton; Morristown; Long Island, New York; Manhattan, New York; Brooklyn, New York; Staten Island, New York; The Bronx, New York
+	Vretstorp Town; Viby Village; Edsberg Village; Fjugesta Town; Vintrosa; Marieberg; Adolfsberg, Örebro; Västhaga, Örebro; Vargerga, Örebro; Vivalla, Örebro
 
 <<<End:Setting>>>
 <<<Begin:Setting:Level1InnocentNpcCount>>>
@@ -18,49 +18,97 @@
 <<<End:Setting>>>
 <<<Begin:Setting:Level1SpyCount>>>
 
-	/* En kommaseparerad lista över antalet spioner per rum level 1 (10 stycken). */
+	/* En kommaseparerad lista över antalet spioner per rum i level 1 (10 stycken). */
 	1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 
 <<<End:Setting>>>
-<<<Begin:Setting:Level1Objects>>>
+<<<Begin:Setting:Level1Coins>>>
+
+	/* En kommaseparerad lista över antalet mynt per rum i level 1 (10 stycken). */
+	1, 0, 1, 0, 2, 0, 2, 0, 3, 4
+
+<<<End:Setting>>>
+<<<Begin:Setting:Level1Ammo>>>
+
+	/* En kommaseparerad lista över antalet ammo-lådor per rum i level 1 (10 stycken). */
+	0, 1, 0, 1, 0, 1, 0, 1, 0, 2
+
+<<<End:Setting>>>
+<<<Begin:Setting:Level1Rocks>>>
+
+	/* En kommaseparerad lista över antalet sten-hinder per rum i level 1 (10 stycken). */
+	7, 2, 5, 1, 10, 3, 6, 11, 3, 4
+
 <<<End:Setting>>>
 <<<Begin:Setting:Level2RoomNames>>>
 
 	/* En semikolonseparerad lista över rummens namn i level 1 (10 stycken). */
-	Vretstorp Town; Viby Village; Edsberg Village; Fjugesta Town; Vintrosa; Marieberg; Adolfsberg, Örebro; Västhaga, Örebro; Vargerga, Örebro; Vivalla, Örebro
+	Rönnberg; Akutsjaur; Stora Tallberg; Moskosel; Kåbdalis; Kitajaur; Stenträsk; Tårrajaur; Vajmat; Jokkmok
 
 <<<End:Setting>>>
 <<<Begin:Setting:Level2InnocentNpcCount>>>
 
-	/* En kommaseparerad lista över antalet oskyldiga NPC:er per rum i level 1 (10 stycken). */
+	/* En kommaseparerad lista över antalet oskyldiga NPC:er per rum i level 2 (10 stycken). */
 	2, 3, 4, 5, 6, 7, 8, 10, 15, 25
 
 <<<End:Setting>>>
 <<<Begin:Setting:Level2SpyCount>>>
 
-	/* En kommaseparerad lista över antalet spioner per rum level 1 (10 stycken). */
+	/* En kommaseparerad lista över antalet spioner per rum i level 2 (10 stycken). */
 	1, 1, 2, 3, 4, 4, 6, 10, 15, 25
 
 <<<End:Setting>>>
-<<<Begin:Setting:Level2Objects>>>
+<<<Begin:Setting:Level2Coins>>>
+
+	/* En kommaseparerad lista över antalet mynt per rum i level 2 (10 stycken). */
+	1, 0, 1, 0, 2, 0, 2, 0, 3, 4
+
+<<<End:Setting>>>
+<<<Begin:Setting:Level2Ammo>>>
+
+	/* En kommaseparerad lista över antalet ammo-lådor per rum i level 2 (10 stycken). */
+	1, 1, 0, 1, 0, 1, 0, 2, 0, 2
+
+<<<End:Setting>>>
+<<<Begin:Setting:Level2Rocks>>>
+
+	/* En kommaseparerad lista över antalet sten-hinder per rum i level 2 (10 stycken). */
+	12, 3, 13, 5, 1, 14, 2, 11, 7, 5
+
 <<<End:Setting>>>
 <<<Begin:Setting:Level3RoomNames>>>
 
-	/* En semikolonseparerad lista över rummens namn i level 1 (10 stycken). */
-	Namn 1; Namn 2; Namn 3; Namn 4; Namn 5; Namn 6; Namn 7; Namn 8; Namn 9; Namn 10
+	/* En semikolonseparerad lista över rummens namn i level 2 (10 stycken). */
+	Schuylkill Haven; Kutztown; Allentown; Easton; Morristown; Long Island, New York; Manhattan, New York; Brooklyn, New York; Staten Island, New York; The Bronx, New York
 
 <<<End:Setting>>>
 <<<Begin:Setting:Level3InnocentNpcCount>>>
 
-	/* En kommaseparerad lista över antalet oskyldiga NPC:er per rum i level 1 (10 stycken). */
+	/* En kommaseparerad lista över antalet oskyldiga NPC:er per rum i level 3 (10 stycken). */
 	4, 6, 8, 10, 12, 14, 16, 20, 30, 50
 
 <<<End:Setting>>>
 <<<Begin:Setting:Level3SpyCount>>>
 
-	/* En kommaseparerad lista över antalet spioner per rum level 1 (10 stycken). */
+	/* En kommaseparerad lista över antalet spioner per rum i level 3 (10 stycken). */
 	2, 2, 4, 6, 8, 9, 12, 20, 100, 250
 
 <<<End:Setting>>>
-<<<Begin:Setting:Level3Objects>>>
+<<<Begin:Setting:Level3Coins>>>
+
+	/* En kommaseparerad lista över antalet mynt per rum i level 3 (10 stycken). */
+	1, 0, 1, 0, 2, 0, 2, 0, 3, 4
+
+<<<End:Setting>>>
+<<<Begin:Setting:Level3Ammo>>>
+
+	/* En kommaseparerad lista över antalet ammo-lådor per rum i level 3 (10 stycken). */
+	1, 0, 2, 0, 1, 0, 2, 0, 0, 0
+
+<<<End:Setting>>>
+<<<Begin:Setting:Level3Rocks>>>
+
+	/* En kommaseparerad lista över antalet sten-hinder per rum i level 3 (10 stycken). */
+	10, 8, 11, 7, 6, 12, 13, 6, 5, 4
+
 <<<End:Setting>>>
