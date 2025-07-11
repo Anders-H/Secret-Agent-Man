@@ -78,18 +78,18 @@ public class IntroScene : Scene
     {
         if (_done)
         {
-            Game1.IntroGraphics!.Draw(spriteBatch, 0, 0, 0);
+            StartSceneResources.IntroGraphics!.Draw(spriteBatch, 0, 0, 0);
         }
         else
         {
             if (_currentCellY > 0)
-                Game1.IntroGraphics!.DrawPart(spriteBatch, 0, 0, 640, _currentCellY * 16, 0, 0);
+                StartSceneResources.IntroGraphics!.DrawPart(spriteBatch, 0, 0, 640, _currentCellY * 16, 0, 0);
 
             if (_currentCellX > 0)
-                Game1.IntroGraphics!.DrawPart(spriteBatch, 0, _currentCellY * 16, _currentCellX * 16, 16, 0, _currentCellY * 16);
+                StartSceneResources.IntroGraphics!.DrawPart(spriteBatch, 0, _currentCellY * 16, _currentCellX * 16, 16, 0, _currentCellY * 16);
 
             if (_inCurrentCellY > 0)
-                Game1.IntroGraphics!.DrawPart(spriteBatch, _currentCellX * 16, _currentCellY * 16, 16, _inCurrentCellY, _currentCellX * 16, _currentCellY * 16);
+                StartSceneResources.IntroGraphics!.DrawPart(spriteBatch, _currentCellX * 16, _currentCellY * 16, 16, _inCurrentCellY, _currentCellX * 16, _currentCellY * 16);
         }
 
         if (ticks % 80 < 40)

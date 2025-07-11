@@ -48,7 +48,7 @@ public class Npc : Character, IRetroActor
             FaceRight = false;
             CurrentAnimation = _walkLeftWithGun;
             X = 639 + Game1.Random.Next(500);
-            Y = Game1.Random.Next(0, 334);
+            Y = Game1.Random.Next(0, IngameScene.SpriteLowerLimit);
         }
         else if (Status == StatusCutScene)
         {
@@ -194,8 +194,8 @@ public class Npc : Character, IRetroActor
                 {
                     Y += 1;
 
-                    if (Y > 334)
-                        Y = 334;
+                    if (Y > IngameScene.SpriteLowerLimit)
+                        Y = IngameScene.SpriteLowerLimit;
                 }
 
                 if (FaceRight)

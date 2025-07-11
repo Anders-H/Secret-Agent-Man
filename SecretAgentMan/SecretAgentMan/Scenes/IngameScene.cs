@@ -32,7 +32,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private int _zeroBasedLevel;
     private string _levelString = "";
     public const int SpriteUpperLimit = 98;
-    public const int SpriteLowerLimit = 276;
+    public const int SpriteLowerLimit = 268;
 
     public IngameScene(RetroGame.RetroGame parent) : base(parent)
     {
@@ -216,6 +216,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                                 _fire.Clear();
                                 _gameCompleted.Occure(ticks);
                                 _currentBonusLevel++;
+                                // TODO: Level clear here?
                             }
                             else
                             {

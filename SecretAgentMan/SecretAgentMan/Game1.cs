@@ -19,17 +19,12 @@ public class Game1 : RetroGame.RetroGame
 {
     public static SettingCollection? Settings { get; set; }
     public static RetroTexture? GraveStoneTexture { get; set; }
-    public static RetroTexture? IntroGraphics { get; set; }
     public static RetroTexture? Hud { get; set; }
     public static RetroTexture? Frame { get; set; }
     public static RetroTexture? BonusLevelFrame { get; set; }
     public static RetroTexture? BonusMeter { get; set; }
     public static RetroTexture? LivesSymbolTexture { get; set; }
     public static RetroTexture? AmmoTexture { get; set; }
-    public static RetroTexture? StartScreenFrame { get; set; }
-    public static RetroTexture? StartScreenGun { get; set; }
-    public static RetroTexture? StartScreenLogo { get; set; }
-    public static RetroTexture? CreditTexture { get; set; }
     public static RetroTexture? CutSceneFrame { get; set; }
     public static Decoration Decoration { get; set; }
     public static Random Random;
@@ -79,12 +74,8 @@ public class Game1 : RetroGame.RetroGame
         BonusMeter = RetroTexture.LoadContent(GraphicsDevice, Content, 11, 51, 26, "bonus-meter");
         LivesSymbolTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 11, 7, 1, "lives11x7");
         AmmoTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 4, 7, 1, "ammo4x7");
-        StartScreenFrame = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "start-screen-frame");
-        StartScreenGun = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "start-screen-gun");
-        StartScreenLogo = RetroTexture.LoadContent(GraphicsDevice, Content, 433, 54, 15, "start-screen-logo433x54");
-        IntroGraphics = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "load-screen-360p-nofilter");
-        CreditTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 326, 158, 1, "start-screen-portraits");
         CutSceneFrame = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "cutsceneframe");
+        StartSceneResources.LoadContent(GraphicsDevice, Content);
         Coin.LoadContent(GraphicsDevice, Content);
         AmmoBox.LoadContent(GraphicsDevice, Content);
         GameOverFiredScene.LoadResources(GraphicsDevice, Content);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using RetroGame.Text;
 using SecretAgentMan.Sprites;
+using SharpDX.MediaFoundation;
 using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 
 namespace SecretAgentMan.Scenes.Rooms;
@@ -15,13 +16,11 @@ public class RoomList
     public RoomList(Player player, FireList enemyFireList, int zeroBasedLevel)
     {
         Rooms = [];
-        int[] spyCount = [1, 1, 2, 3, 4, 4, 6, 10, 15, 25];
-        int[] innocentCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-        string[] names =
-        [
-            "vretstorp town", "viby village", "edsberg village", "fjugesta town", "vintrosa", "marieberg",
-            "adolfsberg, örebro", "västhaga, örebro", "vargerga, örebro", "vivalla, örebro"
-        ];
+        var objectPositions = new ObjectPositionPlaceholderList();
+        var spyCount = new int[10];
+        var innocentCount = new int[10];
+        var coinsCount = new int[10];
+        var names = new string[10];
 
         switch (zeroBasedLevel)
         {
@@ -48,6 +47,13 @@ public class RoomList
 
                     for (var i = 0; i < spyCount.Length; i++)
                         spyCount[i] = int.Parse(parts[i]);
+
+                    // Objects: Coins.
+                    var coinCountInConfig = Game1.Settings.GetValue("Level1Coins");
+                    parts = coinCountInConfig.Split(',');
+
+                    for (var i = 0; i < coinsCount.Length; i++)
+                        coinsCount[i] = int.Parse(parts[i]);
                 }
 
                 break;
@@ -117,11 +123,17 @@ public class RoomList
             for (var j = 0; j < spyCount[i]; j++)
                 room.Npcs.Add(Npc.CreateSpy(player, enemyFireList, j));
 
+            for (var j = 0; j < coinsCount[i]; j++)
+            {
+                // TODO: Check objects minimum and maxium positions.
+                var x = Game1.Random.Next(20, 600);
+                //var y = Game1.
+            }
+
             switch (i)
             {
                 case 0:
                     room.AddAirplane(2);
-                    room.Coins.Add(new Coin(200, 150, 0));
                     room.Ammos.Add(new AmmoBox(90, 200));
                     room.Ammos.Add(new AmmoBox(112, 200));
                     room.Ammos.Add(new AmmoBox(134, 200));
@@ -151,27 +163,15 @@ public class RoomList
                     break;
                 case 6:
                     room.AddAirplane(4);
-
-                    for (var c = 0; c < 10; c++)
-                        room.Coins.Add(new Coin(22 + 64 * c, 200, c % 4));
-
                     break;
                 case 7:
                     room.AddAirplane(8);
                     break;
                 case 8:
                     room.AddAirplane(3);
-
-                    for (var c = 0; c < 16; c++)
-                        room.Coins.Add(new Coin(7 + 40 * c, 150, c % 4));
-
                     break;
                 case 9:
                     room.AddAirplane(15);
-
-                    for (var c = 0; c < 20; c++)
-                        room.Coins.Add(new Coin(7 + 32 * c, 200, c % 4));
-
                     break;
                 default:
                     throw new SystemException("What room?!?");

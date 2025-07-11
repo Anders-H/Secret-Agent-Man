@@ -7,6 +7,8 @@ namespace SecretAgentMan.Sprites;
 
 public class Player : Character
 {
+    public const int PlayerStartX = 30;
+    public const int PlayerStartY = 250;
     private readonly ushort[] _walkRight = [0, 1, 2, 3];
     private readonly ushort[] _walkLeft = [4, 5, 6, 7];
     private readonly ushort[] _die = [20, 21, 20, 21];
@@ -25,8 +27,8 @@ public class Player : Character
         AmmoBoxes = 0;
         BulletsLeft = MaxBullets;
         CurrentAnimation = _walkRight;
-        X = 30;
-        Y = 250;
+        X = PlayerStartX;
+        Y = PlayerStartY;
     }
 
     public void TweakPlayerSpeed(int secretAgentManManipulatedSpeed) =>
@@ -174,8 +176,8 @@ public class Player : Character
             _isMoving = true;
             Y += _speed;
 
-            if (Y > 334)
-                Y = 334;
+            if (Y > IngameScene.SpriteLowerLimit)
+                Y = IngameScene.SpriteLowerLimit;
         }
 
         if (keyboard.IsFirePressed() && ticks > 2)

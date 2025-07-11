@@ -180,7 +180,7 @@ public class StartScene : Scene
         switch (_state)
         {
             case StartSceneState.Logo:
-                Game1.StartScreenGun!.Draw(spriteBatch, 0, _gunX, 0);
+                StartSceneResources.StartScreenGun!.Draw(spriteBatch, 0, _gunX, 0);
                 break;
             case StartSceneState.HighScore:
                 var x = TodaysBestPlayersHeader.Length * 8;
@@ -192,18 +192,18 @@ public class StartScene : Scene
                 _typeWriter!.Draw(spriteBatch, ticks);
                 break;
             case StartSceneState.Credits:
-                Game1.CreditTexture!.Draw(spriteBatch, 0, 156, 110);
+                StartSceneResources.CreditTexture!.Draw(spriteBatch, 0, 156, 110);
                 break;
             default:
                 throw new ArgumentOutOfRangeException($"StartScene.Draw: {_state}");
         }
 
-        Game1.StartScreenLogo!.Draw(spriteBatch, _logoImageList[_logoImageListIndex], 99, _logoY);
+        StartSceneResources.StartScreenLogo!.Draw(spriteBatch, _logoImageList[_logoImageListIndex], 99, _logoY);
 
         if (_frameVisiblePart < 360)
-            Game1.StartScreenFrame!.DrawPart(spriteBatch, 0, 0, 640, _frameVisiblePart, 0, 0);
+            StartSceneResources.StartScreenFrame!.DrawPart(spriteBatch, 0, 0, 640, _frameVisiblePart, 0, 0);
         else
-            Game1.StartScreenFrame!.Draw(spriteBatch, 0, 0, 0);
+            StartSceneResources.StartScreenFrame!.Draw(spriteBatch, 0, 0, 0);
 
         _textBlock.DirectDraw(spriteBatch, 11, 342, _todaysBestScoreString, ColorPalette.LightGrey);
         _textBlock.DirectDraw(spriteBatch, 11, 334, _lastScoreString, ColorPalette.LightGrey);
