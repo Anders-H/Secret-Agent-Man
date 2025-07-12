@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using RetroGame.Text;
 using SecretAgentMan.Sprites;
-using SharpDX.MediaFoundation;
 using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 
 namespace SecretAgentMan.Scenes.Rooms;
@@ -19,7 +18,6 @@ public class RoomList
         var objectPositions = new ObjectPositionPlaceholderList();
         var spyCount = new int[10];
         var innocentCount = new int[10];
-        var coinsCount = new int[10];
         var names = new string[10];
 
         switch (zeroBasedLevel)
@@ -47,13 +45,6 @@ public class RoomList
 
                     for (var i = 0; i < spyCount.Length; i++)
                         spyCount[i] = int.Parse(parts[i]);
-
-                    // Objects: Coins.
-                    var coinCountInConfig = Game1.Settings.GetValue("Level1Coins");
-                    parts = coinCountInConfig.Split(',');
-
-                    for (var i = 0; i < coinsCount.Length; i++)
-                        coinsCount[i] = int.Parse(parts[i]);
                 }
 
                 break;
@@ -113,22 +104,16 @@ public class RoomList
                 throw new SystemException("What level?!?");
         }
 
-        for (var i = 0; i < spyCount.Length; i++)
+        for (var i = 0; i < 10; i++)
         {
             var room = new Room(names[i]);
+            AddCoins(zeroBasedLevel + 1, ref objectPositions, i, ref room);
 
             for (var j = 0; j < innocentCount[i]; j++)
                 room.Npcs.Add(Npc.CreateInnocent(enemyFireList, j));
 
             for (var j = 0; j < spyCount[i]; j++)
                 room.Npcs.Add(Npc.CreateSpy(player, enemyFireList, j));
-
-            for (var j = 0; j < coinsCount[i]; j++)
-            {
-                // TODO: Check objects minimum and maxium positions.
-                var x = Game1.Random.Next(20, 600);
-                //var y = Game1.
-            }
 
             switch (i)
             {
@@ -156,7 +141,6 @@ public class RoomList
                     break;
                 case 4:
                     room.AddAirplane(2);
-                    room.Coins.Add(new Coin(500, 150, 0));
                     break;
                 case 5:
                     room.AddAirplane(2);
@@ -179,6 +163,23 @@ public class RoomList
 
             Rooms.Add(room);
             SpyCount += spyCount[i];
+        }
+    }
+
+    private void AddCoins(int level, ref ObjectPositionPlaceholderList objectPositions, int roomIndex, ref Room room)
+    {
+        var coinCountInConfig = Game1.Settings!.GetValue($"Level{level}Coins");
+        var parts = coinCountInConfig.Split(',');
+        var coinsCount = new int[10];
+
+        for (var i = 0; i < coinsCount.Length; i++)
+            coinsCount[i] = int.Parse(parts[i]);
+
+        for (var j = 0; j < coinsCount[roomIndex]; j++)
+        {
+            var position = objectPositions.GetRandomAcceptableDistance();
+            objectPositions.Add(position);
+            room.Coins.Add(new Coin(position.X, position.Y + 15, 0));
         }
     }
 

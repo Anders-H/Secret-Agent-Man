@@ -28,7 +28,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private short _currentBonusLevel;
     private ulong _bonusReached52At;
     private int _lives;
-    private ulong _diedAt = 0;
+    private ulong _diedAt;
     private int _zeroBasedLevel;
     private string _levelString = "";
     public const int SpriteUpperLimit = 98;
