@@ -547,6 +547,18 @@
 /processorParam:TextureFormat=Color
 /build:static_mayor.png
 
+#begin title_anim-465x205x5x17.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:title_anim-465x205x5x17.png
+
 #begin water640x30.png
 /importer:TextureImporter
 /processor:TextureProcessor

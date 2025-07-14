@@ -14,6 +14,8 @@ namespace SecretAgentMan.Scenes.IntroductionScenes;
 
 public class StartScene : Scene
 {
+    private const int LogoY = 30;
+    private int _introAnimFrame;
     private int _frameVisiblePart;
     private uint _partTick;
     private const string CreditsText = "programming: anders hesselbom    sound, graphics and music: mats j. larsson    copyright 1989 havet software company";
@@ -25,7 +27,6 @@ public class StartScene : Scene
     private readonly string _todaysBestScoreString;
     private StartSceneState _state;
     private int _gunX;
-    private int _logoY;
     private readonly List<int> _logoImageList;
     private int _logoImageListIndex;
     private TextBlockStaticVerticalCenter? _typeWriter;
@@ -33,7 +34,6 @@ public class StartScene : Scene
     public StartScene(RetroGame.RetroGame parent, int lastScore, int todaysBest) : base(parent)
     {
         _gunX = 610;
-        _logoY = -60;
 
         _logoImageList =
         [
@@ -120,10 +120,8 @@ public class StartScene : Scene
 
                 if (ticks % 2 == 0)
                 {
-                    _logoY += 2;
-
-                    if (_logoY > 30)
-                        _logoY = 30;
+                    if (_introAnimFrame < 100)
+                        _introAnimFrame++;
                 }
 
                 break;
@@ -198,7 +196,10 @@ public class StartScene : Scene
                 throw new ArgumentOutOfRangeException($"StartScene.Draw: {_state}");
         }
 
-        StartSceneResources.StartScreenLogo!.Draw(spriteBatch, _logoImageList[_logoImageListIndex], 99, _logoY);
+        if (_introAnimFrame <= 84)
+            StartSceneResources.IntroAnimation!.Draw(spriteBatch, _introAnimFrame, 89, 13);
+        else
+            StartSceneResources.StartScreenLogo!.Draw(spriteBatch, _logoImageList[_logoImageListIndex], 99, LogoY);
 
         if (_frameVisiblePart < 360)
             StartSceneResources.StartScreenFrame!.DrawPart(spriteBatch, 0, 0, 640, _frameVisiblePart, 0, 0);

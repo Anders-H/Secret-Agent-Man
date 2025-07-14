@@ -6,6 +6,7 @@ namespace SecretAgentMan.Scenes.IntroductionScenes;
 
 public static class StartSceneResources
 {
+    public static RetroTexture? IntroAnimation { get; set; }
     public static RetroTexture? IntroGraphics { get; set; }
     public static RetroTexture? StartScreenFrame { get; set; }
     public static RetroTexture? StartScreenGun { get; set; }
@@ -14,6 +15,7 @@ public static class StartSceneResources
 
     public static void LoadContent(GraphicsDevice graphics, ContentManager content)
     {
+        IntroAnimation = RetroTexture.LoadContent(graphics, content, 465, 205, 5, 17, "title_anim-465x205x5x17");
         IntroGraphics = RetroTexture.LoadContent(graphics, content, 640, 360, 1, "load-screen-360p-nofilter");
         StartScreenFrame = RetroTexture.LoadContent(graphics, content, 640, 360, 1, "start-screen-frame");
         StartScreenGun = RetroTexture.LoadContent(graphics, content, 640, 360, 1, "start-screen-gun");
