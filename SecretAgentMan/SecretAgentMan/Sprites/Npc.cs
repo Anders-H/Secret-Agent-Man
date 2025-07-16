@@ -460,4 +460,10 @@ public class Npc : Character, IRetroActor
         IsGraveStone = true;
         Y += 6;
     }
+
+    public void PutTheGunAway()
+    {
+        _gunUp = false;
+        CurrentAnimation = FaceRight ? _walkRight : _walkLeft;
+    }
 }

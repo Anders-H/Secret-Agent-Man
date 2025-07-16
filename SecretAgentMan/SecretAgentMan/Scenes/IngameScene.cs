@@ -315,7 +315,10 @@ public class IngameScene : RetroGame.Scene.IngameScene
             if (_diedAt > 0 && ticks < _diedAt + 50)
             {
                 if (_player.RestoreToLookRight())
+                {
                     _fire.Clear();
+                    _roomList.ResetNpcs(_currentRoomIndex);
+                }
 
                 shouldDrawPlayer = ticks % 7 == 0;
             }

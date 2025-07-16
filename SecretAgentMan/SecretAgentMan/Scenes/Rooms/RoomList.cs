@@ -191,7 +191,11 @@ public class RoomList
         }
     }
 
-    public int Count => Rooms.Count;
+    public int Count =>
+        Rooms.Count;
+
+    public void ResetNpcs(int room) =>
+        Rooms[room].ResetNpcs();
 
     public string GetDistrictName(int room) =>
         Rooms[room].DistrictName;

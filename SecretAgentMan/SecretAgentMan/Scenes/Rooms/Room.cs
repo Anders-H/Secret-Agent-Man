@@ -87,11 +87,15 @@ public class Room
     public void DrawAirPlanes(SpriteBatch spriteBatch)
     {
         foreach (var airplane in _airplanes)
-        {
             airplane.Draw(spriteBatch);
-        }
     }
 
     public bool IsClear() =>
         Npcs.Count(x => x.Status == Npc.StatusSpyUndetected) + Npcs.Count(x => x.Status == Npc.StatusSpyDetected) <= 0;
+
+    public void ResetNpcs()
+    {
+        foreach (var npc in Npcs)
+            npc.PutTheGunAway();
+    }
 }
