@@ -24,7 +24,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private readonly IngameFire _fire = new();
     private int _waterFrameIndex;
     private int _killedSpyCount;
-    private GameEventPointer _gameCompleted = new();
+    private GameEventPointer _levelCompleted = new();
     private short _currentBonusLevel;
     private ulong _bonusReached52At;
     private int _lives;
@@ -54,7 +54,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
     private int ZeroBasedLevel
     {
-        //get => _zeroBasedLevel;
+        get => _zeroBasedLevel;
         set
         {
             _zeroBasedLevel = value;
@@ -113,7 +113,9 @@ public class IngameScene : RetroGame.Scene.IngameScene
                     if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.W))
                     {
                         MediaPlayer.Stop();
-                        Parent.CurrentScene = new SignScene(Parent, "act i", new CutScene1(Parent, new SignScene(Parent, "bla bla bla", Game1.CurrentIngameScene!)));
+                        MayorResources.DoShortTalk();
+                        Game1.TypeWriter.SetText("your mission is completed. well done!");
+                        _levelCompleted.Occure(ticks);
                     }
 
                     if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F))
@@ -214,15 +216,17 @@ public class IngameScene : RetroGame.Scene.IngameScene
                             {
                                 Game1.TypeWriter.SetText($"all spies eliminated! {scoreAdded} points! well done!");
                                 _fire.Clear();
-                                _gameCompleted.Occure(ticks);
+                                MayorResources.DoShortTalk();
+                                Game1.TypeWriter.SetText("your mission is completed. well done!");
+                                _levelCompleted.Occure(ticks);
                                 _currentBonusLevel++;
-                                // TODO: Level clear here?
                             }
                             else
                             {
                                 MayorResources.SaySpyKilled(_killedSpyCount, scoreAdded);
                             }
                         }
+
                         break;
                     }
                 }
@@ -236,16 +240,13 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 return;
             }
 
-            if (_gameCompleted.OccuredTicksAgo(ticks, 500))
+            if (_levelCompleted.OccuredTicksAgo(ticks, 500))
             {
-                // TODO: Next level or game completed.
-                ScoreManagement.StoreLastScore(Score);
-                MediaPlayer.Stop();
-                Parent.CurrentScene = new GameOverKilledScene(Parent); // TODO: Detta ska vara game completed.
+                ActOnLevelCompleted();
                 return;
             }
 
-            if (!_gameCompleted.Occured)
+            if (!_levelCompleted.Occured)
             {
                 _fire.RemoveOneDeadFire();
                 _roomList.TurnOneDeadNpcToGraveStone(_currentRoomIndex);
@@ -272,7 +273,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
             }
         }
 
-        if (!_gameCompleted.Occured && _player.AliveStatus == Character.StatusAlive)
+        if (!_levelCompleted.Occured && _player.AliveStatus == Character.StatusAlive)
         {
             if (_currentBonusLevel >= 52 && _bonusReached52At <= 0)
             {
@@ -296,6 +297,17 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
     public int AddScore(int points) =>
         DirectAddScore(points);
+
+    private void ActOnLevelCompleted()
+    {
+        MediaPlayer.Stop();
+        _levelCompleted.Reset();
+        ZeroBasedLevel++;
+
+        Parent.CurrentScene = ZeroBasedLevel <= 1
+            ? new SignScene(Parent, "act i", new CutScene1(Parent, new SignScene(Parent, $"level {ZeroBasedLevel + 1}", Game1.CurrentIngameScene!)))
+            : new SignScene(Parent, $"level {ZeroBasedLevel + 1}", Game1.CurrentIngameScene!);
+    }
 
     public override void Draw(GameTime gameTime, ulong ticks, SpriteBatch spriteBatch)
     {
@@ -398,7 +410,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
         _roomList.GetAmmos(_currentRoomIndex).DrawPanel(_player, spriteBatch);
         
-        if (_gameCompleted.Occured)
+        if (_levelCompleted.Occured)
         {
             //TODO: Övergång till game completed.
             //Text.DirectDraw(spriteBatch, GameOverKilledScene.GameClearX, 150, GameOverKilledScene.GameClearText, ColorPalette.Green);

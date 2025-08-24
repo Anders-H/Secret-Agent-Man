@@ -84,6 +84,7 @@ public class HighScoreScene : Scene
         }
         else if (_editEnded.OccuredTicksAgo(ticks, 100) && (Keyboard.IsKeyPressed(Keys.Escape) || Keyboard.IsFirePressed()))
         {
+            MediaPlayer.Stop();
             Parent.CurrentScene = new StartScene(Parent, _score, Game1.TodaysBestScore);
         }
 

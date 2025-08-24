@@ -15,7 +15,6 @@ public class RoomList
     public RoomList(Player player, FireList enemyFireList, int zeroBasedLevel)
     {
         Rooms = [];
-        var objectPositions = new ObjectPositionPlaceholderList();
         var spyCount = new int[10];
         var innocentCount = new int[10];
         var names = new string[10];
@@ -107,8 +106,8 @@ public class RoomList
         for (var i = 0; i < 10; i++)
         {
             var room = new Room(names[i]);
-            AddCoins(zeroBasedLevel + 1, ref objectPositions, i, ref room);
-            AddAmmos(zeroBasedLevel + 1, ref objectPositions, i, ref room);
+            AddCoins(zeroBasedLevel + 1, i, ref room);
+            AddAmmos(zeroBasedLevel + 1, i, ref room);
 
             for (var j = 0; j < innocentCount[i]; j++)
                 room.Npcs.Add(Npc.CreateInnocent(enemyFireList, j));
@@ -155,9 +154,38 @@ public class RoomList
             Rooms.Add(room);
             SpyCount += spyCount[i];
         }
+
+        AddBriefcases();
     }
 
-    private static void AddCoins(int level, ref ObjectPositionPlaceholderList objectPositions, int roomIndex, ref Room room)
+    private void AddBriefcases()
+    {
+        var rooms = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        
+        var silverIndex = Game1.Random.Next(0, rooms.Count);
+        rooms.RemoveAt(silverIndex);
+        var blueIndex = Game1.Random.Next(0, rooms.Count);
+        rooms.RemoveAt(blueIndex);
+        var redIndex = Game1.Random.Next(0, rooms.Count);
+        rooms.RemoveAt(redIndex);
+        var brownIndex = Game1.Random.Next(0, rooms.Count);
+        rooms.RemoveAt(brownIndex);
+
+        var position = Rooms[silverIndex].ObjectPositions.GetRandomAcceptableDistance();
+        Rooms[silverIndex].ObjectPositions.Add(position);
+        Rooms[silverIndex].Briefcase = new Briefcase(Briefcase.Silver, position.X, position.Y);
+        position = Rooms[blueIndex].ObjectPositions.GetRandomAcceptableDistance();
+        Rooms[blueIndex].ObjectPositions.Add(position);
+        Rooms[blueIndex].Briefcase = new Briefcase(Briefcase.Blue, position.X, position.Y);
+        position = Rooms[blueIndex].ObjectPositions.GetRandomAcceptableDistance();
+        Rooms[redIndex].ObjectPositions.Add(position);
+        Rooms[redIndex].Briefcase = new Briefcase(Briefcase.Red, position.X, position.Y);
+        position = Rooms[brownIndex].ObjectPositions.GetRandomAcceptableDistance();
+        Rooms[brownIndex].ObjectPositions.Add(position);
+        Rooms[brownIndex].Briefcase = new Briefcase(Briefcase.Brown, position.X, position.Y);
+    }
+
+    private void AddCoins(int level, int roomIndex, ref Room room)
     {
         var coinCountInConfig = Game1.Settings!.GetValue($"Level{level}Coins");
         var parts = coinCountInConfig.Split(',');
@@ -168,13 +196,13 @@ public class RoomList
 
         for (var j = 0; j < coinsCount[roomIndex]; j++)
         {
-            var position = objectPositions.GetRandomAcceptableDistance();
-            objectPositions.Add(position);
+            var position = room.ObjectPositions.GetRandomAcceptableDistance();
+            room.ObjectPositions.Add(position);
             room.Coins.Add(new Coin(position.X, position.Y + 15, 0));
         }
     }
 
-    private static void AddAmmos(int level, ref ObjectPositionPlaceholderList objectPositions, int roomIndex, ref Room room)
+    private void AddAmmos(int level, int roomIndex, ref Room room)
     {
         var coinCountInConfig = Game1.Settings!.GetValue($"Level{level}Ammo");
         var parts = coinCountInConfig.Split(',');
@@ -185,8 +213,8 @@ public class RoomList
 
         for (var j = 0; j < ammoCount[roomIndex]; j++)
         {
-            var position = objectPositions.GetRandomAcceptableDistance();
-            objectPositions.Add(position);
+            var position = room.ObjectPositions.GetRandomAcceptableDistance();
+            room.ObjectPositions.Add(position);
             room.Ammos.Add(new AmmoBox(position.X, position.Y + 15));
         }
     }

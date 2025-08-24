@@ -11,11 +11,13 @@ namespace SecretAgentMan.Scenes.Rooms;
 
 public class Room
 {
+    private readonly List<Airplane> _airplanes;
+    public Briefcase? Briefcase { get; set; }
     public string DistrictName { get; }
     public List<Npc> Npcs { get; }
     public CoinList Coins { get; }
     public AmmoBoxList Ammos { get; }
-    private readonly List<Airplane> _airplanes;
+    public ObjectPositionPlaceholderList ObjectPositions = [];
     
     public Room(string districtName)
     {
@@ -46,9 +48,9 @@ public class Room
         var playerIsDrawn = !shouldDrawPlayer;
         var lastY = IngameScene.SpriteUpperLimit - 1;
 
-        foreach (var t in Npcs.OrderBy(x => x.IntY))
+        foreach (var t in Npcs.OrderBy(x => x.IntYForYSort))
         {
-            if (!playerIsDrawn && player.Y >= lastY && player.Y <= t.IntY)
+            if (!playerIsDrawn && player.Y >= lastY && player.Y <= t.IntYForYSort)
             {
                 if (shouldDrawPlayer)
                 {
@@ -58,7 +60,7 @@ public class Room
             }
 
             t.Draw(spriteBatch);
-            lastY = t.IntY;
+            lastY = t.IntYForYSort;
         }
 
         if (!playerIsDrawn)
@@ -82,6 +84,8 @@ public class Room
                 }
             }
         }
+
+        Briefcase?.Draw(spriteBatch);
     }
 
     public void DrawAirPlanes(SpriteBatch spriteBatch)

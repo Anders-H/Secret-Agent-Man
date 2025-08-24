@@ -76,4 +76,7 @@ public abstract class Character : Sprite
 
         return true;
     }
+
+    public virtual int IntYForYSort =>
+        IntY;
 }

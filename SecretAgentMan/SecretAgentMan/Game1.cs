@@ -78,6 +78,7 @@ public class Game1 : RetroGame.RetroGame
         StartSceneResources.LoadContent(GraphicsDevice, Content);
         Coin.LoadContent(GraphicsDevice, Content);
         AmmoBox.LoadContent(GraphicsDevice, Content);
+        Briefcase.LoadContent(GraphicsDevice, Content);
         GameOverFiredScene.LoadResources(GraphicsDevice, Content);
         IngameBackgroundResources.LoadContent(GraphicsDevice, Content);
         MayorResources.LoadContent(GraphicsDevice, Content);
