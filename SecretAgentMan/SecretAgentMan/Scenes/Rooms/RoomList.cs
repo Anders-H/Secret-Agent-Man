@@ -163,23 +163,33 @@ public class RoomList
         var rooms = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         
         var silverIndex = Game1.Random.Next(0, rooms.Count);
+        var silverRoom = rooms[silverIndex];
         rooms.RemoveAt(silverIndex);
+
         var blueIndex = Game1.Random.Next(0, rooms.Count);
+        var blueRoom = rooms[blueIndex];
         rooms.RemoveAt(blueIndex);
+        
         var redIndex = Game1.Random.Next(0, rooms.Count);
+        var redRoom = rooms[redIndex];
         rooms.RemoveAt(redIndex);
+        
         var brownIndex = Game1.Random.Next(0, rooms.Count);
+        var brownRoom = rooms[brownIndex];
         rooms.RemoveAt(brownIndex);
 
-        var position = Rooms[silverIndex].ObjectPositions.GetRandomAcceptableDistance();
-        Rooms[silverIndex].ObjectPositions.Add(position);
-        Rooms[silverIndex].Briefcase = new Briefcase(Briefcase.Silver, position.X, position.Y);
-        position = Rooms[blueIndex].ObjectPositions.GetRandomAcceptableDistance();
-        Rooms[blueIndex].ObjectPositions.Add(position);
-        Rooms[blueIndex].Briefcase = new Briefcase(Briefcase.Blue, position.X, position.Y);
-        position = Rooms[blueIndex].ObjectPositions.GetRandomAcceptableDistance();
-        Rooms[redIndex].ObjectPositions.Add(position);
-        Rooms[redIndex].Briefcase = new Briefcase(Briefcase.Red, position.X, position.Y);
+        var position = Rooms[silverRoom].ObjectPositions.GetRandomAcceptableDistance();
+        Rooms[silverRoom].ObjectPositions.Add(position);
+        Rooms[silverRoom].Briefcase = new Briefcase(Briefcase.Silver, position.X, position.Y);
+        
+        position = Rooms[blueRoom].ObjectPositions.GetRandomAcceptableDistance();
+        Rooms[blueRoom].ObjectPositions.Add(position);
+        Rooms[blueRoom].Briefcase = new Briefcase(Briefcase.Blue, position.X, position.Y);
+        
+        position = Rooms[redRoom].ObjectPositions.GetRandomAcceptableDistance();
+        Rooms[redRoom].ObjectPositions.Add(position);
+        Rooms[redRoom].Briefcase = new Briefcase(Briefcase.Red, position.X, position.Y);
+        
         position = Rooms[brownIndex].ObjectPositions.GetRandomAcceptableDistance();
         Rooms[brownIndex].ObjectPositions.Add(position);
         Rooms[brownIndex].Briefcase = new Briefcase(Briefcase.Brown, position.X, position.Y);
