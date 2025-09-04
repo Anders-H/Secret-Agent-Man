@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿using System;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using RetroGame;
 using RetroGame.RetroTextures;
@@ -9,7 +10,7 @@ namespace SecretAgentMan.Sprites;
 
 public class Briefcase : Sprite, IRetroActor
 {
-    private readonly int _color;
+    public int ColorIndex { get; }
     public const int Silver = 0;
     public const int Blue = 1;
     public const int Red = 2;
@@ -18,9 +19,9 @@ public class Briefcase : Sprite, IRetroActor
     public static string[] BriefcaseWords { get; } = ["attache case", "briefcase", "document case", "portfolio"];
     public static string[] BriefcaseColors { get; } = ["silver", "blue", "red", "brown"];
 
-    public Briefcase(int color, int x, int y)
+    public Briefcase(int colorIndex, int x, int y)
     {
-        _color = color;
+        ColorIndex = colorIndex;
         X = x;
         Y = y;
     }
@@ -29,6 +30,12 @@ public class Briefcase : Sprite, IRetroActor
     {
         BriefcaseTexture = RetroTexture.LoadContent(graphicsDevice, content, 13, 10, 4, "briefcase13x10");
     }
+
+    public static string GetColorName(int color) =>
+        BriefcaseColors[color];
+
+    public static string GetRandomTerm() =>
+        BriefcaseWords[Game1.Random.Next(0, BriefcaseWords.Length)];
 
     public void Act(ulong ticks)
     {
@@ -51,5 +58,5 @@ public class Briefcase : Sprite, IRetroActor
     }
 
     public void Draw(SpriteBatch spriteBatch) =>
-        BriefcaseTexture?.Draw(spriteBatch, _color, IntX, IntY, ColorPalette.White);
+        BriefcaseTexture?.Draw(spriteBatch, ColorIndex, IntX, IntY, ColorPalette.White);
 }

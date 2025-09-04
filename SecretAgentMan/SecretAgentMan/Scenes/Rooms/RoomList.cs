@@ -191,8 +191,9 @@ public class RoomList
         Rooms[redRoom].Briefcase = new Briefcase(Briefcase.Red, position.X, position.Y);
         
         position = Rooms[brownIndex].ObjectPositions.GetRandomAcceptableDistance();
-        Rooms[brownIndex].ObjectPositions.Add(position);
-        Rooms[brownIndex].Briefcase = new Briefcase(Briefcase.Brown, position.X, position.Y);
+        Rooms[brownRoom].ObjectPositions.Add(position);
+        Rooms[brownRoom].Briefcase = new Briefcase(Briefcase.Brown, position.X, position.Y);
+        
     }
 
     private void AddCoins(int level, int roomIndex, ref Room room)
@@ -252,6 +253,15 @@ public class RoomList
 
     public AmmoBoxList GetAmmos(int room) =>
         Rooms[room].Ammos;
+
+    public Briefcase? GetBriefcase(int room) =>
+        Rooms[room].Briefcase;
+
+    public void SetBriefcaseCollected(int room) =>
+        Rooms[room].SetBriefcaseCollected();
+
+    public void TurnBriefcaseToBomb(int room) =>
+        Rooms[room].TurnBriefcaseToBomb();
 
     public void TurnOneDeadNpcToGraveStone(int room)
     {

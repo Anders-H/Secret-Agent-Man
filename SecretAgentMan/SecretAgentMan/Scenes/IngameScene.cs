@@ -33,11 +33,13 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private string _levelString = "";
     public const int SpriteUpperLimit = 98;
     public const int SpriteLowerLimit = 268;
+    public int CorrectBriefcase { get; set; }
 
     public IngameScene(RetroGame.RetroGame parent) : base(parent)
     {
         _player = new Player(_fire.PlayerFire);
         _roomList = new RoomList(_player, _fire.EnemyFire, 0);
+        CorrectBriefcase = Game1.Random.Next(Briefcase.BriefcaseColors.Length);
         Score = 0;
         AddToAutoUpdate(Game1.TypeWriter);
         AddToAutoDraw(Game1.TypeWriter);
@@ -75,6 +77,13 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
     public override void Update(GameTime gameTime, ulong ticks)
     {
+        if (ticks == 500)
+        {
+            MayorResources.DoShortTalk();
+            Game1.TypeWriter.SetText($"acquire the {Briefcase.GetColorName(CorrectBriefcase)} {Briefcase.GetRandomTerm()}.");
+            Game1.TypeWriter.SetText($"the {Briefcase.GetColorName(CorrectBriefcase)} one. and do not mess this up!");
+        }
+
         if (_player.AliveStatus == Character.StatusAlive)
         {
             if (_askQuitMode)
@@ -149,6 +158,27 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 }
 
                 _roomList.Act(_currentRoomIndex, ticks);
+
+                var briefcase = _roomList.GetBriefcase(_currentRoomIndex);
+
+                if (briefcase != null)
+                {
+                    if (briefcase.Collide(_player))
+                    {
+                        if (briefcase.ColorIndex == CorrectBriefcase)
+                        {
+                            MayorResources.DoShortTalk();
+                            Game1.TypeWriter.SetText("good work!");
+                            _roomList.SetBriefcaseCollected(_currentRoomIndex);
+                        }
+                        else
+                        {
+                            MayorResources.DoShortTalkAngry();
+                            Game1.TypeWriter.SetText("you fool!");
+                            _roomList.TurnBriefcaseToBomb(_currentRoomIndex);
+                        }
+                    }
+                }
 
                 if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F10))
                 {

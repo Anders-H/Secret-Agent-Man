@@ -102,4 +102,15 @@ public class Room
         foreach (var npc in Npcs)
             npc.PutTheGunAway();
     }
+
+    public void SetBriefcaseCollected()
+    {
+        Briefcase = null; // TODO
+    }
+
+    public void TurnBriefcaseToBomb()
+    {
+        Briefcase = null; // TODO
+    }
+        
 }

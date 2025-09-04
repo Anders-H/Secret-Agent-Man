@@ -70,12 +70,12 @@ public class BonusLevelScene : RetroGame.Scene.IngameScene
 
             foreach (var npc in Npcs)
             {
-                if (coin.Collide(npc))
-                {
-                    SoundEffects.EnemyCoin!.PlayRandom();
-                    Coins.Remove(coin);
-                    goto OuterBail;
-                }
+                if (!coin.Collide(npc))
+                    continue;
+
+                SoundEffects.EnemyCoin!.PlayRandom();
+                Coins.Remove(coin);
+                goto OuterBail;
             }
         }
 
