@@ -66,9 +66,10 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
     private void UpdateRoomNameAndCheckClear(ulong ticks)
     {
-        _currentRoomName = _roomList.GetDistrictName(_currentRoomIndex);
+        var room = _roomList.GetRoom(_currentRoomIndex);
+        _currentRoomName = room.DistrictName;
 
-        if (_roomList.RoomIsClear(_currentRoomIndex) && ticks > 200)
+        if (room.IsClear() && ticks > 200)
         {
             MayorResources.DoShortTalk();
             Game1.TypeWriter.SetText("this area is clear");
@@ -77,6 +78,8 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
     public override void Update(GameTime gameTime, ulong ticks)
     {
+        var room = _roomList.GetRoom(_currentRoomIndex);
+
         if (ticks == 500)
         {
             MayorResources.DoShortTalk();
@@ -157,25 +160,50 @@ public class IngameScene : RetroGame.Scene.IngameScene
                     UpdateRoomNameAndCheckClear(ticks);
                 }
 
-                _roomList.Act(_currentRoomIndex, ticks);
+                room.Act(ticks);
 
-                var briefcase = _roomList.GetBriefcase(_currentRoomIndex);
-
-                if (briefcase != null)
+                if (room.Briefcase != null)
                 {
-                    if (briefcase.Collide(_player))
+                    if (room.Briefcase.IsPickedUp)
                     {
-                        if (briefcase.ColorIndex == CorrectBriefcase)
+                        if (ticks < room.Briefcase.PickedUpAt + 10)
                         {
-                            MayorResources.DoShortTalk();
-                            Game1.TypeWriter.SetText("good work!");
-                            _roomList.SetBriefcaseCollected(_currentRoomIndex);
+                            room.Briefcase.Y--;
                         }
                         else
                         {
-                            MayorResources.DoShortTalkAngry();
-                            Game1.TypeWriter.SetText("you fool!");
-                            _roomList.TurnBriefcaseToBomb(_currentRoomIndex);
+                            if (room.Briefcase.ColorIndex != CorrectBriefcase)
+                            {
+                                //room.Bomb = new Bomb(room.)
+                            }
+
+                            room.Briefcase = null;
+                        }
+                    }
+                    else
+                    {
+                        if (room.Briefcase.Collide(_player))
+                        {
+                            room.Briefcase.PickedUpAt = ticks;
+
+                            if (room.Briefcase.ColorIndex == CorrectBriefcase)
+                            {
+                                SoundEffects.PlayerCoin!.PlayRandom();
+                                MayorResources.DoShortTalk();
+                                Game1.TypeWriter.SetText("good work!");
+                                Score += 50;
+                                _currentBonusLevel++;
+                            }
+                            else
+                            {
+                                SoundEffects.FireNoAmmo!.PlayNext();
+                                MayorResources.DoShortTalkAngry();
+                                Game1.TypeWriter.SetText("you fool!");
+                                _currentBonusLevel -= 5;
+
+                                if (_currentBonusLevel < 0)
+                                    _currentBonusLevel = 0;
+                            }
                         }
                     }
                 }
@@ -184,21 +212,20 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 {
                     _messageDebug++;
                     Game1.TypeWriter.SetText($"you have added text {_messageDebug} to the {(Game1.Random.Next(2) == 0 ? "message " : "")}system!{(Game1.Random.Next(2) == 0 ? " thank you!" : "")}");
-                    // TODO Arg eller inte?
                 }
             }
 
             _fire.Act(ticks);
 
-            if (_roomList.GetCoins(_currentRoomIndex).Act(ticks, _player, _roomList.GetNpcs(_currentRoomIndex)))
+            if (room.Coins.Act(ticks, _player, room.Npcs))
             {
                 Score += 50;
                 _currentBonusLevel++;
             }
 
-            _roomList.GetAmmos(_currentRoomIndex).Act(_player);
+            room.Ammos.Act(_player);
 
-            foreach (var npc in _roomList.GetNpcs(_currentRoomIndex))
+            foreach (var npc in room.Npcs)
             {
                 foreach (var fire in _fire.PlayerFire)
                 {
@@ -341,6 +368,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
     public override void Draw(GameTime gameTime, ulong ticks, SpriteBatch spriteBatch)
     {
+        var room = _roomList.GetRoom(_currentRoomIndex);
         Game1.Decoration.Draw(spriteBatch, _currentRoomIndex);
         IngameBackgroundResources.WaterTexture?.Draw(spriteBatch, _waterFrameIndex, 0, 91);
 
@@ -359,15 +387,15 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 if (_player.RestoreToLookRight())
                 {
                     _fire.Clear();
-                    _roomList.ResetNpcs(_currentRoomIndex);
+                    room.ResetNpcs();
                 }
 
                 shouldDrawPlayer = ticks % 7 == 0;
             }
 
             _roomList.DrawBackground(spriteBatch, _currentRoomIndex, Text, _player, shouldDrawPlayer);
-            _roomList.GetCoins(_currentRoomIndex).Draw(spriteBatch);
-            _roomList.GetAmmos(_currentRoomIndex).ForEach(x => x.Draw(spriteBatch));
+            room.Coins.Draw(spriteBatch);
+            room.Ammos.ForEach(x => x.Draw(spriteBatch));
             _fire.Draw(spriteBatch);
             _roomList.DrawDecorations(spriteBatch, _currentRoomIndex);
         }
@@ -438,14 +466,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 break;
         }
 
-        _roomList.GetAmmos(_currentRoomIndex).DrawPanel(_player, spriteBatch);
-        
-        if (_levelCompleted.Occured)
-        {
-            //TODO: Övergång till game completed.
-            //Text.DirectDraw(spriteBatch, GameOverKilledScene.GameClearX, 150, GameOverKilledScene.GameClearText, ColorPalette.Green);
-        }
-
+        room.Ammos.DrawPanel(_player, spriteBatch);
         Game1.Frame!.Draw(spriteBatch, 0, 0, 0);
 
         if (_currentBonusLevel > 0)

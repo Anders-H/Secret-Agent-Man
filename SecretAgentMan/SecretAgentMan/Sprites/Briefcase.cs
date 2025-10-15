@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using RetroGame;
 using RetroGame.RetroTextures;
@@ -10,6 +9,7 @@ namespace SecretAgentMan.Sprites;
 
 public class Briefcase : Sprite, IRetroActor
 {
+    public ulong PickedUpAt { get; set; }
     public int ColorIndex { get; }
     public const int Silver = 0;
     public const int Blue = 1;
@@ -26,10 +26,11 @@ public class Briefcase : Sprite, IRetroActor
         Y = y;
     }
 
-    public static void LoadContent(GraphicsDevice graphicsDevice, ContentManager content)
-    {
+    public static void LoadContent(GraphicsDevice graphicsDevice, ContentManager content) =>
         BriefcaseTexture = RetroTexture.LoadContent(graphicsDevice, content, 13, 10, 4, "briefcase13x10");
-    }
+
+    public bool IsPickedUp =>
+        PickedUpAt > 0;
 
     public static string GetColorName(int color) =>
         BriefcaseColors[color];

@@ -158,6 +158,9 @@ public class RoomList
         AddBriefcases();
     }
 
+    public Room GetRoom(int index) =>
+            Rooms[index];
+
     private void AddBriefcases()
     {
         var rooms = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
@@ -232,36 +235,6 @@ public class RoomList
 
     public int Count =>
         Rooms.Count;
-
-    public void ResetNpcs(int room) =>
-        Rooms[room].ResetNpcs();
-
-    public string GetDistrictName(int room) =>
-        Rooms[room].DistrictName;
-
-    public bool RoomIsClear(int room) =>
-        Rooms[room].IsClear();
-
-    public void Act(int room, ulong ticks) =>
-        Rooms[room].Act(ticks);
-
-    public List<Npc> GetNpcs(int room) =>
-        Rooms[room].Npcs;
-
-    public CoinList GetCoins(int room) =>
-        Rooms[room].Coins;
-
-    public AmmoBoxList GetAmmos(int room) =>
-        Rooms[room].Ammos;
-
-    public Briefcase? GetBriefcase(int room) =>
-        Rooms[room].Briefcase;
-
-    public void SetBriefcaseCollected(int room) =>
-        Rooms[room].SetBriefcaseCollected();
-
-    public void TurnBriefcaseToBomb(int room) =>
-        Rooms[room].TurnBriefcaseToBomb();
 
     public void TurnOneDeadNpcToGraveStone(int room)
     {
