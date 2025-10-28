@@ -18,6 +18,7 @@ public class RoomList
         var spyCount = new int[10];
         var innocentCount = new int[10];
         var names = new string[10];
+        PlaceBombInRoom(Game1.Random.Next(10));
 
         switch (zeroBasedLevel)
         {
@@ -160,6 +161,16 @@ public class RoomList
 
     public Room GetRoom(int index) =>
             Rooms[index];
+
+    private void PlaceBombInRoom(int roomIndex)
+    {
+#if DEBUG
+        roomIndex = 0;
+#endif
+        var position = Rooms[roomIndex].ObjectPositions.GetRandomAcceptableDistance();
+        Rooms[roomIndex].ObjectPositions.Add(position);
+        Rooms[roomIndex].Bomb = new Bomb(position.X, position.Y);
+    }
 
     private void AddBriefcases()
     {

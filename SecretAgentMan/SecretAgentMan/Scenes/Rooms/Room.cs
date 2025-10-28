@@ -18,7 +18,8 @@ public class Room
     public CoinList Coins { get; }
     public AmmoBoxList Ammos { get; }
     public ObjectPositionPlaceholderList ObjectPositions = [];
-    
+    public Bomb? Bomb { get; set; }
+
     public Room(string districtName)
     {
         _airplanes = [];

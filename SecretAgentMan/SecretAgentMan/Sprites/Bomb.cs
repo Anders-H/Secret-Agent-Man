@@ -13,20 +13,26 @@ public class Bomb : Sprite, IRetroActor
     public const int StateWaiting = 0;
     public const int StateExploding = 1;
     public const int FirstDeadlyCell = 26;
+    public const int LastIndex = 30;
     public int CellIndex { get; set; }
     public static RetroTexture? BombTexture { get; set; }
 
-    public Bomb()
+    public Bomb(int x, int y)
     {
         CellIndex = 0;
+        X = x;
+        Y = y;
     }
 
     public void Act(ulong ticks)
     {
     }
 
-    public void Draw(SpriteBatch spriteBatch) =>
-        BombTexture?.Draw(spriteBatch, CellIndex, IntX, IntY, ColorPalette.White);
+    public void Draw(SpriteBatch spriteBatch)
+    {
+        if (CellIndex <= 31)
+            BombTexture?.Draw(spriteBatch, CellIndex, IntX, IntY, ColorPalette.White);
+    }
 
     public static void LoadContent(GraphicsDevice graphicsDevice, ContentManager content) =>
         BombTexture = RetroTexture.LoadContent(graphicsDevice, content, 13, 10, 4, "bomb40x31");
