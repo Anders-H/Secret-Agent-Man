@@ -18,7 +18,6 @@ public class RoomList
         var spyCount = new int[10];
         var innocentCount = new int[10];
         var names = new string[10];
-        PlaceBombInRoom(Game1.Random.Next(10));
 
         switch (zeroBasedLevel)
         {
@@ -157,20 +156,11 @@ public class RoomList
         }
 
         AddBriefcases();
+        PlaceBombInRoom(Game1.Random.Next(10));
     }
 
     public Room GetRoom(int index) =>
             Rooms[index];
-
-    private void PlaceBombInRoom(int roomIndex)
-    {
-#if DEBUG
-        roomIndex = 0;
-#endif
-        var position = Rooms[roomIndex].ObjectPositions.GetRandomAcceptableDistance();
-        Rooms[roomIndex].ObjectPositions.Add(position);
-        Rooms[roomIndex].Bomb = new Bomb(position.X, position.Y);
-    }
 
     private void AddBriefcases()
     {
@@ -192,6 +182,13 @@ public class RoomList
         var brownRoom = rooms[brownIndex];
         rooms.RemoveAt(brownIndex);
 
+        var bombIndex = Game1.Random.Next(0, rooms.Count);
+#if DEBUG
+        bombIndex = 0;
+#endif
+        var bombRoom = rooms[brownIndex];
+        rooms.RemoveAt(brownIndex);
+
         var position = Rooms[silverRoom].ObjectPositions.GetRandomAcceptableDistance();
         Rooms[silverRoom].ObjectPositions.Add(position);
         Rooms[silverRoom].Briefcase = new Briefcase(Briefcase.Silver, position.X, position.Y);
@@ -207,7 +204,10 @@ public class RoomList
         position = Rooms[brownIndex].ObjectPositions.GetRandomAcceptableDistance();
         Rooms[brownRoom].ObjectPositions.Add(position);
         Rooms[brownRoom].Briefcase = new Briefcase(Briefcase.Brown, position.X, position.Y);
-        
+
+        position = Rooms[bombIndex].ObjectPositions.GetRandomAcceptableDistance();
+        Rooms[bombIndex].ObjectPositions.Add(position);
+        Rooms[bombIndex].Bomb = new Bomb(position.X, position.Y);
     }
 
     private void AddCoins(int level, int roomIndex, ref Room room)

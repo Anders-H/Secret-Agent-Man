@@ -208,6 +208,11 @@ public class IngameScene : RetroGame.Scene.IngameScene
                     }
                 }
 
+                if (room.Bomb != null)
+                {
+                    room.Bomb.Act(ticks);
+                }
+
                 if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F10))
                 {
                     _messageDebug++;
@@ -468,6 +473,9 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
         room.Ammos.DrawPanel(_player, spriteBatch);
         Game1.Frame!.Draw(spriteBatch, 0, 0, 0);
+
+        if (room.Bomb != null)
+            room.Bomb.Draw(spriteBatch);
 
         if (_currentBonusLevel > 0)
         {
