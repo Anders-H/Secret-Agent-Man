@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -15,7 +14,7 @@ public class BonusLevelScene : RetroGame.Scene.IngameScene
     private readonly DateTime _bonusLevelStartTime;
     private readonly IngameFire _fire = new();
     private readonly Player _player;
-    private List<Npc> Npcs { get; }
+    private NpcList Npcs { get; }
     private readonly AddScoreDelegate _addScore;
     private int _secondsPassed;
     public CoinList Coins { get; }
@@ -94,7 +93,7 @@ public class BonusLevelScene : RetroGame.Scene.IngameScene
 
                 if (npc.AliveStatus == Character.StatusAlive)
                 {
-                    npc.Die(ticks);
+                    npc.Die(ticks, true);
                     SoundEffects.EnemyDie!.PlayRandom();
                     Score = _addScore(5);
                 }

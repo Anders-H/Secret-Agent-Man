@@ -391,9 +391,11 @@ public class Npc : Character, IRetroActor
         return true;
     }
 
-    public void Die(ulong ticks)
+    public void Die(ulong ticks, bool playSound)
     {
-        SoundEffects.EnemyDie!.PlayRandom();
+        if (playSound)
+            SoundEffects.EnemyDie!.PlayRandom();
+
         CurrentAnimation = _die;
         AliveStatus = StatusDying;
         DieAtTicks = ticks;

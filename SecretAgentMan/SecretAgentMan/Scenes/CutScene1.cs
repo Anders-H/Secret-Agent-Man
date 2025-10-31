@@ -77,7 +77,7 @@ public class CutScene1 : RetroGame.Scene.IngameScene
             if (_fire.PlayerFire.Any(f => _enemy.Hit(f)))
             {
                 _fire.PlayerFire.Clear();
-                _enemy.Die(ticks);
+                _enemy.Die(ticks, true);
                 _enemyDied = true;
             }
         }

@@ -31,6 +31,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private ulong _diedAt;
     private int _zeroBasedLevel;
     private string _levelString = "";
+    private bool _bombKilledPlayer;
     public const int SpriteUpperLimit = 98;
     public const int SpriteLowerLimit = 268;
     public int CorrectBriefcase { get; set; }
@@ -69,7 +70,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
         var room = _roomList.GetRoom(_currentRoomIndex);
         _currentRoomName = room.DistrictName;
 
-        if (room.IsClear() && ticks > 200)
+        if (room.Npcs.AllAreDead() && ticks > 200)
         {
             MayorResources.DoShortTalk();
             Game1.TypeWriter.SetText("this area is clear");
@@ -211,6 +212,28 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 if (room.Bomb != null)
                 {
                     room.Bomb.Act(ticks);
+
+                    if (room.Bomb.CellIndex < Bomb.FirstDeadlyCell)
+                    {
+                        foreach (var f in _fire.PlayerFire)
+                        {
+                            if (room.Bomb.Collide(f))
+                            {
+                                room.Bomb = null;
+                                _fire.PlayerFire.Remove(f);
+                                break;
+                            }
+                        }
+                    }
+                    else if (room.Bomb.CellIndex == Bomb.FirstDeadlyCell && !_bombKilledPlayer)
+                    {
+                        _player.Die(ticks);
+                        room.Npcs.Die(ticks, false);
+                    }
+                    else if (room.Bomb.CellIndex >= Bomb.CellCount)
+                    {
+                        room.Bomb = null;
+                    }
                 }
 
                 if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F10))
@@ -242,7 +265,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                         {
                             if (npc.AliveStatus == Character.StatusAlive)
                             {
-                                npc.Die(ticks);
+                                npc.Die(ticks, true);
                                 _innocentKill++;
                                 _currentBonusLevel -= 2;
 
@@ -269,7 +292,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                         }
                         else if (npc.Status == Npc.StatusSpyDetected && npc.AliveStatus == Character.StatusAlive)
                         {
-                            npc.Die(ticks);
+                            npc.Die(ticks, true);
                             _killedSpyCount++;
                             var scoreAdded = _killedSpyCount * 5;
                             Score += scoreAdded;
@@ -326,6 +349,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 _lives--;
                 _diedAt = ticks;
                 _player.AliveStatus = Character.StatusAlive;
+                _bombKilledPlayer = room.Bomb != null && room.Bomb.CellIndex >= Bomb.FirstDeadlyCell;
             }
             else
             {
@@ -392,7 +416,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 if (_player.RestoreToLookRight())
                 {
                     _fire.Clear();
-                    room.ResetNpcs();
+                    room.Npcs.Reset();
                 }
 
                 shouldDrawPlayer = ticks % 7 == 0;
@@ -402,7 +426,6 @@ public class IngameScene : RetroGame.Scene.IngameScene
             room.Coins.Draw(spriteBatch);
             room.Ammos.ForEach(x => x.Draw(spriteBatch));
             _fire.Draw(spriteBatch);
-            _roomList.DrawDecorations(spriteBatch, _currentRoomIndex);
         }
 
         Text.DirectDraw(spriteBatch, 12, 12, _currentRoomName, Color.White);

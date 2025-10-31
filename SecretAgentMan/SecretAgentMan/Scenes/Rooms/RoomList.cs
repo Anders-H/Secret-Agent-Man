@@ -156,7 +156,6 @@ public class RoomList
         }
 
         AddBriefcases();
-        PlaceBombInRoom(Game1.Random.Next(10));
     }
 
     public Room GetRoom(int index) =>
@@ -183,11 +182,8 @@ public class RoomList
         rooms.RemoveAt(brownIndex);
 
         var bombIndex = Game1.Random.Next(0, rooms.Count);
-#if DEBUG
-        bombIndex = 0;
-#endif
-        var bombRoom = rooms[brownIndex];
-        rooms.RemoveAt(brownIndex);
+        var bombRoom = rooms[bombIndex];
+        rooms.RemoveAt(bombIndex);
 
         var position = Rooms[silverRoom].ObjectPositions.GetRandomAcceptableDistance();
         Rooms[silverRoom].ObjectPositions.Add(position);
@@ -206,8 +202,8 @@ public class RoomList
         Rooms[brownRoom].Briefcase = new Briefcase(Briefcase.Brown, position.X, position.Y);
 
         position = Rooms[bombIndex].ObjectPositions.GetRandomAcceptableDistance();
-        Rooms[bombIndex].ObjectPositions.Add(position);
-        Rooms[bombIndex].Bomb = new Bomb(position.X, position.Y);
+        Rooms[bombRoom].ObjectPositions.Add(position);
+        Rooms[bombRoom].Bomb = new Bomb(position.X, position.Y, 0);
     }
 
     private void AddCoins(int level, int roomIndex, ref Room room)
@@ -256,9 +252,9 @@ public class RoomList
         }
     }
 
-    public void DrawBackground(SpriteBatch spriteBatch, int room, TextBlock text, Player player, bool shouldDrawPlayer) =>
+    public void DrawBackground(SpriteBatch spriteBatch, int room, TextBlock text, Player player, bool shouldDrawPlayer)
+    {
         Rooms[room].Draw(spriteBatch, text, player, shouldDrawPlayer);
-
-    public void DrawDecorations(SpriteBatch spriteBatch, int room) =>
-        Rooms[room].DrawAirPlanes(spriteBatch);
+        Rooms[room].Airplanes.Draw(spriteBatch);
+    }
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RetroGame;
 using RetroGame.Text;
@@ -11,10 +9,10 @@ namespace SecretAgentMan.Scenes.Rooms;
 
 public class Room
 {
-    private readonly List<Airplane> _airplanes;
+    public readonly AirplaneList Airplanes;
     public Briefcase? Briefcase { get; set; }
     public string DistrictName { get; }
-    public List<Npc> Npcs { get; }
+    public NpcList Npcs { get; }
     public CoinList Coins { get; }
     public AmmoBoxList Ammos { get; }
     public ObjectPositionPlaceholderList ObjectPositions = [];
@@ -22,7 +20,7 @@ public class Room
 
     public Room(string districtName)
     {
-        _airplanes = [];
+        Airplanes = [];
         DistrictName = districtName;
         Npcs = [];
         Coins = [];
@@ -32,15 +30,14 @@ public class Room
     public void AddAirplane(int count)
     {
         for (var i = 0; i < count; i++)
-            _airplanes.Add(new Airplane());
+            Airplanes.Add(new Airplane());
     }
 
     public void Act(ulong ticks)
     {
-        foreach (var npc in Npcs)
-            npc.Act(ticks);
+        Npcs.Act(ticks);
 
-        foreach (var airplane in _airplanes)
+        foreach (var airplane in Airplanes)
             airplane.Act(ticks);
     }
 
@@ -49,7 +46,7 @@ public class Room
         var playerIsDrawn = !shouldDrawPlayer;
         var lastY = IngameScene.SpriteUpperLimit - 1;
 
-        foreach (var t in Npcs.OrderBy(x => x.IntYForYSort))
+        foreach (var t in Npcs.YSorted())
         {
             if (!playerIsDrawn && player.Y >= lastY && player.Y <= t.IntYForYSort)
             {
@@ -87,20 +84,5 @@ public class Room
         }
 
         Briefcase?.Draw(spriteBatch);
-    }
-
-    public void DrawAirPlanes(SpriteBatch spriteBatch)
-    {
-        foreach (var airplane in _airplanes)
-            airplane.Draw(spriteBatch);
-    }
-
-    public bool IsClear() =>
-        Npcs.Count(x => x.Status == Npc.StatusSpyUndetected) + Npcs.Count(x => x.Status == Npc.StatusSpyDetected) <= 0;
-
-    public void ResetNpcs()
-    {
-        foreach (var npc in Npcs)
-            npc.PutTheGunAway();
     }
 }
