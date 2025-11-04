@@ -103,8 +103,8 @@ public class Player : Character
             _isMoving = true;
             Y += _speed;
 
-            if (Y > IngameScene.SpriteLowerLimit)
-                Y = IngameScene.SpriteLowerLimit;
+            if (Y > IngameScene.PlayerSpriteLowerLimit)
+                Y = IngameScene.PlayerSpriteLowerLimit;
         }
 
         if (keyboard.IsFirePressed() && ticks > 2)
@@ -176,8 +176,8 @@ public class Player : Character
             _isMoving = true;
             Y += _speed;
 
-            if (Y > IngameScene.SpriteLowerLimit)
-                Y = IngameScene.SpriteLowerLimit;
+            if (Y > IngameScene.PlayerSpriteLowerLimit)
+                Y = IngameScene.PlayerSpriteLowerLimit;
         }
 
         if (keyboard.IsFirePressed() && ticks > 2)

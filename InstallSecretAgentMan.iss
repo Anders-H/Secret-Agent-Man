@@ -25,6 +25,9 @@ WizardStyle=modern
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
+[Run]
+Filename: "{app}\CheckNet.exe"; StatusMsg: "Checking for .NET 8.0-Windows"; Flags: skipifsilent
+
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
@@ -103,7 +106,7 @@ Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\MonoGame.Framework.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\mscordaccore.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\mscordaccore_amd64_amd64_4.6.30411.01.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\mscordaccore_amd64_amd64_8.0.1425.11118.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\mscordaccore_amd64_amd64_8.0.2125.47513.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\mscordbi.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\mscorlib.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\mscorrc.debug.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -344,11 +347,18 @@ Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\ammo4x7.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\ammobox16x11.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\background-640x91.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
+Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\bomb40x31.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\bonus-meter.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\bonus-stars-640x360.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
+Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\bonuslevel.wma"; DestDir: "{app}\Content"; Flags: ignoreversion
+Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\bonuslevel.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
+Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\briefcase13x10.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\c64fontswe.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\coin10x10.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\crt.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
+Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\cutscene.wma"; DestDir: "{app}\Content"; Flags: ignoreversion
+Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\cutscene.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
+Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\cutsceneframe.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\enemy_sfx_coin_1.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\enemy_sfx_coin_2.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\enemy_sfx_coin_3.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
@@ -363,6 +373,8 @@ Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\hiscore.wma"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\hiscore.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\hud.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
+Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\ingame.wma"; DestDir: "{app}\Content"; Flags: ignoreversion
+Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\ingame.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\lives11x7.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\load-screen-360p-nofilter.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\loader.wma"; DestDir: "{app}\Content"; Flags: ignoreversion
@@ -396,8 +408,10 @@ Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\start-screen-frame.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\start-screen-gun.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\start-screen-logo433x54.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
+Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\start-screen-portraits.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\Static50x50.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\static_mayor.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
+Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\title_anim-465x205x5x17.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\water640x30.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 
 [Icons]

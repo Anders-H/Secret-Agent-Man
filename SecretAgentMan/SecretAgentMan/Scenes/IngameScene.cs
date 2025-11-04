@@ -34,6 +34,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private bool _bombKilledPlayer;
     public const int SpriteUpperLimit = 98;
     public const int SpriteLowerLimit = 268;
+    public const int PlayerSpriteLowerLimit = 274;
     public int CorrectBriefcase { get; set; }
 
     public IngameScene(RetroGame.RetroGame parent) : base(parent)
@@ -175,7 +176,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                         {
                             if (room.Briefcase.ColorIndex != CorrectBriefcase)
                             {
-                                //room.Bomb = new Bomb(room.)
+                                room.Bomb = new Bomb(room.Briefcase.IntX, room.Briefcase.IntY + 10, ticks);
                             }
 
                             room.Briefcase = null;
@@ -221,6 +222,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                             {
                                 room.Bomb = null;
                                 _fire.PlayerFire.Remove(f);
+                                SoundEffects.FireNoAmmo!.PlayNext();
                                 break;
                             }
                         }
@@ -257,63 +259,63 @@ public class IngameScene : RetroGame.Scene.IngameScene
             {
                 foreach (var fire in _fire.PlayerFire)
                 {
-                    if (npc.Hit(fire))
+                    if (!npc.Hit(fire))
+                        continue;
+
+                    _fire.PlayerFire.Remove(fire);
+
+                    if (npc.PlayerMayNotKill())
                     {
-                        _fire.PlayerFire.Remove(fire);
-
-                        if (npc.PlayerMayNotKill())
-                        {
-                            if (npc.AliveStatus == Character.StatusAlive)
-                            {
-                                npc.Die(ticks, true);
-                                _innocentKill++;
-                                _currentBonusLevel -= 2;
-
-                                if (_currentBonusLevel < 0)
-                                    _currentBonusLevel = 0;
-
-                                switch (_innocentKill)
-                                {
-                                    case 1:
-                                        MayorResources.DoShortTalk();
-                                        Game1.TypeWriter.SetText("you have killed an innocent man!");
-                                        Score -= 10;
-                                        break;
-                                    case 2:
-                                        MayorResources.DoShortTalkAngry();
-                                        Game1.TypeWriter.SetText("you cannot just go around and shoot people!");
-                                        Score -= 50;
-                                        break;
-                                    case 3:
-                                        _lastInnocentKillAt = ticks;
-                                        break;
-                                }
-                            }
-                        }
-                        else if (npc.Status == Npc.StatusSpyDetected && npc.AliveStatus == Character.StatusAlive)
+                        if (npc.AliveStatus == Character.StatusAlive)
                         {
                             npc.Die(ticks, true);
-                            _killedSpyCount++;
-                            var scoreAdded = _killedSpyCount * 5;
-                            Score += scoreAdded;
+                            _innocentKill++;
+                            _currentBonusLevel -= 2;
 
-                            if (_killedSpyCount >= _roomList.SpyCount)
+                            if (_currentBonusLevel < 0)
+                                _currentBonusLevel = 0;
+
+                            switch (_innocentKill)
                             {
-                                Game1.TypeWriter.SetText($"all spies eliminated! {scoreAdded} points! well done!");
-                                _fire.Clear();
-                                MayorResources.DoShortTalk();
-                                Game1.TypeWriter.SetText("your mission is completed. well done!");
-                                _levelCompleted.Occure(ticks);
-                                _currentBonusLevel++;
-                            }
-                            else
-                            {
-                                MayorResources.SaySpyKilled(_killedSpyCount, scoreAdded);
+                                case 1:
+                                    MayorResources.DoShortTalk();
+                                    Game1.TypeWriter.SetText("you have killed an innocent man!");
+                                    Score -= 10;
+                                    break;
+                                case 2:
+                                    MayorResources.DoShortTalkAngry();
+                                    Game1.TypeWriter.SetText("you cannot just go around and shoot people!");
+                                    Score -= 50;
+                                    break;
+                                case 3:
+                                    _lastInnocentKillAt = ticks;
+                                    break;
                             }
                         }
-
-                        break;
                     }
+                    else if (npc.Status == Npc.StatusSpyDetected && npc.AliveStatus == Character.StatusAlive)
+                    {
+                        npc.Die(ticks, true);
+                        _killedSpyCount++;
+                        var scoreAdded = _killedSpyCount * 5;
+                        Score += scoreAdded;
+
+                        if (_killedSpyCount >= _roomList.SpyCount)
+                        {
+                            Game1.TypeWriter.SetText($"all spies eliminated! {scoreAdded} points! well done!");
+                            _fire.Clear();
+                            MayorResources.DoShortTalk();
+                            Game1.TypeWriter.SetText("your mission is completed. well done!");
+                            _levelCompleted.Occure(ticks);
+                            _currentBonusLevel++;
+                        }
+                        else
+                        {
+                            MayorResources.SaySpyKilled(_killedSpyCount, scoreAdded);
+                        }
+                    }
+
+                    break;
                 }
             }
 
