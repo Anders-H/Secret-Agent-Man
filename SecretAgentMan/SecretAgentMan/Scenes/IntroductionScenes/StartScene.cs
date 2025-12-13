@@ -109,6 +109,14 @@ public class StartScene : Scene
                 break;
         }
 
+        if (_introAnimFrame > 90 && ticks % 3 == 0)
+        {
+            _logoImageListIndex++;
+
+            if (_logoImageListIndex >= _logoImageList.Count)
+                _logoImageListIndex = 0;
+        }
+
         switch (_state)
         {
             case StartSceneState.Logo:
@@ -126,15 +134,6 @@ public class StartScene : Scene
 
                 break;
             case StartSceneState.Instructions:
-                
-                if (ticks % 3 == 0)
-                {
-                    _logoImageListIndex++;
-
-                    if (_logoImageListIndex >= _logoImageList.Count)
-                        _logoImageListIndex = 0;
-                }
-
                 _typeWriter!.Act(_partTick);
                 break;
             case StartSceneState.Credits:
@@ -148,29 +147,22 @@ public class StartScene : Scene
 
     private void CreateInstructions()
     {
-        _typeWriter = new TextBlockStaticVerticalCenter(640, 110,
-            "AS A SECRET AGENT, YOU ARE CALLED UPON",
-            "BY NEW YORK CITY MAYOR KOCH TO CURB THE",
-            "ESCALATING CRIME RATE.",
+        _typeWriter = new TextBlockStaticVerticalCenter(640, 110, 9,
+            "MAYOR KOCH HAS CHOSEN YOU AGENT, TO",
+            "FIGHT THE RISING CRIME WAVE IN NEW YORK CITY.",
             "",
-            "CRIMINAL ELEMENTS ARE OPENLY ROAMING",
-            "AMONG THE OTHER CITIZENS, AND IT IS OF",
-            "UTMOST IMPORTANCE THAT YOU ELIMINATE",
-            "ALL THE CRIMINALS IN THE AREA, WITHOUT",
-            "HARMING ANY OF THE PEACEFUL CIVILIAN",
-            "POPULATION.",
+            "CRIMINALS ARE HIDING AMONG LAW-ABIDING CITIZENS.",
+            "YOUR JOB: ELIMINATE EVERY ARMED CRIMINAL.",
+            "DO NOT HARM CIVILIANS.",
             "",
-            "YOU MAY NOT KILL ANY CIVILIANS, YOU",
-            "NEED TO KILL ALL CRIMINAL ELEMENTS.",
+            "CLEAR ALL ENEMIES TO REACH THE NEXT STAGE.",
             "",
-            "TO REACH THE NEXT LEVEL, ALL CRIMINALS",
-            "MUST BE ELIMINATED.",
+            "BONUS ITEMS ARE SCATTERED AROUND THE CITY.",
+            "NEW ORDERS MAY APPEAR AT ANY TIME. STAY SHARP",
+            "AND WATCH THE MAYOR'S MESSAGES.",
             "",
-            "THERE ARE BONUS ITEMS PLACED OUT FOR",
-            "YOU, AND ADDITIONAL TASKS MAY BE GIVEN",
-            "TO YOU DURING GAMEPLAY - PAY CAREFUL",
-            "ATTENTION TO WHAT MAYOR KOCH HAS TO SAY.",
-            "GOOD LUCK, AND BE CAREFUL OUT THERE!");
+            "GOOD LUCK, AGENT.",
+            "THE CITY IS COUNTING ON YOU.");
     }
 
     public override void Draw(GameTime gameTime, ulong ticks, SpriteBatch spriteBatch)

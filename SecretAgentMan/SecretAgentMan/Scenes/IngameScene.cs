@@ -25,8 +25,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private int _waterFrameIndex;
     private int _killedSpyCount;
     private GameEventPointer _levelCompleted = new();
-    private short _currentBonusLevel;
-    private ulong _bonusReached52At;
+    private readonly MetaBonus _metaBonus;
     private int _lives;
     private ulong _diedAt;
     private int _zeroBasedLevel;
@@ -43,6 +42,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
         _roomList = new RoomList(_player, _fire.EnemyFire, 0);
         CorrectBriefcase = Game1.Random.Next(Briefcase.BriefcaseColors.Length);
         Score = 0;
+        _metaBonus = new MetaBonus();
         AddToAutoUpdate(Game1.TypeWriter);
         AddToAutoDraw(Game1.TypeWriter);
         UpdateRoomNameAndCheckClear(0);
@@ -194,17 +194,14 @@ public class IngameScene : RetroGame.Scene.IngameScene
                                 MayorResources.DoShortTalk();
                                 Game1.TypeWriter.SetText("good work!");
                                 Score += 50;
-                                _currentBonusLevel++;
+                                _metaBonus.IncreaseBonus(ticks, 1);
                             }
                             else
                             {
                                 SoundEffects.FireNoAmmo!.PlayNext();
                                 MayorResources.DoShortTalkAngry();
                                 Game1.TypeWriter.SetText("you fool!");
-                                _currentBonusLevel -= 5;
-
-                                if (_currentBonusLevel < 0)
-                                    _currentBonusLevel = 0;
+                                _metaBonus.DecreaseBonus(ticks, 5);
                             }
                         }
                     }
@@ -250,7 +247,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
             if (room.Coins.Act(ticks, _player, room.Npcs))
             {
                 Score += 50;
-                _currentBonusLevel++;
+                _metaBonus.IncreaseBonus(ticks, 1);
             }
 
             room.Ammos.Act(_player);
@@ -270,10 +267,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                         {
                             npc.Die(ticks, true);
                             _innocentKill++;
-                            _currentBonusLevel -= 2;
-
-                            if (_currentBonusLevel < 0)
-                                _currentBonusLevel = 0;
+                            _metaBonus.DecreaseBonus(ticks, 2);
 
                             switch (_innocentKill)
                             {
@@ -299,6 +293,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                         _killedSpyCount++;
                         var scoreAdded = _killedSpyCount * 5;
                         Score += scoreAdded;
+                        _metaBonus.IncreaseBonus(ticks, 1);
 
                         if (_killedSpyCount >= _roomList.SpyCount)
                         {
@@ -307,7 +302,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                             MayorResources.DoShortTalk();
                             Game1.TypeWriter.SetText("your mission is completed. well done!");
                             _levelCompleted.Occure(ticks);
-                            _currentBonusLevel++;
+                            _metaBonus.IncreaseBonus(ticks, 1);
                         }
                         else
                         {
@@ -363,16 +358,15 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
         if (!_levelCompleted.Occured && _player.AliveStatus == Character.StatusAlive)
         {
-            if (_currentBonusLevel >= 52 && _bonusReached52At <= 0)
+            if (_metaBonus.CurrentBonusLevel >= 52 && _metaBonus.BonusReached52At <= 0)
             {
-                _bonusReached52At = ticks;
+                _metaBonus.BonusReached52At = ticks;
             }
-            else if (_currentBonusLevel >= 52 && _bonusReached52At > 10)
+            else if (_metaBonus.CurrentBonusLevel >= 52 && _metaBonus.BonusReached52At > 10)
             {
-                if (ticks - _bonusReached52At > 200)
+                if (ticks - _metaBonus.BonusReached52At > 200)
                 {
-                    _bonusReached52At = 0;
-                    _currentBonusLevel = 0;
+                    _metaBonus.Reset();
                     MediaPlayer.Stop();
                     Parent.CurrentScene = new SignScene(Parent, "bonus", new BonusLevelScene(Parent, Score, AddScore));
                 }
@@ -380,6 +374,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
         }
 
         MayorResources.Act(ticks);
+        _metaBonus.Update(ticks);
         base.Update(gameTime, ticks);
     }
 
@@ -502,18 +497,11 @@ public class IngameScene : RetroGame.Scene.IngameScene
         if (room.Bomb != null)
             room.Bomb.Draw(spriteBatch);
 
-        if (_currentBonusLevel > 0)
+        var frame = _metaBonus.GetBonusGageSpriteFrameIndex();
+
+        if (frame > 0)
         {
-            var frame = _currentBonusLevel / 2;
-
-            frame = frame switch
-            {
-                < 0 => 0,
-                > 25 => 25,
-                _ => frame
-            };
-
-            if (_bonusReached52At > 10)
+            if (_metaBonus.BonusReached52At > 10)
             {
                 if (ticks % 15 < 7)
                     Game1.BonusMeter!.Draw(spriteBatch, frame, 521, 297);
@@ -525,6 +513,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
         }
         
         MayorResources.Draw(spriteBatch);
+        _metaBonus.Draw(ticks, spriteBatch, Text);
         base.Draw(gameTime, ticks, spriteBatch);
     }
 }

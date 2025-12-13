@@ -17,6 +17,7 @@ public class ObjectPositionPlaceholderList : List<ObjectPositionPlaceholder>
     public ObjectPositionPlaceholder GetRandomAcceptableDistance()
     {
         var retryCount = 0;
+
         do
         {
             retryCount++;
@@ -28,10 +29,32 @@ public class ObjectPositionPlaceholderList : List<ObjectPositionPlaceholder>
         } while (true);
     }
 
+    public ObjectPositionPlaceholder GetRandomAcceptableDistanceWidthBorder()
+    {
+        var retryCount = 0;
+
+        do
+        {
+            retryCount++;
+            var o = GetRandomWithBorder();
+
+            if (DistanceIsAcceptable(o.X, o.Y) || retryCount > 1000)
+                return o;
+
+        } while (true);
+    }
+
     public static ObjectPositionPlaceholder GetRandom()
     {
         var x = Game1.Random.Next(30, 597);
         var y = Game1.Random.Next(98, 268);
+        return new ObjectPositionPlaceholder(x, y);
+    }
+
+    public static ObjectPositionPlaceholder GetRandomWithBorder()
+    {
+        var x = Game1.Random.Next(50, 577);
+        var y = Game1.Random.Next(118, 258);
         return new ObjectPositionPlaceholder(x, y);
     }
 }

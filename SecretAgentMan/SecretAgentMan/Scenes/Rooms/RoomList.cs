@@ -163,6 +163,13 @@ public class RoomList
 
     private void AddBriefcases()
     {
+        //FÖR ATT FIXA BUGGEN MED ATT ENDAST FÖRSTA BOMBEN DÖDAR
+        var positionDebug = Rooms[0].ObjectPositions.GetRandomAcceptableDistanceWidthBorder();
+        Rooms[0].Bomb = new Bomb(positionDebug.X, positionDebug.Y, 0);
+        positionDebug = Rooms[0].ObjectPositions.GetRandomAcceptableDistanceWidthBorder();
+        Rooms[0].Briefcase = new Briefcase(Briefcase.Silver, positionDebug.X, positionDebug.Y);
+        //SLUT: FÖR ATT FIXA BUGGEN MED ATT ENDAST FÖRSTA BOMBEN DÖDAR
+
         var rooms = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         
         var silverIndex = Game1.Random.Next(0, rooms.Count);
@@ -185,23 +192,23 @@ public class RoomList
         var bombRoom = rooms[bombIndex];
         rooms.RemoveAt(bombIndex);
 
-        var position = Rooms[silverRoom].ObjectPositions.GetRandomAcceptableDistance();
+        var position = Rooms[silverRoom].ObjectPositions.GetRandomAcceptableDistanceWidthBorder();
         Rooms[silverRoom].ObjectPositions.Add(position);
         Rooms[silverRoom].Briefcase = new Briefcase(Briefcase.Silver, position.X, position.Y);
         
-        position = Rooms[blueRoom].ObjectPositions.GetRandomAcceptableDistance();
+        position = Rooms[blueRoom].ObjectPositions.GetRandomAcceptableDistanceWidthBorder();
         Rooms[blueRoom].ObjectPositions.Add(position);
         Rooms[blueRoom].Briefcase = new Briefcase(Briefcase.Blue, position.X, position.Y);
         
-        position = Rooms[redRoom].ObjectPositions.GetRandomAcceptableDistance();
+        position = Rooms[redRoom].ObjectPositions.GetRandomAcceptableDistanceWidthBorder();
         Rooms[redRoom].ObjectPositions.Add(position);
         Rooms[redRoom].Briefcase = new Briefcase(Briefcase.Red, position.X, position.Y);
         
-        position = Rooms[brownIndex].ObjectPositions.GetRandomAcceptableDistance();
+        position = Rooms[brownIndex].ObjectPositions.GetRandomAcceptableDistanceWidthBorder();
         Rooms[brownRoom].ObjectPositions.Add(position);
         Rooms[brownRoom].Briefcase = new Briefcase(Briefcase.Brown, position.X, position.Y);
 
-        position = Rooms[bombIndex].ObjectPositions.GetRandomAcceptableDistance();
+        position = Rooms[bombIndex].ObjectPositions.GetRandomAcceptableDistanceWidthBorder();
         Rooms[bombRoom].ObjectPositions.Add(position);
         Rooms[bombRoom].Bomb = new Bomb(position.X, position.Y, 0);
     }
