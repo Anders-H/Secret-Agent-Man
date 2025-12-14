@@ -70,6 +70,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     {
         var room = _roomList.GetRoom(_currentRoomIndex);
         _currentRoomName = room.DistrictName;
+        _bombKilledPlayer = false;
 
         if (room.Npcs.AllAreDead() && ticks > 200)
         {
@@ -177,6 +178,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                             if (room.Briefcase.ColorIndex != CorrectBriefcase)
                             {
                                 room.Bomb = new Bomb(room.Briefcase.IntX, room.Briefcase.IntY + 10, ticks);
+                                _bombKilledPlayer = false;
                             }
 
                             room.Briefcase = null;
