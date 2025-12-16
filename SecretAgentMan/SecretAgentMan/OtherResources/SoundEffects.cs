@@ -12,6 +12,8 @@ public static class SoundEffects
     public static SoundEffect? PlayerCoin { get; set; }
     public static SoundEffect? FireNoAmmo { get; set; }
     public static SoundEffect? AmmoBox { get; set; }
+    public static SoundEffect? ExplosionBig { get; set; }
+    public static SoundEffect? ExplosionSmall { get; set; }
 
     public static void CreateSoundEffects(RetroGame.RetroGame game)
     {
@@ -23,6 +25,8 @@ public static class SoundEffects
         PlayerCoin = new SoundEffect(game);
         FireNoAmmo = new SoundEffect(game);
         AmmoBox = new SoundEffect(game);
+        ExplosionBig = new SoundEffect(game);
+        ExplosionSmall = new SoundEffect(game);
     }
 
     public static void LoadSoundEffects()
@@ -35,5 +39,7 @@ public static class SoundEffects
         PlayerCoin!.Initialize("player_sfx_coin_1", "player_sfx_coin_2");
         FireNoAmmo!.Initialize("sfx_noammo2");
         AmmoBox!.Initialize("sfx_pickup-ammo");
+        ExplosionBig!.Initialize("sfx_explosion");
+        ExplosionSmall!.Initialize("sfx_explosion_small");
     }
 }

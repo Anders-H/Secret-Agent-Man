@@ -397,6 +397,18 @@
 /processorParam:Quality=Best
 /build:sfx_enemydeath3.wav
 
+#begin sfx_explosion_small.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx_explosion_small.wav
+
+#begin sfx_explosion.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx_explosion.wav
+
 #begin sfx_gun1.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

@@ -219,15 +219,16 @@ public class IngameScene : RetroGame.Scene.IngameScene
                         {
                             if (room.Bomb.Collide(f))
                             {
-                                room.Bomb = null;
+                                room.Bomb.FlashState = true;
                                 _fire.PlayerFire.Remove(f);
-                                SoundEffects.FireNoAmmo!.PlayNext();
+                                SoundEffects.ExplosionSmall!.PlayNext();
                                 break;
                             }
                         }
                     }
                     else if (room.Bomb.CellIndex == Bomb.FirstDeadlyCell && !_bombKilledPlayer)
                     {
+                        SoundEffects.ExplosionBig!.PlayNext();
                         _player.Die(ticks);
                         room.Npcs.Die(ticks, false);
                     }
@@ -497,7 +498,10 @@ public class IngameScene : RetroGame.Scene.IngameScene
         Game1.Frame!.Draw(spriteBatch, 0, 0, 0);
 
         if (room.Bomb != null)
-            room.Bomb.Draw(spriteBatch);
+        {
+            if (room.Bomb.Draw(spriteBatch))
+                room.Bomb = null;
+        }
 
         var frame = _metaBonus.GetBonusGageSpriteFrameIndex();
 

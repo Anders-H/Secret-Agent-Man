@@ -10,6 +10,7 @@ namespace SecretAgentMan.Sprites;
 public class Bomb : Sprite, IRetroActor
 {
     private readonly ulong _createdAt;
+    private int _flashCounter;
     public const int FirstDeadlyCell = 52;
     public const int LastIndex = 57;
     public const int CellWidth = 40;
@@ -17,6 +18,7 @@ public class Bomb : Sprite, IRetroActor
     public const int CellCount = 58;
     public int CellIndex { get; set; }
     public static RetroTexture? BombTexture { get; set; }
+    public bool FlashState { get; set; }
 
     public Bomb(int x, int y, ulong ticks)
     {
@@ -24,6 +26,8 @@ public class Bomb : Sprite, IRetroActor
         X = x;
         Y = y;
         _createdAt = ticks;
+        _flashCounter = 0;
+        FlashState = false;
     }
 
     public void Act(ulong ticks)
@@ -35,15 +39,26 @@ public class Bomb : Sprite, IRetroActor
             CellIndex++;
     }
 
-    public void Draw(SpriteBatch spriteBatch)
+    public bool Draw(SpriteBatch spriteBatch)
     {
+        if (FlashState)
+        {
+            BombTexture?.Draw(spriteBatch, FirstDeadlyCell, IntX, IntY, ColorPalette.White);
+            _flashCounter++;
+            return _flashCounter > 2;
+        }
+
         if (CellIndex <= LastIndex)
             BombTexture?.Draw(spriteBatch, CellIndex, IntX, IntY, ColorPalette.White);
+
+        return false;
     }
 
     public static void LoadContent(GraphicsDevice graphicsDevice, ContentManager content) =>
         BombTexture = RetroTexture.LoadContent(graphicsDevice, content, CellWidth, CellHeight, CellCount, "bomb40x31");
 
     public bool Collide(Fire? fire) =>
-        (fire != null) && (fire.X > X + 1 && fire.X < X + 15 && fire.Y > Y + 5 && fire.Y < Y + 20);
+        !FlashState
+            && ((fire != null)
+            && (fire.X > X + 1 && fire.X < X + 15 && fire.Y > Y + 5 && fire.Y < Y + 20));
 }

@@ -164,10 +164,10 @@ public class RoomList
     private void AddBriefcases()
     {
         //FÖR ATT FIXA BUGGEN MED ATT ENDAST FÖRSTA BOMBEN DÖDAR
-        //var positionDebug = Rooms[0].ObjectPositions.GetRandomAcceptableDistanceWidthBorder();
-        //Rooms[0].Bomb = new Bomb(positionDebug.X, positionDebug.Y, 0);
-        //positionDebug = Rooms[0].ObjectPositions.GetRandomAcceptableDistanceWidthBorder();
-        //Rooms[0].Briefcase = new Briefcase(Briefcase.Silver, positionDebug.X, positionDebug.Y);
+        var positionDebug = Rooms[0].ObjectPositions.GetRandomAcceptableDistanceWidthBorder();
+        Rooms[0].Bomb = new Bomb(positionDebug.X, positionDebug.Y, 0);
+        positionDebug = Rooms[0].ObjectPositions.GetRandomAcceptableDistanceWidthBorder();
+        Rooms[0].Briefcase = new Briefcase(Briefcase.Silver, positionDebug.X, positionDebug.Y);
         //SLUT: FÖR ATT FIXA BUGGEN MED ATT ENDAST FÖRSTA BOMBEN DÖDAR
 
         var rooms = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
