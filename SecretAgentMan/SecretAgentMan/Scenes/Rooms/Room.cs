@@ -9,6 +9,7 @@ namespace SecretAgentMan.Scenes.Rooms;
 
 public class Room
 {
+    private readonly RoomBackground _roomBackground;
     public readonly AirplaneList Airplanes;
     public Briefcase? Briefcase { get; set; }
     public string DistrictName { get; }
@@ -20,12 +21,16 @@ public class Room
 
     public Room(string districtName)
     {
+        _roomBackground = new RoomBackgroundBuilder().Build();
         Airplanes = [];
         DistrictName = districtName;
         Npcs = [];
         Coins = [];
         Ammos = [];
     }
+
+    public void DrawDecorationBackground(SpriteBatch spriteBatch) =>
+        _roomBackground.DrawDecorationBackground(spriteBatch);
 
     public void AddAirplane(int count)
     {

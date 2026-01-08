@@ -398,7 +398,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     public override void Draw(GameTime gameTime, ulong ticks, SpriteBatch spriteBatch)
     {
         var room = _roomList.GetRoom(_currentRoomIndex);
-        Game1.Decoration.Draw(spriteBatch, _currentRoomIndex);
+        room.DrawDecorationBackground(spriteBatch);
         IngameBackgroundResources.WaterTexture?.Draw(spriteBatch, _waterFrameIndex, 0, 91);
 
         if (_askQuitMode)

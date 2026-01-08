@@ -11,6 +11,7 @@ using SecretAgentMan.OtherResources;
 using SecretAgentMan.Scenes;
 using SecretAgentMan.Scenes.GameOverScenes;
 using SecretAgentMan.Scenes.IntroductionScenes;
+using SecretAgentMan.Scenes.Rooms;
 using SecretAgentMan.Sprites;
 
 namespace SecretAgentMan;
@@ -26,7 +27,6 @@ public class Game1 : RetroGame.RetroGame
     public static RetroTexture? LivesSymbolTexture { get; set; }
     public static RetroTexture? AmmoTexture { get; set; }
     public static RetroTexture? CutSceneFrame { get; set; }
-    public static Decoration Decoration { get; set; }
     public static Random Random;
     public static bool Cheat = false;
     public static int LastScore;
@@ -44,7 +44,6 @@ public class Game1 : RetroGame.RetroGame
         LastScore = 0;
         TodaysBestScore = 0;
         HighScore = new HighScoreList(640, 380, true, true, HighScoreViewY);
-        Decoration = new Decoration();
         TypeWriter = new TypeWriter(70, 298, 6, ColorPalette.White);
         CurrentIngameScene = null;
     }
@@ -75,6 +74,7 @@ public class Game1 : RetroGame.RetroGame
         LivesSymbolTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 11, 7, 1, "lives11x7");
         AmmoTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 4, 7, 1, "ammo4x7");
         CutSceneFrame = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "cutsceneframe");
+        RoomBackground.LoadContent(GraphicsDevice, Content);
         StartSceneResources.LoadContent(GraphicsDevice, Content);
         Coin.LoadContent(GraphicsDevice, Content);
         AmmoBox.LoadContent(GraphicsDevice, Content);
