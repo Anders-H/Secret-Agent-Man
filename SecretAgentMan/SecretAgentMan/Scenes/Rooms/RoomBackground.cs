@@ -217,6 +217,7 @@ public class RoomBackground
 
     public void DrawDecorationBackground(SpriteBatch spriteBatch)
     {
-
+        foreach (var roomBuilding in RoomBuildings)
+            roomBuilding.Texture.Draw(spriteBatch, 0, roomBuilding.X, roomBuilding.Y);
     }
 }

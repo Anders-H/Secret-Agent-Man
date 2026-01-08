@@ -28,11 +28,11 @@ public class RoomBackgroundBuilder
 
         } while (true);
 
-        currentX = x + gap + roomBackground.RoomBuildings[0].X;
+        currentX = gap + roomBackground.RoomBuildings[0].X;
 
         do
         {
-            var building = GetRandomBuilding(x - width);
+            var building = GetRandomBuilding(width - currentX);
 
             if (building == null)
                 break;
