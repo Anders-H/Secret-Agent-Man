@@ -8,6 +8,14 @@ namespace SecretAgentMan.Scenes.Rooms;
 
 public class RoomBackground
 {
+    public static RetroTexture? Sky1 { get; private set; }
+    public static RetroTexture? Sky2 { get; private set; }
+    public static RetroTexture? Sky3 { get; private set; }
+    public static RetroTexture? Sky4 { get; private set; }
+    public static RetroTexture? Bg1 { get; private set; }
+    public static RetroTexture? Bg2 { get; private set; }
+    public static RetroTexture? Bg3 { get; private set; }
+    public static RetroTexture? Bg4 { get; private set; }
     public const int Count = 62;
     public static RetroTexture? Building1_18_35 { get; private set; }
     public static RetroTexture? Building2_24_19 { get; private set; }
@@ -71,6 +79,8 @@ public class RoomBackground
     public static RetroTexture? Building60_61_53 { get; private set; }
     public static RetroTexture? Building61_21_38 { get; private set; }
     public static RetroTexture? Building62_22_46 { get; private set; }
+    public RetroTexture? Sky { get; set; }
+    public RetroTexture? Bg { get; set; }
     public List<Building> RoomBuildings { get; }
 
     public RoomBackground()
@@ -80,6 +90,16 @@ public class RoomBackground
 
     public static void LoadContent(GraphicsDevice graphicsDevice, ContentManager content)
     {
+        Sky1 = RetroTexture.LoadContent(graphicsDevice, content, 640, 91, 1, "bg/sky/Sky1_640-91");
+        Sky2 = RetroTexture.LoadContent(graphicsDevice, content, 640, 91, 1, "bg/sky/Sky2_640-91");
+        Sky3 = RetroTexture.LoadContent(graphicsDevice, content, 640, 91, 1, "bg/sky/Sky3_640-91");
+        Sky4 = RetroTexture.LoadContent(graphicsDevice, content, 640, 91, 1, "bg/sky/Sky4_640-91");
+
+        Bg1 = RetroTexture.LoadContent(graphicsDevice, content, 640, 91, 1, "bg/bg/BG1_640-91");
+        Bg2 = RetroTexture.LoadContent(graphicsDevice, content, 640, 91, 1, "bg/bg/BG2_640-91");
+        Bg3 = RetroTexture.LoadContent(graphicsDevice, content, 640, 91, 1, "bg/bg/BG3_640x91");
+        Bg4 = RetroTexture.LoadContent(graphicsDevice, content, 640, 91, 1, "bg/bg/BG4_640-91");
+
         Building1_18_35 = RetroTexture.LoadContent(graphicsDevice, content, 18, 35, 1, "bg/Building1_18-35");
         Building2_24_19 = RetroTexture.LoadContent(graphicsDevice, content, 24, 19, 1, "bg/Building2_24-19");
         Building3_18_61 = RetroTexture.LoadContent(graphicsDevice, content, 18, 61, 1, "bg/Building3_18-61");
@@ -217,6 +237,9 @@ public class RoomBackground
 
     public void DrawDecorationBackground(SpriteBatch spriteBatch)
     {
+        Sky?.Draw(spriteBatch, 0, 0, 0);
+        Bg?.Draw(spriteBatch, 0, 0, 0);
+
         foreach (var roomBuilding in RoomBuildings)
             roomBuilding.Texture.Draw(spriteBatch, 0, roomBuilding.X, roomBuilding.Y);
     }
