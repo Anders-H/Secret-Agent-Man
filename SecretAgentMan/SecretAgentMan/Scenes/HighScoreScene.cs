@@ -41,6 +41,7 @@ public class HighScoreScene : Scene
 
         MediaPlayer.Stop();
         MediaPlayer.Play(Songs.HiScoreSong!);
+        MediaPlayer.IsRepeating = true;
     }
 
     public override void Update(GameTime gameTime, ulong ticks)
