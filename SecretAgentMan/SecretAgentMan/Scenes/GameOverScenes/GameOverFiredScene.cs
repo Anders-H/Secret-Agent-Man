@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using RetroGame;
+using RetroGame.Audio;
 using RetroGame.RetroTextures;
 using RetroGame.Scene;
 using RetroGame.Text;
@@ -51,10 +52,7 @@ public class GameOverFiredScene : Scene
 
     public override void Update(GameTime gameTime, ulong ticks)
     {
-        if (ticks == 100 && Game1.HighScore.Qualify(Game1.LastScore))
-            MediaPlayer.Play(Songs.GameOverSong);
-        if (ticks == 350 && !Game1.HighScore.Qualify(Game1.LastScore))
-            MediaPlayer.Play(Songs.GameOverSong);
+        Jukebox.PlayIf(ticks == 350 && !Game1.HighScore.Qualify(Game1.LastScore), Songs.GameOverSong, false);
 
         switch (_cellIndex)
         {

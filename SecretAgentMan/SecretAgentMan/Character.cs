@@ -66,8 +66,7 @@ public abstract class Character : Sprite
         var fireX = fire.X + 12;
         var fireY = fire.Y + 12;
         var xLimitLeft = IntX + 3;
-        var xLimitRight = IntX + 21
-            ;
+        var xLimitRight = IntX + 21;
         if (fireX < xLimitLeft || fireX > xLimitRight)
             return false;
 

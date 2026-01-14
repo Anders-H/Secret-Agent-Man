@@ -41,13 +41,11 @@ public class IngameScene : RetroGame.Scene.IngameScene
         _player = new Player(_fire.PlayerFire);
         _roomList = new RoomList(_player, _fire.EnemyFire, 0);
         CorrectBriefcase = Game1.Random.Next(Briefcase.BriefcaseColors.Length);
-        Score = 0;
         _metaBonus = new MetaBonus();
         AddToAutoUpdate(Game1.TypeWriter);
         AddToAutoDraw(Game1.TypeWriter);
         UpdateRoomNameAndCheckClear(0);
         _lives = 2;
-        MediaPlayer.Stop();
         ZeroBasedLevel = 0;
     }
 

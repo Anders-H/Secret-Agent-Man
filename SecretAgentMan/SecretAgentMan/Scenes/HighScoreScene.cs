@@ -3,22 +3,19 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using RetroGame;
-using RetroGame.Input;
+using RetroGame.Audio;
 using RetroGame.Scene;
-using RetroGame.Text;
 using SecretAgentMan.OtherResources;
 using SecretAgentMan.Scenes.GameOverScenes;
 using SecretAgentMan.Scenes.IntroductionScenes;
 
 namespace SecretAgentMan.Scenes;
 
-public class HighScoreScene : Scene
+public class HighScoreScene : TextAndKeyboardScene
 {
     private readonly int _score;
     private bool _qualify;
     private GameEventPointer _editEnded = new();
-    private readonly TextBlock _textBlock;
-    private KeyboardStateChecker Keyboard { get; }
     private const string BestPlayer = "you are one of the best players today. enter your name in the highscore list! well done, sir!";
     private int _bestPlayerX;
     private readonly GameOverReason _gameOverReason;
@@ -28,20 +25,14 @@ public class HighScoreScene : Scene
     {
         _gameOverReason = gameOverReason;
         _bestPlayerX = 650;
-        Keyboard = new KeyboardStateChecker();
         _score = score;
-        _textBlock = new TextBlock(CharacterSet.Uppercase);
-        AddToAutoUpdate(Keyboard);
         Game1.HighScore.ResetVisuals(Game1.HighScoreEditY);
+        Jukebox.PlayWithLoop(Songs.HiScoreSong);
 
         if (_gameOverReason == GameOverReason.PlayerFired)
             _gameOverY = 200;
         else if (_gameOverReason == GameOverReason.PlayerDied)
             _gameOverY = 0;
-
-        MediaPlayer.Stop();
-        MediaPlayer.Play(Songs.HiScoreSong!);
-        MediaPlayer.IsRepeating = true;
     }
 
     public override void Update(GameTime gameTime, ulong ticks)
@@ -118,7 +109,7 @@ public class HighScoreScene : Scene
                 break;
         }
 
-        _textBlock.DirectDraw(spriteBatch, _bestPlayerX, 70, BestPlayer, ColorPalette.Green);
+        TextBlock.DirectDraw(spriteBatch, _bestPlayerX, 70, BestPlayer, ColorPalette.Green);
         Game1.HighScore.Draw(spriteBatch, ticks);
         base.Draw(gameTime, ticks, spriteBatch);
     }
