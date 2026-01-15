@@ -100,12 +100,12 @@ public class HighScoreScene : TextAndKeyboardScene
         switch (_gameOverReason)
         {
             case GameOverReason.PlayerFired:
-                GameOverFiredScene.GameOverGraphics4!.Draw(spriteBatch, 0, 0, 0);
-                GameOverFiredScene.GameOverGraphics3!.Draw(spriteBatch, 0, 0, _gameOverY);
+                GameOverFiredScene.GameOverGraphics.Texture4!.Draw(spriteBatch, 0, 0, 0);
+                GameOverFiredScene.GameOverGraphics.Texture3!.Draw(spriteBatch, 0, 0, _gameOverY);
                 break;
             case GameOverReason.PlayerDied:
-                GameOverFiredScene.GameOverGraphics2!.Draw(spriteBatch, 0, 0, 0);
-                GameOverFiredScene.GameOverGraphics3!.Draw(spriteBatch, 0, 0, _gameOverY);
+                GameOverFiredScene.GameOverGraphics.Texture2!.Draw(spriteBatch, 0, 0, 0);
+                GameOverFiredScene.GameOverGraphics.Texture3!.Draw(spriteBatch, 0, 0, _gameOverY);
                 break;
         }
 

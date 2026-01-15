@@ -45,22 +45,8 @@ public class RoomBackgroundBuilder
 
         } while (true);
 
-        roomBackground.Sky = Game1.Random.Next(0, 4) switch
-        {
-            0 => RoomBackground.Sky1,
-            1 => RoomBackground.Sky2,
-            2 => RoomBackground.Sky3,
-            _ => RoomBackground.Sky4
-        };
-
-        roomBackground.Bg = Game1.Random.Next(0, 4) switch
-        {
-            0 => RoomBackground.Bg1,
-            1 => RoomBackground.Bg2,
-            2 => RoomBackground.Bg3,
-            _ => RoomBackground.Bg4
-        };
-
+        roomBackground.Sky = RoomBackground.SkySources.GetTexture(Game1.Random.Next(0, 4));
+        roomBackground.Bg = RoomBackground.BgSources.GetTexture(Game1.Random.Next(0, 4));
         return roomBackground;
     }
 
