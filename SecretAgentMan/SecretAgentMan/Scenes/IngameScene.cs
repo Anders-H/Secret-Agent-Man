@@ -19,7 +19,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private bool _askQuitMode;
     private int _currentRoomIndex;
     private readonly Player _player;
-    private readonly RoomList _roomList;
+    private RoomList _roomList;
     private string _currentRoomName = "";
     private readonly IngameFire _fire = new();
     private int _waterFrameIndex;
@@ -163,6 +163,8 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
                 room.Act(ticks);
 
+                // Följande extra logik gäller om vi är i ett rum som innehåller en portfölj.
+
                 if (room.Briefcase != null)
                 {
                     if (room.Briefcase.IsPickedUp)
@@ -184,6 +186,12 @@ public class IngameScene : RetroGame.Scene.IngameScene
                     }
                     else
                     {
+                        /*
+                        Här kontrollerar vi om spelaren kolliderar med en portfölj.
+                        Om så är fallet, ska vi kolla om det är rätt färg och ge bonus eller
+                        lägga ut en bomb om det är fel färg.
+                        */
+
                         if (room.Briefcase.Collide(_player))
                         {
                             room.Briefcase.PickedUpAt = ticks;
@@ -206,6 +214,8 @@ public class IngameScene : RetroGame.Scene.IngameScene
                         }
                     }
                 }
+
+                // Följande extra logik gäller om rummet innehåller en bomb. Det kan inträffa under spelets gång.
 
                 if (room.Bomb != null)
                 {
@@ -387,6 +397,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
         MediaPlayer.Stop();
         _levelCompleted.Reset();
         ZeroBasedLevel++;
+        _roomList = new RoomList(_player, _fire.EnemyFire, ZeroBasedLevel);
 
         Parent.CurrentScene = ZeroBasedLevel <= 1
             ? new SignScene(Parent, "act i", new CutScene1(Parent, new SignScene(Parent, $"level {ZeroBasedLevel + 1}", Game1.CurrentIngameScene!)))
@@ -396,6 +407,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     public override void Draw(GameTime gameTime, ulong ticks, SpriteBatch spriteBatch)
     {
         var room = _roomList.GetRoom(_currentRoomIndex);
+        _currentRoomName = room.DistrictName;
         room.DrawDecorationBackground(spriteBatch);
         IngameBackgroundResources.WaterTexture?.Draw(spriteBatch, _waterFrameIndex, 0, 91);
 

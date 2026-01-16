@@ -226,6 +226,7 @@ _pkginfo.txt
 *.appx
 *.appxbundle
 *.appxupload
+*settings.php
 
 # Visual Studio cache files
 # files ending in .cache can be ignored
@@ -400,3 +401,5 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/SecretAgentMan/sam-online-highscore-toolkit/Settings.cs
+Website/highscore/config.php

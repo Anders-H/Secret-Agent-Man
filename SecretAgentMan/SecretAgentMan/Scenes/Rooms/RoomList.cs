@@ -100,7 +100,8 @@ public class RoomList
 
                 break;
             default:
-                throw new SystemException("What level?!?");
+                // TODO: Procedurellt genererade grejer
+                break;
         }
 
         for (var i = 0; i < 10; i++)
