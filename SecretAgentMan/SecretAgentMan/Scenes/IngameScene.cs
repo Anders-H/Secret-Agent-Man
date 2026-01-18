@@ -346,6 +346,10 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 _player.DieIfHit(_fire.EnemyFire, ticks);
             }
         }
+        else if (room.Bomb != null)
+        {
+            room.Bomb.Act(ticks);
+        }
 
         if (_player.AliveStatus == Character.StatusDying)
             _player.Tick(ticks);
