@@ -26,6 +26,10 @@ public class NpcList : List<Npc>
             npc.PutTheGunAway();
     }
 
-    public bool AllAreDead() =>
-        this.Count(x => x.Status == Npc.StatusSpyUndetected) + this.Count(x => x.Status == Npc.StatusSpyDetected) <= 0;
+    public bool AllAreDead()
+    {
+        var undetected = this.Count(x => x.Status == Npc.StatusSpyUndetected && x.AliveStatus == Character.StatusAlive);
+        var detected = this.Count(x => x.Status == Npc.StatusSpyDetected && x.AliveStatus == Character.StatusAlive);
+        return detected + undetected <= 0;
+    }
 }

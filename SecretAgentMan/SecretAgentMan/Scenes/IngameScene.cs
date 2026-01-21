@@ -31,6 +31,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private int _zeroBasedLevel;
     private string _levelString = "";
     private bool _bombKilledPlayer;
+    private bool _briefcaseMissionCompleted;
     public const int SpriteUpperLimit = 98;
     public const int SpriteLowerLimit = 268;
     public const int PlayerSpriteLowerLimit = 274;
@@ -45,6 +46,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
         AddToAutoUpdate(Game1.TypeWriter);
         AddToAutoDraw(Game1.TypeWriter);
         UpdateRoomNameAndCheckClear(0);
+        _briefcaseMissionCompleted = false;
         _lives = 2;
         ZeroBasedLevel = 0;
     }
@@ -71,10 +73,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
         _bombKilledPlayer = false;
 
         if (room.Npcs.AllAreDead() && ticks > 200)
-        {
-            MayorResources.DoShortTalk();
             Game1.TypeWriter.SetText("this area is clear");
-        }
     }
 
     public override void Update(GameTime gameTime, ulong ticks)
@@ -86,6 +85,11 @@ public class IngameScene : RetroGame.Scene.IngameScene
             MayorResources.DoShortTalk();
             Game1.TypeWriter.SetText($"acquire the {Briefcase.GetColorName(CorrectBriefcase)} {Briefcase.GetRandomTerm()}.");
             Game1.TypeWriter.SetText($"the {Briefcase.GetColorName(CorrectBriefcase)} one. and do not mess this up!");
+        }
+        else if (ticks == 5000 && !_briefcaseMissionCompleted)
+        {
+            MayorResources.DoShortTalk();
+            Game1.TypeWriter.SetText($"remember to acquire the {Briefcase.GetColorName(CorrectBriefcase)} {Briefcase.GetRandomTerm()}.");
         }
 
         if (_player.AliveStatus == Character.StatusAlive)
@@ -175,7 +179,11 @@ public class IngameScene : RetroGame.Scene.IngameScene
                         }
                         else
                         {
-                            if (room.Briefcase.ColorIndex != CorrectBriefcase)
+                            if (room.Briefcase.ColorIndex == CorrectBriefcase)
+                            {
+                                _briefcaseMissionCompleted = true;
+                            }
+                            else
                             {
                                 room.Bomb = new Bomb(room.Briefcase.IntX, room.Briefcase.IntY + 10, ticks);
                                 _bombKilledPlayer = false;
@@ -401,6 +409,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
         MediaPlayer.Stop();
         _levelCompleted.Reset();
         ZeroBasedLevel++;
+        _briefcaseMissionCompleted = false;
         _roomList = new RoomList(_player, _fire.EnemyFire, ZeroBasedLevel);
 
         Parent.CurrentScene = ZeroBasedLevel <= 1
@@ -484,6 +493,9 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
         Text.DirectDraw(spriteBatch, 544, 323, _levelString, ColorPalette.White);
 
+        if (ticks > 500 && !_briefcaseMissionCompleted && ticks%60 < 30)
+            Briefcase.Draw(spriteBatch, CorrectBriefcase, 497, 298);
+
         switch (_lives)
         {
             case 2:
@@ -534,6 +546,11 @@ public class IngameScene : RetroGame.Scene.IngameScene
         
         MayorResources.Draw(spriteBatch);
         _metaBonus.Draw(ticks, spriteBatch, Text);
+
+#if DEBUG
+        Text.DirectDraw(spriteBatch, 12, 100, $"ticks: {ticks}", ColorPalette.White);
+#endif
+
         base.Draw(gameTime, ticks, spriteBatch);
     }
 }

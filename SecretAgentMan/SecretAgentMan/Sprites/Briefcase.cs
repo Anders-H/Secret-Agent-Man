@@ -60,4 +60,7 @@ public class Briefcase : Sprite, IRetroActor
 
     public void Draw(SpriteBatch spriteBatch) =>
         BriefcaseTexture?.Draw(spriteBatch, ColorIndex, IntX, IntY, ColorPalette.White);
+
+    public static void Draw(SpriteBatch spriteBatch, int colorIndex, int x, int y) =>
+        BriefcaseTexture?.Draw(spriteBatch, colorIndex, x, y, ColorPalette.White);
 }
