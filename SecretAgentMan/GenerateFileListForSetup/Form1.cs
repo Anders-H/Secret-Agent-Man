@@ -12,8 +12,8 @@ public partial class Form1 : Form
     private void Form1_Load(object sender, EventArgs e)
     {
         var s = new StringBuilder();
-        s.AppendLine(@"Source: ""D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentManLoader\bin\Release\net8.0-windows\{#MyAppExeName}""; DestDir: ""{app}""; Flags: ignoreversion");
-        var loaderDirectory = new DirectoryInfo(@"D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentManLoader\bin\Release\net8.0-windows\");
+        s.AppendLine(@"Source: ""D:\GitRepos\Secret-Agent-Man\SecretAgentMan\PublishedProgram\{#MyAppExeName}""; DestDir: ""{app}""; Flags: ignoreversion");
+        var loaderDirectory = new DirectoryInfo(@"D:\GitRepos\Secret-Agent-Man\SecretAgentMan\PublishedProgram\");
 
         foreach (var fileInfo in loaderDirectory.GetFiles())
         {
@@ -23,10 +23,10 @@ public partial class Form1 : Form
             if (fileInfo.Name.EndsWith(".pdb", StringComparison.CurrentCultureIgnoreCase))
                 continue;
 
-            s.AppendLine($@"Source: ""D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentManLoader\bin\Release\net8.0-windows\{fileInfo.Name}""; DestDir: ""{{app}}""; Flags: ignoreversion");
+            s.AppendLine($@"Source: ""D:\GitRepos\Secret-Agent-Man\SecretAgentMan\PublishedProgram\{fileInfo.Name}""; DestDir: ""{{app}}""; Flags: ignoreversion");
         }
 
-        var gameDirectory = new DirectoryInfo(@"D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\");
+        var gameDirectory = new DirectoryInfo(@"D:\GitRepos\Secret-Agent-Man\SecretAgentMan\PublishedProgram\");
 
         foreach (var fileInfo in gameDirectory.GetFiles())
         {
@@ -36,10 +36,10 @@ public partial class Form1 : Form
             if (fileInfo.Name.EndsWith(".pdb", StringComparison.CurrentCultureIgnoreCase))
                 continue;
 
-            s.AppendLine($@"Source: ""D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\{fileInfo.Name}""; DestDir: ""{{app}}""; Flags: ignoreversion");
+            s.AppendLine($@"Source: ""D:\GitRepos\Secret-Agent-Man\SecretAgentMan\PublishedProgram\{fileInfo.Name}""; DestDir: ""{{app}}""; Flags: ignoreversion");
         }
 
-        var contentDirectory = new DirectoryInfo(@"D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\");
+        var contentDirectory = new DirectoryInfo(@"D:\GitRepos\Secret-Agent-Man\SecretAgentMan\PublishedProgram\Content\");
 
         foreach (var fileInfo in contentDirectory.GetFiles())
         {
@@ -49,7 +49,7 @@ public partial class Form1 : Form
             if (fileInfo.Name.EndsWith(".pdb", StringComparison.CurrentCultureIgnoreCase))
                 continue;
 
-            s.AppendLine($@"Source: ""D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\{fileInfo.Name}""; DestDir: ""{{app}}\Content""; Flags: ignoreversion");
+            s.AppendLine($@"Source: ""D:\GitRepos\Secret-Agent-Man\SecretAgentMan\PublishedProgram\Content\{fileInfo.Name}""; DestDir: ""{{app}}\Content""; Flags: ignoreversion");
         }
 
         textBox1.Text = s.ToString();

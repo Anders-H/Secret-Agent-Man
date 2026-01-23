@@ -386,6 +386,8 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Secrets
 /SecretAgentMan/sam-online-highscore-toolkit/Settings.cs
-Website/highscore/config.php
 /SecretAgentMan/sam-online-highscore-toolkit/production-calls.http
+/Website/highscore/config.php
