@@ -3,4 +3,5 @@
 public interface ISettings
 {
     string Password { get; }
+    string BaseUrl { get; }
 }
