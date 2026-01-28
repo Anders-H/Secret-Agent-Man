@@ -11,9 +11,7 @@ public sealed class HighscoreServicesTests
         var response = new HighscoreServices().GetGlobalHighscores().Result;
 
         foreach (var x in response)
-        {
-            Console.WriteLine($"{x.Position} - {x.Score} - {x.Date} - {x.PlayerName}");
-        }
+            System.Diagnostics.Debug.WriteLine($"{x.Position} - {x.Score} - {x.Date} - {x.PlayerName}");
     }
 
     [TestMethod]
@@ -22,8 +20,16 @@ public sealed class HighscoreServicesTests
         var response = GlobalHighscoreList.CreateSubtitleMessage("this is a test subtitle message");
 
         foreach (var x in response)
-        {
-            Console.WriteLine($"{x.Position} - {x.Score} - {x.Date} - {x.PlayerName}");
-        }
+            System.Diagnostics.Debug.WriteLine($"{x.Position} - {x.Score} - {x.Date} - {x.PlayerName}");
+    }
+
+    [TestMethod]
+    public void SaveHighscoreEntry()
+    {
+        var response = new HighscoreServices().SaveGlobalHighscoreEntry(342, "tst").Result;
+
+        foreach (var x in response)
+            System.Diagnostics.Debug.WriteLine($"{x.Position} - {x.Score} - {x.Date} - {x.PlayerName}");
+
     }
 }
