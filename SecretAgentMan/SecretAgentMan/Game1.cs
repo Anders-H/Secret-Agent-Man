@@ -7,6 +7,7 @@ using RetroGame;
 using RetroGame.HighScore;
 using RetroGame.RetroTextures;
 using RetroGame.Text;
+using sam_online_highscore_toolkit;
 using SecretAgentMan.OtherResources;
 using SecretAgentMan.Scenes;
 using SecretAgentMan.Scenes.GameOverScenes;
@@ -37,9 +38,11 @@ public class Game1 : RetroGame.RetroGame
     public static TypeWriter TypeWriter { get; }
     public static IngameScene? CurrentIngameScene { get; set; }
     public static int BonusRoundSeconds { get; set; }
+    public static GlobalHighscoreList GlobalHighscores { get; set; }
 
     static Game1()
     {
+        GlobalHighscores = [];
         Random = new Random();
         LastScore = 0;
         TodaysBestScore = 0;

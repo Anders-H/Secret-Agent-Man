@@ -5,5 +5,6 @@ public enum StartSceneState
     Logo,
     HighScore,
     Instructions,
-    Credits
+    Credits,
+    GlobalHighScore
 }

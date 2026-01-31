@@ -32,6 +32,36 @@ public class HighscoreServices
         }
     }
 
+    public GlobalHighscoreList GetGlobalHighscoresSync()
+    {
+        ISettings settings = new Settings();
+        using var httpClient = new HttpClient();
+        return GetGlobalHighscoresSync(settings, httpClient);
+    }
+
+    public GlobalHighscoreList GetGlobalHighscoresSync(ISettings settings, HttpClient httpClient)
+    {
+        try
+        {
+            var data = httpClient.GetStringAsync($"{settings.BaseUrl}gethighscore.php?format=csv").Result;
+            var records = data.Split(';', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            var result = new GlobalHighscoreList();
+            var pos = 0;
+
+            foreach (var record in records)
+            {
+                pos++;
+                var parts = record.Split('|', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+                result.Add(new GlobalHighscore(pos, int.Parse(parts[0]), parts[1], parts[2]));
+            }
+            return result;
+        }
+        catch
+        {
+            return GlobalHighscoreList.CreateSubtitleMessage("failed to download global highscore list");
+        }
+    }
+
     public async Task<GlobalHighscoreList> SaveGlobalHighscoreEntry(int score, string playerName)
     {
         ISettings settings = new Settings();

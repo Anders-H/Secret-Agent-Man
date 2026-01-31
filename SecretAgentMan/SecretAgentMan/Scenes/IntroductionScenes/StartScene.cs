@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
@@ -8,7 +6,10 @@ using RetroGame;
 using RetroGame.Input;
 using RetroGame.Scene;
 using RetroGame.Text;
+using sam_online_highscore_toolkit;
 using SecretAgentMan.OtherResources;
+using System;
+using System.Collections.Generic;
 
 namespace SecretAgentMan.Scenes.IntroductionScenes;
 
@@ -33,6 +34,8 @@ public class StartScene : Scene
 
     public StartScene(RetroGame.RetroGame parent, int lastScore, int todaysBest) : base(parent)
     {
+        var highscoreService = new HighscoreServices();
+        Game1.GlobalHighscores = highscoreService.GetGlobalHighscoresSync();
         _gunX = 610;
 
         _logoImageList =
@@ -105,6 +108,9 @@ public class StartScene : Scene
                 _state = StartSceneState.Credits;
                 break;
             case StartSceneState.Credits when _partTick % 750 == 0:
+                _state = StartSceneState.GlobalHighScore;
+                break;
+            case StartSceneState.GlobalHighScore when _partTick % 800 == 0:
                 _state = StartSceneState.Logo;
                 break;
         }
@@ -183,6 +189,26 @@ public class StartScene : Scene
                 break;
             case StartSceneState.Credits:
                 StartSceneResources.CreditTexture!.Draw(spriteBatch, 0, 156, 110);
+                break;
+            case StartSceneState.GlobalHighScore:
+                const string header = "all time best players";
+                var allTimeHeaderX = 319 - ((header.Length * 8) / 2);
+                var itemX = 319 - (("01 - 2020-01-01 - aaa - 9999999".Length * 8) / 2);
+                var y = 100;
+                _textBlock.DirectDraw(spriteBatch, allTimeHeaderX, y, header, ColorPalette.Yellow);
+                y += 16;
+
+                for (var i = 0; i < 25; i++)
+                {
+                    if (i >= Game1.GlobalHighscores.Count)
+                        break;
+
+                    var record = Game1.GlobalHighscores[i];
+                    var recordString = $"{i + 1:00} - {record.Date} - {record.PlayerName} - {record.Score:0000000}";
+                    _textBlock.DirectDraw(spriteBatch, itemX, y, recordString, ColorPalette.LightGrey);
+                    y += 8;
+                }
+                
                 break;
             default:
                 throw new ArgumentOutOfRangeException($"StartScene.Draw: {_state}");

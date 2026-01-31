@@ -26,7 +26,7 @@ public sealed class HighscoreServicesTests
     [TestMethod]
     public void SaveHighscoreEntry()
     {
-        var response = new HighscoreServices().SaveGlobalHighscoreEntry(342, "tst").Result;
+        var response = new HighscoreServices().SaveGlobalHighscoreEntry(341, "xxx").Result;
 
         foreach (var x in response)
             System.Diagnostics.Debug.WriteLine($"{x.Position} - {x.Score} - {x.Date} - {x.PlayerName}");

@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Media;
 using RetroGame;
 using RetroGame.Audio;
 using RetroGame.Scene;
+using sam_online_highscore_toolkit;
 using SecretAgentMan.OtherResources;
 using SecretAgentMan.Scenes.GameOverScenes;
 using SecretAgentMan.Scenes.IntroductionScenes;
@@ -20,6 +21,8 @@ public class HighScoreScene : TextAndKeyboardScene
     private int _bestPlayerX;
     private readonly GameOverReason _gameOverReason;
     private int _gameOverY;
+    private string _newEntry = "";
+    private bool _newEntrySaved;
 
     public HighScoreScene(RetroGame.RetroGame parent, int score, GameOverReason gameOverReason) : base(parent)
     {
@@ -77,6 +80,16 @@ public class HighScoreScene : TextAndKeyboardScene
         else if (_editEnded.OccuredTicksAgo(ticks, 100) && (Keyboard.IsKeyPressed(Keys.Escape) || Keyboard.IsFirePressed()))
         {
             MediaPlayer.Stop();
+
+            _newEntry = Game1.HighScore.TypedName;
+
+            if (!string.IsNullOrWhiteSpace(_newEntry) && !_newEntrySaved)
+            {
+                _newEntrySaved = true;
+                var highscoreServices = new HighscoreServices();
+                _ = highscoreServices.SaveGlobalHighscoreEntry(_score, _newEntry);
+            }
+
             Parent.CurrentScene = new StartScene(Parent, _score, Game1.TodaysBestScore);
         }
 
