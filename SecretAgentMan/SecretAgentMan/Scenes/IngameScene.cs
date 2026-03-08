@@ -37,10 +37,10 @@ public class IngameScene : RetroGame.Scene.IngameScene
     public const int PlayerSpriteLowerLimit = 274;
     public int CorrectBriefcase { get; set; }
 
-    public IngameScene(RetroGame.RetroGame parent) : base(parent)
+    public IngameScene(RetroGame.RetroGame parent, int zeroBasedStartLevel) : base(parent)
     {
         _player = new Player(_fire.PlayerFire);
-        _roomList = new RoomList(_player, _fire.EnemyFire, 0);
+        _roomList = new RoomList(_player, _fire.EnemyFire, zeroBasedStartLevel);
         CorrectBriefcase = Game1.Random.Next(Briefcase.BriefcaseColors.Length);
         _metaBonus = new MetaBonus();
         AddToAutoUpdate(Game1.TypeWriter);
@@ -48,7 +48,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
         UpdateRoomNameAndCheckClear(0);
         _briefcaseMissionCompleted = false;
         _lives = 2;
-        ZeroBasedLevel = 0;
+        ZeroBasedLevel = zeroBasedStartLevel;
     }
 
     public override void BeginScene()

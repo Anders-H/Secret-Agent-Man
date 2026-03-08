@@ -100,7 +100,22 @@ public class RoomList
 
                 break;
             default:
-                // TODO: Procedurellt genererade grejer
+                {
+                    // Overwrite names.
+                    var fantasyNameGenerator = new FantasyGameNameGenerator.NameGenerator();
+
+                    for (var i = 0; i < names.Length; i++)
+                        names[i] = fantasyNameGenerator.GenerateName().ToLower();
+
+                    // Overwrite NPC count.
+                    for (var i = 0; i < innocentCount.Length; i++)
+                        innocentCount[i] = Game1.Random.Next(30) + 1;
+
+                    // Overwrite spy count.
+                    for (var i = 0; i < innocentCount.Length; i++)
+                        innocentCount[i] = Game1.Random.Next(10 * (i * 1)) + 1;
+                }
+
                 break;
         }
 
@@ -216,35 +231,67 @@ public class RoomList
 
     private void AddCoins(int level, int roomIndex, ref Room room)
     {
-        var coinCountInConfig = Game1.Settings!.GetValue($"Level{level}Coins");
-        var parts = coinCountInConfig.Split(',');
-        var coinsCount = new int[10];
+        var settingName = $"Level{level}Coins";
 
-        for (var i = 0; i < coinsCount.Length; i++)
-            coinsCount[i] = int.Parse(parts[i]);
-
-        for (var j = 0; j < coinsCount[roomIndex]; j++)
+        if (Game1.Settings == null || !Game1.Settings.HasSetting(settingName))
         {
-            var position = room.ObjectPositions.GetRandomAcceptableDistance();
-            room.ObjectPositions.Add(position);
-            room.Coins.Add(new Coin(position.X, position.Y + 15, 0));
+            var coinsCount = Game1.Random.Next(10);
+
+            for (var j = 0; j < coinsCount; j++)
+            {
+                var position = room.ObjectPositions.GetRandomAcceptableDistance();
+                room.ObjectPositions.Add(position);
+                room.Coins.Add(new Coin(position.X, position.Y + 15, 0));
+            }
+        }
+        else
+        {
+            var coinCountInConfig = Game1.Settings!.GetValue($"Level{level}Coins");
+            var parts = coinCountInConfig.Split(',');
+            var coinsCount = new int[10];
+
+            for (var i = 0; i < coinsCount.Length; i++)
+                coinsCount[i] = int.Parse(parts[i]);
+
+            for (var j = 0; j < coinsCount[roomIndex]; j++)
+            {
+                var position = room.ObjectPositions.GetRandomAcceptableDistance();
+                room.ObjectPositions.Add(position);
+                room.Coins.Add(new Coin(position.X, position.Y + 15, 0));
+            }
         }
     }
 
     private void AddAmmos(int level, int roomIndex, ref Room room)
     {
-        var coinCountInConfig = Game1.Settings!.GetValue($"Level{level}Ammo");
-        var parts = coinCountInConfig.Split(',');
-        var ammoCount = new int[10];
+        var settingName = $"Level{level}Ammo";
 
-        for (var i = 0; i < ammoCount.Length; i++)
-            ammoCount[i] = int.Parse(parts[i]);
-
-        for (var j = 0; j < ammoCount[roomIndex]; j++)
+        if (Game1.Settings == null || !Game1.Settings.HasSetting(settingName))
         {
-            var position = room.ObjectPositions.GetRandomAcceptableDistance();
-            room.ObjectPositions.Add(position);
-            room.Ammos.Add(new AmmoBox(position.X, position.Y + 15));
+            var ammoCount = Game1.Random.Next(4);
+
+            for (var j = 0; j < ammoCount; j++)
+            {
+                var position = room.ObjectPositions.GetRandomAcceptableDistance();
+                room.ObjectPositions.Add(position);
+                room.Ammos.Add(new AmmoBox(position.X, position.Y + 15));
+            }
+        }
+        else
+        {
+            var ammoCountInConfig = Game1.Settings!.GetValue($"Level{level}Ammo");
+            var parts = ammoCountInConfig.Split(',');
+            var ammoCount = new int[10];
+
+            for (var i = 0; i < ammoCount.Length; i++)
+                ammoCount[i] = int.Parse(parts[i]);
+
+            for (var j = 0; j < ammoCount[roomIndex]; j++)
+            {
+                var position = room.ObjectPositions.GetRandomAcceptableDistance();
+                room.ObjectPositions.Add(position);
+                room.Ammos.Add(new AmmoBox(position.X, position.Y + 15));
+            }
         }
     }
 

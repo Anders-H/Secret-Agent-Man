@@ -77,8 +77,13 @@ public class StartScene : Scene
 
         if ((Keyboard.IsFirePressed() || Keyboard.IsPadButtonPressed(Buttons.Start) ) && ticks > 11)
         {
-            Game1.CurrentIngameScene = new IngameScene(Parent);
-            Parent.CurrentScene = new SignScene(Parent, "level 1", Game1.CurrentIngameScene);
+#if DEBUG
+            const int zeroBasedLevel = 3;
+#else
+            const int zeroBasedLevel = 0;
+#endif
+            Game1.CurrentIngameScene = new IngameScene(Parent, zeroBasedLevel);
+            Parent.CurrentScene = new SignScene(Parent, $"level {zeroBasedLevel + 1}", Game1.CurrentIngameScene);
             return;
         }
 
@@ -98,9 +103,11 @@ public class StartScene : Scene
         {
             case StartSceneState.Logo when _partTick % 750 == 0:
                 _state = StartSceneState.HighScore;
+                _partTick = 0;
                 break;
             case StartSceneState.HighScore when _partTick % 750 == 0:
                 _state = StartSceneState.Instructions;
+                _partTick = 0;
                 CreateInstructions();
                 break;
             case StartSceneState.Instructions when _partTick % 3000 == 0:
@@ -108,9 +115,11 @@ public class StartScene : Scene
                 _state = StartSceneState.Credits;
                 break;
             case StartSceneState.Credits when _partTick % 750 == 0:
+                _partTick = 0;
                 _state = StartSceneState.GlobalHighScore;
                 break;
             case StartSceneState.GlobalHighScore when _partTick % 800 == 0:
+                _partTick = 0;
                 _state = StartSceneState.Logo;
                 break;
         }
@@ -143,6 +152,8 @@ public class StartScene : Scene
                 _typeWriter!.Act(_partTick);
                 break;
             case StartSceneState.Credits:
+                break;
+            case StartSceneState.GlobalHighScore:
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
