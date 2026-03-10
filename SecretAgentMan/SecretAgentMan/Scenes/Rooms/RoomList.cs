@@ -143,7 +143,7 @@ public class RoomList
                     room.AddAirplane(2);
                     break;
                 case 3:
-                    room.AddAirplane(7);
+                    room.AddAirplane(1);
                     break;
                 case 4:
                     room.AddAirplane(2);
@@ -161,7 +161,7 @@ public class RoomList
                     room.AddAirplane(3);
                     break;
                 case 9:
-                    room.AddAirplane(15);
+                    room.AddAirplane(1);
                     break;
                 default:
                     throw new SystemException("What room?!?");
