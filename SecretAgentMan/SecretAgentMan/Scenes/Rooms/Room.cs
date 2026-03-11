@@ -10,6 +10,7 @@ namespace SecretAgentMan.Scenes.Rooms;
 public class Room
 {
     private readonly RoomBackground _roomBackground;
+    public int RoomIndex { get; }
     public readonly AirplaneList Airplanes;
     public Briefcase? Briefcase { get; set; }
     public string DistrictName { get; }
@@ -19,8 +20,9 @@ public class Room
     public ObjectPositionPlaceholderList ObjectPositions = [];
     public Bomb? Bomb { get; set; }
 
-    public Room(string districtName)
+    public Room(int roomIndex, string districtName)
     {
+        RoomIndex = roomIndex;
         _roomBackground = new RoomBackgroundBuilder().Build();
         Airplanes = [];
         DistrictName = districtName;

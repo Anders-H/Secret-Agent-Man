@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using RetroGame.Text;
 using SecretAgentMan.Sprites;
@@ -121,7 +120,7 @@ public class RoomList
 
         for (var i = 0; i < 10; i++)
         {
-            var room = new Room(names[i]);
+            var room = new Room(i, names[i]);
             AddCoins(zeroBasedLevel + 1, i, ref room);
             AddAmmos(zeroBasedLevel + 1, i, ref room);
 
@@ -131,42 +130,8 @@ public class RoomList
             for (var j = 0; j < spyCount[i]; j++)
                 room.Npcs.Add(Npc.CreateSpy(player, enemyFireList, j));
 
-            switch (i)
-            {
-                case 0:
-                    room.AddAirplane(2);
-                    break;
-                case 1:
-                    room.AddAirplane(3);
-                    break;
-                case 2:
-                    room.AddAirplane(2);
-                    break;
-                case 3:
-                    room.AddAirplane(1);
-                    break;
-                case 4:
-                    room.AddAirplane(2);
-                    break;
-                case 5:
-                    room.AddAirplane(2);
-                    break;
-                case 6:
-                    room.AddAirplane(4);
-                    break;
-                case 7:
-                    room.AddAirplane(8);
-                    break;
-                case 8:
-                    room.AddAirplane(3);
-                    break;
-                case 9:
-                    room.AddAirplane(1);
-                    break;
-                default:
-                    throw new SystemException("What room?!?");
-            }
-
+            var airPlaneDecorationService = new AirPlaneDecorationService(zeroBasedLevel);
+            airPlaneDecorationService.AddPlanes(room);
             Rooms.Add(room);
             SpyCount += spyCount[i];
         }
