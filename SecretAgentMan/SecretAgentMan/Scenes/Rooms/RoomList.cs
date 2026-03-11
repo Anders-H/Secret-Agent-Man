@@ -211,7 +211,7 @@ public class RoomList
         }
         else
         {
-            var coinCountInConfig = Game1.Settings!.GetValue($"Level{level}Coins");
+            var coinCountInConfig = Game1.Settings.GetValue($"Level{level}Coins");
             var parts = coinCountInConfig.Split(',');
             var coinsCount = new int[10];
 
@@ -244,7 +244,7 @@ public class RoomList
         }
         else
         {
-            var ammoCountInConfig = Game1.Settings!.GetValue($"Level{level}Ammo");
+            var ammoCountInConfig = Game1.Settings.GetValue($"Level{level}Ammo");
             var parts = ammoCountInConfig.Split(',');
             var ammoCount = new int[10];
 

@@ -3,6 +3,5 @@
 public enum GameOverReason
 {
     PlayerDied,
-    PlayerFired,
-    Win
+    PlayerFired
 }

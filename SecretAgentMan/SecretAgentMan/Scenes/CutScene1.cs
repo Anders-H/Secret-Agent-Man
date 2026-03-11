@@ -105,7 +105,7 @@ public class CutScene1 : RetroGame.Scene.IngameScene
 
             if (ticks % 3 == 0)
             {
-                var zombie = new Npc(Npc.StatusCutScene, null, new FireList(), (ulong)Game1.Random.Next(1, 7))
+                var zombie = new Npc(Npc.StatusCutScene, null, [], (ulong)Game1.Random.Next(1, 7))
                 {
                     X = 631 + Game1.Random.Next(0, 50),
                     Y = 88 + Game1.Random.Next(0, 183)

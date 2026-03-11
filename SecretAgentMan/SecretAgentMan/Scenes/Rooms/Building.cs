@@ -2,7 +2,7 @@
 
 namespace SecretAgentMan.Scenes.Rooms;
 
-public struct Building
+public readonly struct Building
 {
     public RetroTexture Texture { get; }
     public int X { get; }
