@@ -13,9 +13,9 @@ public partial class Form1 : Form
     {
         var s = new StringBuilder();
         s.AppendLine(@"Source: ""D:\GitRepos\Secret-Agent-Man\SecretAgentMan\PublishedProgram\{#MyAppExeName}""; DestDir: ""{app}""; Flags: ignoreversion");
-        var loaderDirectory = new DirectoryInfo(@"D:\GitRepos\Secret-Agent-Man\SecretAgentMan\PublishedProgram\");
+        var gameDirectory = new DirectoryInfo(@"D:\GitRepos\Secret-Agent-Man\SecretAgentMan\PublishedProgram\");
 
-        foreach (var fileInfo in loaderDirectory.GetFiles())
+        foreach (var fileInfo in gameDirectory.GetFiles())
         {
             if (fileInfo.Name.EndsWith(".exe", StringComparison.CurrentCultureIgnoreCase))
                 continue;
@@ -23,17 +23,7 @@ public partial class Form1 : Form
             if (fileInfo.Name.EndsWith(".pdb", StringComparison.CurrentCultureIgnoreCase))
                 continue;
 
-            s.AppendLine($@"Source: ""D:\GitRepos\Secret-Agent-Man\SecretAgentMan\PublishedProgram\{fileInfo.Name}""; DestDir: ""{{app}}""; Flags: ignoreversion");
-        }
-
-        var gameDirectory = new DirectoryInfo(@"D:\GitRepos\Secret-Agent-Man\SecretAgentMan\PublishedProgram\");
-
-        foreach (var fileInfo in gameDirectory.GetFiles())
-        {
             if (string.Compare(fileInfo.Name, "cheat.dat", StringComparison.CurrentCultureIgnoreCase) == 0)
-                continue;
-
-            if (fileInfo.Name.EndsWith(".pdb", StringComparison.CurrentCultureIgnoreCase))
                 continue;
 
             s.AppendLine($@"Source: ""D:\GitRepos\Secret-Agent-Man\SecretAgentMan\PublishedProgram\{fileInfo.Name}""; DestDir: ""{{app}}""; Flags: ignoreversion");

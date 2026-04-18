@@ -39,6 +39,9 @@ public class IntroScene : Scene
 
     public override void Update(GameTime gameTime, ulong ticks)
     {
+        if (ticks < 20)
+            Keyboard.ClearState();
+
         _inCurrentCellY += 6;
 
         if (_inCurrentCellY > 16)
