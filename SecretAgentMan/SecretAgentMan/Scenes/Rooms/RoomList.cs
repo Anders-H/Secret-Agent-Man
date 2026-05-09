@@ -112,7 +112,7 @@ public class RoomList
 
                     // Overwrite spy count.
                     for (var i = 0; i < innocentCount.Length; i++)
-                        innocentCount[i] = Game1.Random.Next(10 * (i * 1)) + 1;
+                        spyCount[i] = Game1.Random.Next(10 * (i * 1)) + 1;
                 }
 
                 break;
@@ -137,6 +137,17 @@ public class RoomList
         }
 
         AddBriefcases();
+    }
+
+    public int SuggestKillsRequired()
+    {
+        var lowLimit = SpyCount / 2;
+        var requiredCount = Game1.Random.Next(lowLimit, SpyCount + 1);
+        
+        while (requiredCount % 5 != 0)
+            requiredCount--;
+
+        return requiredCount;
     }
 
     public Room GetRoom(int index) =>

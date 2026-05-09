@@ -24,6 +24,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private readonly IngameFire _fire = new();
     private int _waterFrameIndex;
     private int _killedSpyCount;
+    private int _killsRequired;
     private GameEventPointer _levelCompleted = new();
     private readonly MetaBonus _metaBonus;
     private int _lives;
@@ -41,6 +42,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     {
         _player = new Player(_fire.PlayerFire);
         _roomList = new RoomList(_player, _fire.EnemyFire, zeroBasedStartLevel);
+        _killsRequired = _roomList.SuggestKillsRequired();
         CorrectBriefcase = Game1.Random.Next(Briefcase.BriefcaseColors.Length);
         _metaBonus = new MetaBonus();
         AddToAutoUpdate(Game1.TypeWriter);
@@ -85,6 +87,16 @@ public class IngameScene : RetroGame.Scene.IngameScene
             MayorResources.DoShortTalk();
             Game1.TypeWriter.SetText($"acquire the {Briefcase.GetColorName(CorrectBriefcase)} {Briefcase.GetRandomTerm()}.");
             Game1.TypeWriter.SetText($"the {Briefcase.GetColorName(CorrectBriefcase)} one. and do not mess this up!");
+        }
+        else if (ticks == 1300 || ticks == 6000 || ticks == 7500)
+        {
+            MayorResources.DoShortTalk();
+            Game1.TypeWriter.SetText($"you need to terminate {_killsRequired} spies.");
+
+            if (_killedSpyCount > 1)
+                Game1.TypeWriter.SetText($"you have already terminated {_killedSpyCount} spies.");
+            else if (_killedSpyCount == 1)
+                Game1.TypeWriter.SetText("you have only killed one spy.");
         }
         else if (ticks == 5000 && !_briefcaseMissionCompleted)
         {
@@ -317,6 +329,15 @@ public class IngameScene : RetroGame.Scene.IngameScene
                         if (_killedSpyCount >= _roomList.SpyCount)
                         {
                             Game1.TypeWriter.SetText($"all spies eliminated! {scoreAdded} points! well done!");
+                            _fire.Clear();
+                            MayorResources.DoShortTalk();
+                            Game1.TypeWriter.SetText("your mission is completed. well done!");
+                            _levelCompleted.Occure(ticks);
+                            _metaBonus.IncreaseBonus(ticks, 1);
+                        }
+                        else if (_killedSpyCount >= _killsRequired)
+                        {
+                            Game1.TypeWriter.SetText($"you have terminated {_killsRequired} spies! {scoreAdded} points! well done!");
                             _fire.Clear();
                             MayorResources.DoShortTalk();
                             Game1.TypeWriter.SetText("your mission is completed. well done!");

@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using BroncoSettingsParser;
+﻿using BroncoSettingsParser;
 using BroncoSettingsParser.ResponseModel;
 using Microsoft.Xna.Framework;
 using RetroGame;
@@ -14,6 +12,9 @@ using SecretAgentMan.Scenes.GameOverScenes;
 using SecretAgentMan.Scenes.IntroductionScenes;
 using SecretAgentMan.Scenes.Rooms;
 using SecretAgentMan.Sprites;
+using System;
+using System.IO;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace SecretAgentMan;
 
@@ -88,7 +89,11 @@ public class Game1 : RetroGame.RetroGame
         MayorResources.LoadContent(GraphicsDevice, Content);
         SoundEffects.LoadSoundEffects();
         Songs.LoadSongs(Content);
+#if DEBUG
+        CurrentScene = new StartScene(this, 0, 0);
+#else
         CurrentScene = new IntroScene(this);
+#endif
         base.LoadContent();
     }
 }
