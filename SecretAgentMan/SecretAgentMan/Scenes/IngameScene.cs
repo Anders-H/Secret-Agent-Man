@@ -24,7 +24,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private readonly IngameFire _fire = new();
     private int _waterFrameIndex;
     private int _killedSpyCount;
-    private int _killsRequired;
+    private readonly int _killsRequired;
     private GameEventPointer _levelCompleted = new();
     private readonly MetaBonus _metaBonus;
     private int _lives;
@@ -326,18 +326,12 @@ public class IngameScene : RetroGame.Scene.IngameScene
                         Score += scoreAdded;
                         _metaBonus.IncreaseBonus(ticks, 1);
 
-                        if (_killedSpyCount >= _roomList.SpyCount)
+                        if (_killedSpyCount >= _roomList.SpyCount || _killedSpyCount >= _killsRequired)
                         {
-                            Game1.TypeWriter.SetText($"all spies eliminated! {scoreAdded} points! well done!");
-                            _fire.Clear();
-                            MayorResources.DoShortTalk();
-                            Game1.TypeWriter.SetText("your mission is completed. well done!");
-                            _levelCompleted.Occure(ticks);
-                            _metaBonus.IncreaseBonus(ticks, 1);
-                        }
-                        else if (_killedSpyCount >= _killsRequired)
-                        {
-                            Game1.TypeWriter.SetText($"you have terminated {_killsRequired} spies! {scoreAdded} points! well done!");
+                            Game1.TypeWriter.SetText(_killedSpyCount >= _killsRequired
+                                ? $"you have terminated {_killsRequired} spies! {scoreAdded} points! well done!"
+                                : $"all spies eliminated! {scoreAdded} points! well done!");
+
                             _fire.Clear();
                             MayorResources.DoShortTalk();
                             Game1.TypeWriter.SetText("your mission is completed. well done!");
@@ -368,10 +362,11 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 return;
             }
 
+            _roomList.TurnOneDeadNpcToGraveStone(_currentRoomIndex);
+
             if (!_levelCompleted.Occured)
             {
                 _fire.RemoveOneDeadFire();
-                _roomList.TurnOneDeadNpcToGraveStone(_currentRoomIndex);
                 _player.DieIfHit(_fire.EnemyFire, ticks);
             }
         }

@@ -141,6 +141,9 @@ public class RoomList
 
     public int SuggestKillsRequired()
     {
+#if DEBUG
+        return 2;
+#else
         var lowLimit = SpyCount / 2;
         var requiredCount = Game1.Random.Next(lowLimit, SpyCount + 1);
         
@@ -148,6 +151,7 @@ public class RoomList
             requiredCount--;
 
         return requiredCount;
+#endif
     }
 
     public Room GetRoom(int index) =>
