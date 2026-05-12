@@ -50,6 +50,41 @@ public class Player : Character
         return true;
     }
 
+    public void WalkTo(int x, int y, ulong ticks)
+    {
+        var oldX = IntX;
+        var oldY = IntY;
+
+        if (X > x && X - _speed >= x)
+        {
+            MoveLeft();
+
+            if (CurrentAnimation != _walkLeft)
+                CurrentAnimation = _walkLeft;
+        }
+        else if (X < x && X + _speed <= x)
+        {
+            MoveRight();
+
+            if (CurrentAnimation != _walkRight)
+                CurrentAnimation = _walkRight;
+        }
+
+        if (Y > y && Y - _speed >= y)
+        {
+            _isMoving = true;
+            Y -= _speed;
+        }
+        else if (Y < y && Y + _speed <= y)
+        {
+            _isMoving = true;
+            Y += _speed;
+        }
+
+        if ((oldX != IntX || oldY != IntY) && (ticks % 4 == 0))
+            CurrentAnimationIndex++;
+    }
+
     public void PlayerControl(ulong ticks, KeyboardStateChecker keyboard, int currentRoomIndex, out bool nextRoom, out bool previousRoom, RoomList rooms)
     {
         nextRoom = false;

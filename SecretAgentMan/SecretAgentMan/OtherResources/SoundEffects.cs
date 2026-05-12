@@ -14,6 +14,7 @@ public static class SoundEffects
     public static SoundEffect? AmmoBox { get; set; }
     public static SoundEffect? ExplosionBig { get; set; }
     public static SoundEffect? ExplosionSmall { get; set; }
+    public static SoundEffect? LevelCompleted { get; set; }
 
     public static void CreateSoundEffects(RetroGame.RetroGame game)
     {
@@ -27,6 +28,7 @@ public static class SoundEffects
         AmmoBox = new SoundEffect(game);
         ExplosionBig = new SoundEffect(game);
         ExplosionSmall = new SoundEffect(game);
+        LevelCompleted = new SoundEffect(game);
     }
 
     public static void LoadSoundEffects()
@@ -41,5 +43,6 @@ public static class SoundEffects
         AmmoBox!.Initialize("sfx_pickup-ammo");
         ExplosionBig!.Initialize("sfx_explosion");
         ExplosionSmall!.Initialize("sfx_explosion_small");
+        LevelCompleted!.Initialize("Fanfare");
     }
 }

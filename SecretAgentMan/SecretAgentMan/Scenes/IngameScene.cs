@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using RetroGame;
@@ -13,6 +14,7 @@ namespace SecretAgentMan.Scenes;
 
 public class IngameScene : RetroGame.Scene.IngameScene
 {
+    private ChopperStatus _chopperStatus;
     private int _innocentKill;
     private ulong _lastInnocentKillAt;
     private int _messageDebug;
@@ -162,19 +164,26 @@ public class IngameScene : RetroGame.Scene.IngameScene
                         _waterFrameIndex = 0;
                 }
 
-                _player.PlayerControl(ticks, Keyboard, _currentRoomIndex, out var nextRoom, out var previousRoom, _roomList);
-
-                if (nextRoom)
+                if (_levelCompleted.Occured)
                 {
-                    _currentRoomIndex++;
-                    _fire.Clear();
-                    UpdateRoomNameAndCheckClear(ticks);
+                    
                 }
-                else if (previousRoom)
+                else
                 {
-                    _currentRoomIndex--;
-                    _fire.Clear();
-                    UpdateRoomNameAndCheckClear(ticks);
+                    _player.PlayerControl(ticks, Keyboard, _currentRoomIndex, out var nextRoom, out var previousRoom, _roomList);
+
+                    if (nextRoom)
+                    {
+                        _currentRoomIndex++;
+                        _fire.Clear();
+                        UpdateRoomNameAndCheckClear(ticks);
+                    }
+                    else if (previousRoom)
+                    {
+                        _currentRoomIndex--;
+                        _fire.Clear();
+                        UpdateRoomNameAndCheckClear(ticks);
+                    }
                 }
 
                 room.Act(ticks);
@@ -336,6 +345,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                             MayorResources.DoShortTalk();
                             Game1.TypeWriter.SetText("your mission is completed. well done!");
                             _levelCompleted.Occure(ticks);
+                            _chopperStatus = ChopperStatus.MovingIn;
                             _metaBonus.IncreaseBonus(ticks, 1);
                         }
                         else
@@ -348,6 +358,25 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 }
             }
 
+            if (_levelCompleted.Occured)
+            {
+                switch (_chopperStatus)
+                {
+                    case ChopperStatus.MovingIn:
+                        _player.WalkTo(347, 195, ticks);
+                        break;
+                    case ChopperStatus.Waiting:
+                        _player.RestoreToLookRight();
+                        break;
+                    case ChopperStatus.MovingOut:
+                        _player.X += 2;
+                        _player.Y -= 1;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+
             if (_innocentKill >= 3 && ticks > _lastInnocentKillAt + 100)
             {
                 ScoreManagement.StoreLastScore(Score);
@@ -356,7 +385,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 return;
             }
 
-            if (_levelCompleted.OccuredTicksAgo(ticks, 500))
+            if (_levelCompleted.OccuredTicksAgo(ticks, 500)) // TODO: Ska vara när helekoptern har dragit.
             {
                 ActOnLevelCompleted();
                 return;
@@ -431,6 +460,9 @@ public class IngameScene : RetroGame.Scene.IngameScene
         Parent.CurrentScene = ZeroBasedLevel <= 1
             ? new SignScene(Parent, "act i", new CutScene1(Parent, new SignScene(Parent, $"level {ZeroBasedLevel + 1}", Game1.CurrentIngameScene!)))
             : new SignScene(Parent, $"level {ZeroBasedLevel + 1}", Game1.CurrentIngameScene!);
+
+        if (ZeroBasedLevel > 1 || Parent.CurrentScene is CutScene1)
+            SoundEffects.LevelCompleted!.PlayNext();
     }
 
     public override void Draw(GameTime gameTime, ulong ticks, SpriteBatch spriteBatch)

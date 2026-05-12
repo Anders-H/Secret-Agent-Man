@@ -1003,6 +1003,12 @@
 /processorParam:Quality=Best
 /build:enemy_sfx_coin_3.wav
 
+#begin Fanfare.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Fanfare.wav
+
 #begin floppy.png
 /importer:TextureImporter
 /processor:TextureProcessor
