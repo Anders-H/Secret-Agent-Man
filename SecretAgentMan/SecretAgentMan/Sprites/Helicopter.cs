@@ -22,7 +22,7 @@ public class Helicopter : Sprite, IRetroActor
     private const int TargetY = 10;
     private const int SpeedX = 2;
     private const int SpeedY = 1;
-    private int _cellIndex = 0;
+    private int _cellIndex;
     private static RetroTexture? HeliLadderTexture { get; set; }
     public ulong ReachedTargetAt { get; private set; }
     public HelicopterStatus Status { get; set; }

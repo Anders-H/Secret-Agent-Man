@@ -51,7 +51,7 @@ public class Game1 : RetroGame.RetroGame
         CurrentIngameScene = null;
     }
 
-    public Game1() : base(640, 360, RetroDisplayMode.Windowed, false)
+    public Game1() : base(640, 360, RetroDisplayMode.Fullscreen, false)
     {
         SoundEffects.CreateSoundEffects(this);
     }

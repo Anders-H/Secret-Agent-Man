@@ -1327,6 +1327,12 @@
 /processorParam:Quality=Best
 /build:sfx_gun9.wav
 
+#begin sfx_heli.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx_heli.wav
+
 #begin sfx_noammo2.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

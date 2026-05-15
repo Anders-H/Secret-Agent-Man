@@ -20,7 +20,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private int _messageDebug;
     private bool _askQuitMode;
     private int _currentRoomIndex;
-    private readonly Player _player;
+    private Player _player;
     private RoomList _roomList;
     private string _currentRoomName = "";
     private readonly IngameFire _fire = new();
@@ -58,6 +58,8 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
     public override void BeginScene()
     {
+        _helicopter = new Helicopter();
+        _player = new Player(_fire.PlayerFire);
         MediaPlayer.Play(Songs.IngameSong!);
     }
 
@@ -73,6 +75,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
     private void UpdateRoomNameAndCheckClear(ulong ticks)
     {
+        _helicopter = new Helicopter();
         var room = _roomList.GetRoom(_currentRoomIndex);
         _currentRoomName = room.DistrictName;
         _bombKilledPlayer = false;
@@ -136,11 +139,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                         _waterFrameIndex = 0;
                 }
 
-                if (_levelCompleted.Occured)
-                {
-                    
-                }
-                else
+                if(!_levelCompleted.Occured)
                 {
                     _player.PlayerControl(ticks, Keyboard, _currentRoomIndex, out var nextRoom, out var previousRoom, _roomList);
 
@@ -318,6 +317,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                             Game1.TypeWriter.SetText("your mission is completed. well done!");
                             _levelCompleted.Occure(ticks);
                             _helicopter.Status = Helicopter.HelicopterStatus.MovingIn;
+                            SoundEffects.Heli!.PlayNext();
                             _metaBonus.IncreaseBonus(ticks, 1);
                         }
                         else

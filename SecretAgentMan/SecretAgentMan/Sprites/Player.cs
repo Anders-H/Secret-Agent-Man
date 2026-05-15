@@ -31,6 +31,13 @@ public class Player : Character
         Y = PlayerStartY;
     }
 
+    public void Reset()
+    {
+        ForceRestoreToLookRight();
+        X = PlayerStartX;
+        Y = PlayerStartY;
+    }
+
     public void TweakPlayerSpeed(int secretAgentManManipulatedSpeed) =>
         _speed = secretAgentManManipulatedSpeed;
 
