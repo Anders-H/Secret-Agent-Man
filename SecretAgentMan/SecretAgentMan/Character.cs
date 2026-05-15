@@ -25,6 +25,11 @@ public abstract class Character : Sprite
         FaceRight = true;
     }
 
+    public void ForceCellIndexToZero()
+    {
+        CellIndex = 0;
+    }
+
     protected ushort[]? CurrentAnimation
     {
         get => _currentAnimation;

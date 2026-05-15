@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using RetroGame;
@@ -8,13 +7,14 @@ using SecretAgentMan.Scenes.GameOverScenes;
 using SecretAgentMan.Scenes.IntroductionScenes;
 using SecretAgentMan.Scenes.Rooms;
 using SecretAgentMan.Sprites;
+using System;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace SecretAgentMan.Scenes;
 
 public class IngameScene : RetroGame.Scene.IngameScene
 {
-    private ChopperStatus _chopperStatus;
+    private Helicopter _helicopter;
     private int _innocentKill;
     private ulong _lastInnocentKillAt;
     private int _messageDebug;
@@ -42,6 +42,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
     public IngameScene(RetroGame.RetroGame parent, int zeroBasedStartLevel) : base(parent)
     {
+        _helicopter = new Helicopter();
         _player = new Player(_fire.PlayerFire);
         _roomList = new RoomList(_player, _fire.EnemyFire, zeroBasedStartLevel);
         _killsRequired = _roomList.SuggestKillsRequired();
@@ -126,35 +127,6 @@ public class IngameScene : RetroGame.Scene.IngameScene
             {
                 if (Keyboard.IsKeyPressed(Keys.Escape))
                     _askQuitMode = true;
-
-                if (RetroGame.RetroGame.CheatFileAvailable)
-                {
-                    if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F9))
-                        Game1.Cheat = !Game1.Cheat;
-
-                    if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F8))
-                        Score += 100;
-
-                    if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.B))
-                    {
-                        MediaPlayer.Stop();
-                        Parent.CurrentScene = new SignScene(Parent, "bonus", new BonusLevelScene(Parent, Score, AddScore));
-                    }
-
-                    if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.W))
-                    {
-                        MediaPlayer.Stop();
-                        MayorResources.DoShortTalk();
-                        Game1.TypeWriter.SetText("your mission is completed. well done!");
-                        _levelCompleted.Occure(ticks);
-                    }
-
-                    if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F))
-                        _player.ResetBulletsLeft();
-
-                    if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.D))
-                        _player.Die(ticks);
-                }
 
                 if (ticks % 7 == 0)
                 {
@@ -345,7 +317,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                             MayorResources.DoShortTalk();
                             Game1.TypeWriter.SetText("your mission is completed. well done!");
                             _levelCompleted.Occure(ticks);
-                            _chopperStatus = ChopperStatus.MovingIn;
+                            _helicopter.Status = Helicopter.HelicopterStatus.MovingIn;
                             _metaBonus.IncreaseBonus(ticks, 1);
                         }
                         else
@@ -358,23 +330,32 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 }
             }
 
-            if (_levelCompleted.Occured)
+            switch (_helicopter.Status)
             {
-                switch (_chopperStatus)
-                {
-                    case ChopperStatus.MovingIn:
-                        _player.WalkTo(347, 195, ticks);
-                        break;
-                    case ChopperStatus.Waiting:
-                        _player.RestoreToLookRight();
-                        break;
-                    case ChopperStatus.MovingOut:
-                        _player.X += 2;
+                case Helicopter.HelicopterStatus.None:
+                    break;
+                case Helicopter.HelicopterStatus.MovingIn:
+                    _player.WalkTo(348, 195, ticks);
+                    _helicopter.Act(ticks);
+                    break;
+                case Helicopter.HelicopterStatus.Waiting:
+                    if (ticks == _helicopter.ReachedTargetAt + 40)
+                        _player.ForceRestoreToLookRight();
+
+                    if (ticks == _helicopter.ReachedTargetAt + 80)
+                        _helicopter.Status = Helicopter.HelicopterStatus.MovingOut;
+
+                    break;
+                case Helicopter.HelicopterStatus.MovingOut:
+                    _player.X += 2;
+
+                    if (ticks % 2 == 0)
                         _player.Y -= 1;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+
+                    _helicopter.Act(ticks);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             if (_innocentKill >= 3 && ticks > _lastInnocentKillAt + 100)
@@ -505,6 +486,11 @@ public class IngameScene : RetroGame.Scene.IngameScene
         Text.DirectDraw(spriteBatch, 544, 299, "lives", ColorPalette.White);
         Text.DirectDraw(spriteBatch, 544, 307, "faults", ColorPalette.White);
         
+        if (_helicopter.Status != Helicopter.HelicopterStatus.None)
+        {
+            _helicopter.Draw(spriteBatch);
+        }
+
         if (_player.AmmoBoxes <= 0)
         {
             switch (_player.BulletsLeft)

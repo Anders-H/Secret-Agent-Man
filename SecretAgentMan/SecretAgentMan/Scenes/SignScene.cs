@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using RetroGame;
 using RetroGame.Scene;
+using SecretAgentMan.OtherResources;
 
 namespace SecretAgentMan.Scenes;
 
@@ -18,11 +19,14 @@ public class SignScene : RetroGame.Scene.IngameScene
         _message = $"    {message}    ";
         _nextScene = nextScene;
         _x = 320 - (_message.Length * 4); // (... * 8) / 2
+
+        if (message != "level 1" && message != "level 2")
+            SoundEffects.LevelCompleted!.PlayNext();
     }
 
     public override void Update(GameTime gameTime, ulong ticks)
     {
-        if (ticks > 120)
+        if (ticks > 200)
         {
             Parent.CurrentScene = _nextScene;
             _nextScene.BeginScene();

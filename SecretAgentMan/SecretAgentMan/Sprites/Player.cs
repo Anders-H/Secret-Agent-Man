@@ -50,6 +50,14 @@ public class Player : Character
         return true;
     }
 
+    public void ForceRestoreToLookRight()
+    {
+        CurrentAnimation = _walkRight;
+        FaceRight = true;
+        CurrentAnimationIndex = 0;
+        ForceCellIndexToZero();
+    }
+
     public void WalkTo(int x, int y, ulong ticks)
     {
         var oldX = IntX;

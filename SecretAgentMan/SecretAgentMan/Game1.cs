@@ -14,7 +14,6 @@ using SecretAgentMan.Scenes.Rooms;
 using SecretAgentMan.Sprites;
 using System;
 using System.IO;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace SecretAgentMan;
 
@@ -52,7 +51,7 @@ public class Game1 : RetroGame.RetroGame
         CurrentIngameScene = null;
     }
 
-    public Game1() : base(640, 360, RetroDisplayMode.Fullscreen, false)
+    public Game1() : base(640, 360, RetroDisplayMode.Windowed, false)
     {
         SoundEffects.CreateSoundEffects(this);
     }
@@ -78,6 +77,7 @@ public class Game1 : RetroGame.RetroGame
         LivesSymbolTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 11, 7, 1, "lives11x7");
         AmmoTexture = RetroTexture.LoadContent(GraphicsDevice, Content, 4, 7, 1, "ammo4x7");
         CutSceneFrame = RetroTexture.LoadContent(GraphicsDevice, Content, 640, 360, 1, "cutsceneframe");
+        Helicopter.LoadContent(GraphicsDevice, Content);
         RoomBackground.LoadContent(GraphicsDevice, Content);
         StartSceneResources.LoadContent(GraphicsDevice, Content);
         Coin.LoadContent(GraphicsDevice, Content);

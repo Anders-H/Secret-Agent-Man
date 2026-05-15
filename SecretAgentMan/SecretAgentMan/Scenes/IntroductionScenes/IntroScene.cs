@@ -14,7 +14,7 @@ public class IntroScene : Scene
 {
     private const int CellCountX = 40;
     private const int CellCountY = 23;
-    private const int TicksBeforeContinue = 3500;
+    private const int TicksBeforeContinue = 1000;
     private int _currentCellX;
     private int _currentCellY;
     private int _inCurrentCellY;
@@ -61,9 +61,6 @@ public class IntroScene : Scene
             }
         }
 
-        if (RetroGame.RetroGame.CheatFileAvailable && Keyboard.IsFirePressed())
-            Parent.CurrentScene = new StartScene(Parent, 0, 0);
-
         if (ticks == TicksBeforeContinue)
             Keyboard.ClearState();
 
@@ -99,7 +96,7 @@ public class IntroScene : Scene
         {
             if (ticks > 600)
             {
-                if (_done) //(_canContinue)
+                if (_canContinue)
                     _textBlock.DirectDraw(spriteBatch, _pressFireCenterX, 300, PressFire, ColorPalette.White);
                 else
                     _textBlock.DirectDraw(spriteBatch, _loadingPleaseWaitCenterX, 300, LoadingPleaseWait, ColorPalette.White);
