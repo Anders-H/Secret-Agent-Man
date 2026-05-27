@@ -121,6 +121,10 @@ public class RoomList
         for (var i = 0; i < 10; i++)
         {
             var room = new Room(i, names[i]);
+
+            if (i == 0)
+                room.ObjectPositions.Add(new ObjectPositionPlaceholder(Player.PlayerStartX, Player.PlayerStartY));
+
             AddCoins(zeroBasedLevel + 1, i, ref room);
             AddAmmos(zeroBasedLevel + 1, i, ref room);
 

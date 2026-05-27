@@ -9,7 +9,6 @@ namespace SecretAgentMan.Sprites;
 
 public class Npc : Character, IRetroActor
 {
-    private const int HeightCompensation = 6;
     private readonly Player? _player;
     private int _ticksSinceDirectionChange;
     private int _ticksSinceGunToggle;
@@ -461,11 +460,11 @@ public class Npc : Character, IRetroActor
     {
         _graveStoneCellIndex = 0;
         IsGraveStone = true;
-        Y += HeightCompensation;
+        Y += 6;
     }
 
     public override int IntYForYSort =>
-        IntY - HeightCompensation;
+        IsGraveStone ? IntY - 8 : IntY;
 
     public void PutTheGunAway()
     {

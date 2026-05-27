@@ -117,9 +117,9 @@ public class BonusLevelScene : RetroGame.Scene.IngameScene
         var playerIsDrawn = false;
         var lastY = IngameScene.SpriteUpperLimit - 1;
 
-        foreach (var t in Npcs.OrderBy(x => x.IntY))
+        foreach (var t in Npcs.OrderBy(x => x.IntYForYSort))
         {
-            if (!playerIsDrawn && _player.Y >= lastY && _player.Y <= t.IntY)
+            if (!playerIsDrawn && _player.Y >= lastY && _player.Y <= t.IntYForYSort)
             {
                 _player.Draw(spriteBatch, IngameBackgroundResources.CharactersTexture, _player.CellIndex, Color.White);
                 playerIsDrawn = true;

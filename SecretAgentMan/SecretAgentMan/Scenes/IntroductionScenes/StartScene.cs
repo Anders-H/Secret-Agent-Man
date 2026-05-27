@@ -78,7 +78,7 @@ public class StartScene : Scene
         if ((Keyboard.IsFirePressed() || Keyboard.IsPadButtonPressed(Buttons.Start) ) && ticks > 11)
         {
 #if DEBUG
-            const int zeroBasedLevel = 0;
+            const int zeroBasedLevel = 4;
 #else
             const int zeroBasedLevel = 0;
 #endif
