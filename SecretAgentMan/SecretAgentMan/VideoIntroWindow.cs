@@ -1,13 +1,10 @@
 using System;
 using System.IO;
-using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Threading;
 using Application = System.Windows.Application;
 
 namespace SecretAgentMan;
@@ -76,24 +73,24 @@ public sealed class VideoIntroWindow : Window
         Loaded += (_, _) => _media.Play();
     }
 
-    private void CloseOnKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+    private void CloseOnKeyDown(object? sender, System.Windows.Input.KeyEventArgs e)
     {
-        if (e.Key == System.Windows.Input.Key.LeftCtrl || e.Key == System.Windows.Input.Key.Space || e.Key == System.Windows.Input.Key.Escape)
-        {
-            KeyDown -= CloseOnKeyDown;
-            var windowInteropHelper = new WindowInteropHelper(this);
-            Buffer.FlushMouseBuffer(windowInteropHelper.EnsureHandle());
-            Buffer.FlushKeyboardBuffer(windowInteropHelper.EnsureHandle());
-            CloseWindow();
-        }
+        if (e.Key is not (System.Windows.Input.Key.LeftCtrl or System.Windows.Input.Key.Space or System.Windows.Input.Key.Escape))
+            return;
+
+        KeyDown -= CloseOnKeyDown;
+        var windowInteropHelper = new WindowInteropHelper(this);
+        Buffer.FlushMouseBuffer(windowInteropHelper.EnsureHandle());
+        Buffer.FlushKeyboardBuffer(windowInteropHelper.EnsureHandle());
+        CloseWindow();
     }
 
     // Videon är klar – starta mjuk fade-out
-    private void OnMediaEnded(object sender, RoutedEventArgs e) =>
+    private void OnMediaEnded(object? sender, RoutedEventArgs e) =>
         CloseWindow();
 
     // Uppspelning misslyckades – stäng direkt utan att krascha
-    private void OnMediaFailed(object sender, ExceptionRoutedEventArgs e) =>
+    private void OnMediaFailed(object? sender, ExceptionRoutedEventArgs e) =>
         CloseWindow();
 
     private void CloseWindow()
