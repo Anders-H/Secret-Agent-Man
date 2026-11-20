@@ -62,6 +62,10 @@ public class MetaBonus
     {
         BonusReached52At = 0;
         CurrentBonusLevel = 0;
+        _isVisible = false;
+        _lastInformationChangeAt = 0;
+        _currentY = YStart;
+        _info = "";
     }
 
     public void Update(ulong ticks)

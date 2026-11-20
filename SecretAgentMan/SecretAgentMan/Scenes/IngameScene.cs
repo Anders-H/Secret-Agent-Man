@@ -20,13 +20,14 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private int _messageDebug;
     private bool _askQuitMode;
     private int _currentRoomIndex;
-    private Player _player;
-    private RoomList _roomList;
+    private readonly Player _player;
+    private RoomList _roomList = null!;
+    private readonly Func<Player, FireList, int, RoomList> _createRooms;
     private string _currentRoomName = "";
     private readonly IngameFire _fire = new();
     private int _waterFrameIndex;
     private int _killedSpyCount;
-    private readonly int _killsRequired;
+    private int _killsRequired;
     private GameEventPointer _levelCompleted = new();
     private readonly MetaBonus _metaBonus;
     private int _lives;
@@ -40,27 +41,49 @@ public class IngameScene : RetroGame.Scene.IngameScene
     public const int PlayerSpriteLowerLimit = 274;
     public int CorrectBriefcase { get; set; }
 
-    public IngameScene(RetroGame.RetroGame parent, int zeroBasedStartLevel) : base(parent)
+    public IngameScene(RetroGame.RetroGame parent, int zeroBasedStartLevel) : this(parent, zeroBasedStartLevel, static (player, fire, level) => new RoomList(player, fire, level))
     {
+    }
+
+    internal IngameScene(RetroGame.RetroGame parent, int zeroBasedStartLevel, Func<Player, FireList, int, RoomList> createRooms) : base(parent)
+    {
+        _createRooms = createRooms;
         _helicopter = new Helicopter();
         _player = new Player(_fire.PlayerFire);
-        _roomList = new RoomList(_player, _fire.EnemyFire, zeroBasedStartLevel);
-        _killsRequired = _roomList.SuggestKillsRequired();
-        CorrectBriefcase = Game1.Random.Next(Briefcase.BriefcaseColors.Length);
         _metaBonus = new MetaBonus();
         AddToAutoUpdate(Game1.TypeWriter);
         AddToAutoDraw(Game1.TypeWriter);
-        UpdateRoomNameAndCheckClear(0);
-        _briefcaseMissionCompleted = false;
         _lives = 2;
-        ZeroBasedLevel = zeroBasedStartLevel;
+        StartLevel(zeroBasedStartLevel);
     }
 
     public override void BeginScene()
     {
-        _helicopter = new Helicopter();
-        _player = new Player(_fire.PlayerFire);
-        MediaPlayer.Play(Songs.IngameSong!);
+        Keyboard.ClearState();
+        if (Songs.IngameSong != null)
+            MediaPlayer.Play(Songs.IngameSong);
+    }
+
+    internal void StartLevel(int zeroBasedLevel)
+    {
+        ZeroBasedLevel = zeroBasedLevel;
+        ResetTicks();
+        _currentRoomIndex = 0;
+        _killedSpyCount = 0;
+        _diedAt = 0;
+        _askQuitMode = false;
+        _waterFrameIndex = 0;
+        _briefcaseMissionCompleted = false;
+        _levelCompleted.Reset();
+        _metaBonus.Reset();
+        _fire.Clear();
+        _player.Reset();
+        _player.ResetBulletsLeft();
+        _player.AmmoBoxes = 0;
+        _roomList = _createRooms(_player, _fire.EnemyFire, zeroBasedLevel);
+        _killsRequired = _roomList.SuggestKillsRequired();
+        CorrectBriefcase = Game1.Random.Next(Briefcase.BriefcaseColors.Length);
+        UpdateRoomNameAndCheckClear(0);
     }
 
     private int ZeroBasedLevel
@@ -71,6 +94,15 @@ public class IngameScene : RetroGame.Scene.IngameScene
             _zeroBasedLevel = value;
             _levelString = $"level    {_zeroBasedLevel + 1}";
         }
+    }
+
+    internal Room ChangeRoom(int index, ulong ticks)
+    {
+        var room = _roomList.GetRoom(index);
+        _currentRoomIndex = index;
+        _fire.Clear();
+        UpdateRoomNameAndCheckClear(ticks);
+        return room;
     }
 
     private void UpdateRoomNameAndCheckClear(ulong ticks)
@@ -144,17 +176,9 @@ public class IngameScene : RetroGame.Scene.IngameScene
                     _player.PlayerControl(ticks, Keyboard, _currentRoomIndex, out var nextRoom, out var previousRoom, _roomList);
 
                     if (nextRoom)
-                    {
-                        _currentRoomIndex++;
-                        _fire.Clear();
-                        UpdateRoomNameAndCheckClear(ticks);
-                    }
+                        room = ChangeRoom(_currentRoomIndex + 1, ticks);
                     else if (previousRoom)
-                    {
-                        _currentRoomIndex--;
-                        _fire.Clear();
-                        UpdateRoomNameAndCheckClear(ticks);
-                    }
+                        room = ChangeRoom(_currentRoomIndex - 1, ticks);
                 }
 
                 room.Act(ticks);
@@ -236,15 +260,15 @@ public class IngameScene : RetroGame.Scene.IngameScene
                     }
                     else if (room.Bomb.CellIndex == Bomb.FirstDeadlyCell && !_bombKilledPlayer)
                     {
+                        _bombKilledPlayer = true;
                         SoundEffects.ExplosionBig!.PlayNext();
                         _player.Die(ticks);
                         room.Npcs.Die(ticks, false);
                     }
-                    else if (room.Bomb.CellIndex >= Bomb.CellCount)
-                    {
-                        room.Bomb = null;
-                    }
                 }
+
+                if (room.Bomb?.IsFinished == true)
+                    room.Bomb = null;
 
                 if (Keyboard.IsKeyDown(Keys.RightShift) && Keyboard.IsKeyPressed(Keys.F10))
                 {
@@ -376,13 +400,16 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
             if (!_levelCompleted.Occured)
             {
-                _fire.RemoveOneDeadFire();
+                _fire.RemoveDeadFire();
                 _player.DieIfHit(_fire.EnemyFire, ticks);
             }
         }
         else if (room.Bomb != null)
         {
             room.Bomb.Act(ticks);
+
+            if (room.Bomb.IsFinished)
+                room.Bomb = null;
         }
 
         if (_player.AliveStatus == Character.StatusDying)
@@ -395,6 +422,9 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 _lives--;
                 _diedAt = ticks;
                 _player.AliveStatus = Character.StatusAlive;
+                _player.RestoreToLookRight();
+                _fire.Clear();
+                room.Npcs.Reset();
                 _bombKilledPlayer = room.Bomb != null && room.Bomb.CellIndex >= Bomb.FirstDeadlyCell;
             }
             else
@@ -402,6 +432,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 ScoreManagement.StoreLastScore(Score);
                 MediaPlayer.Stop();
                 Parent.CurrentScene = new GameOverKilledScene(Parent);
+                return;
             }
         }
 
@@ -417,7 +448,9 @@ public class IngameScene : RetroGame.Scene.IngameScene
                 {
                     _metaBonus.Reset();
                     MediaPlayer.Stop();
+                    _fire.Clear();
                     Parent.CurrentScene = new SignScene(Parent, "bonus", new BonusLevelScene(Parent, Score, AddScore));
+                    return;
                 }
             }
         }
@@ -433,10 +466,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
     private void ActOnLevelCompleted()
     {
         MediaPlayer.Stop();
-        _levelCompleted.Reset();
-        ZeroBasedLevel++;
-        _briefcaseMissionCompleted = false;
-        _roomList = new RoomList(_player, _fire.EnemyFire, ZeroBasedLevel);
+        StartLevel(ZeroBasedLevel + 1);
 
         Parent.CurrentScene = ZeroBasedLevel <= 1
             ? new SignScene(Parent, "act i", new CutScene1(Parent, new SignScene(Parent, $"level {ZeroBasedLevel + 1}", Game1.CurrentIngameScene!)))
@@ -449,7 +479,6 @@ public class IngameScene : RetroGame.Scene.IngameScene
     public override void Draw(GameTime gameTime, ulong ticks, SpriteBatch spriteBatch)
     {
         var room = _roomList.GetRoom(_currentRoomIndex);
-        _currentRoomName = room.DistrictName;
         room.DrawDecorationBackground(spriteBatch);
         IngameBackgroundResources.WaterTexture?.Draw(spriteBatch, _waterFrameIndex, 0, 91);
 
@@ -465,12 +494,6 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
             if (_diedAt > 0 && ticks < _diedAt + 50)
             {
-                if (_player.RestoreToLookRight())
-                {
-                    _fire.Clear();
-                    room.Npcs.Reset();
-                }
-
                 shouldDrawPlayer = ticks % 7 == 0;
             }
 
@@ -556,13 +579,7 @@ public class IngameScene : RetroGame.Scene.IngameScene
 
         room.Ammos.DrawPanel(_player, spriteBatch);
         Game1.Frame!.Draw(spriteBatch, 0, 0, 0);
-
-        if (room.Bomb != null)
-        {
-            if (room.Bomb.Draw(spriteBatch))
-                room.Bomb = null;
-        }
-
+        room.Bomb?.Draw(spriteBatch);
         var frame = _metaBonus.GetBonusGageSpriteFrameIndex();
 
         if (frame > 0)

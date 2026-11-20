@@ -19,6 +19,7 @@ public class Bomb : Sprite, IRetroActor
     public int CellIndex { get; set; }
     public static RetroTexture? BombTexture { get; set; }
     public bool FlashState { get; set; }
+    public bool IsFinished => CellIndex >= CellCount || (FlashState && _flashCounter >= 3);
 
     public Bomb(int x, int y, ulong ticks)
     {
@@ -32,6 +33,11 @@ public class Bomb : Sprite, IRetroActor
 
     public void Act(ulong ticks)
     {
+        if (FlashState)
+        {
+            _flashCounter++;
+            return;
+        }
         if (_createdAt + 20 >= ticks)
             return;
 
@@ -39,19 +45,16 @@ public class Bomb : Sprite, IRetroActor
             CellIndex++;
     }
 
-    public bool Draw(SpriteBatch spriteBatch)
+    public void Draw(SpriteBatch spriteBatch)
     {
         if (FlashState)
         {
             BombTexture?.Draw(spriteBatch, FirstDeadlyCell, IntX, IntY, ColorPalette.White);
-            _flashCounter++;
-            return _flashCounter > 2;
+            return;
         }
 
         if (CellIndex <= LastIndex)
             BombTexture?.Draw(spriteBatch, CellIndex, IntX, IntY, ColorPalette.White);
-
-        return false;
     }
 
     public static void LoadContent(GraphicsDevice graphicsDevice, ContentManager content) =>

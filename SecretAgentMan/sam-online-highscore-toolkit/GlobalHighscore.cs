@@ -35,16 +35,6 @@ public class GlobalHighscore
         PlayerName = playerName;
     }
 
-    private DateOnly ParseDate(string date)
-    {
-        var parts = date.Split('-');
-
-        if (parts.Length != 3)
-            throw new FormatException("Invalid date format. Expected format: YYYY-MM-DD");
-        
-        var year = int.Parse(parts[0]);
-        var month = int.Parse(parts[1]);
-        var day = int.Parse(parts[2]);
-        return new DateOnly(year, month, day);
-    }
+    private static DateOnly ParseDate(string date) =>
+        DateOnly.ParseExact(date, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
 }

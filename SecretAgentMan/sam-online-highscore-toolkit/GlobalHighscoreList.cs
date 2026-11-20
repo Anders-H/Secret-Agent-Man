@@ -7,32 +7,8 @@ public class GlobalHighscoreList : List<GlobalHighscore>
         var result = new GlobalHighscoreList();
         var parts = new List<string>();
 
-        while (message.Length > 0)
-        {
-            if (message.Length <= 0)
-                break;
-
-            if (message.Length == 1)
-            {
-                parts.Add(message[..1] + "  ");
-                break;
-            }
-
-            if (message.Length == 2)
-            {
-                parts.Add(message[..2] + " ");
-                break;
-            }
-
-            if (message.Length == 3)
-            {
-                parts.Add(message[..3]);
-                break;
-            }
-
-            parts.Add(message[..3]);
-            message = message[3..];
-        }
+        for (var i = 0; i < message.Length; i += 3)
+            parts.Add(message.Substring(i, Math.Min(3, message.Length - i)).PadRight(3));
 
         var count = parts.Count;
         var position = 0;

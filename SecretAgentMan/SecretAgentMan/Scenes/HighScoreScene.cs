@@ -21,8 +21,7 @@ public class HighScoreScene : TextAndKeyboardScene
     private int _bestPlayerX;
     private readonly GameOverReason _gameOverReason;
     private int _gameOverY;
-    private string _newEntry = "";
-    private bool _newEntrySaved;
+    private bool _hasNewEntry;
 
     public HighScoreScene(RetroGame.RetroGame parent, int score, GameOverReason gameOverReason) : base(parent)
     {
@@ -30,6 +29,7 @@ public class HighScoreScene : TextAndKeyboardScene
         _bestPlayerX = 650;
         _score = score;
         Game1.HighScore.ResetVisuals(Game1.HighScoreEditY);
+        AddToAutoUpdate(Game1.HighScore);
         Jukebox.PlayWithLoop(Songs.HiScoreSong);
 
         if (_gameOverReason == GameOverReason.PlayerFired)
@@ -61,8 +61,10 @@ public class HighScoreScene : TextAndKeyboardScene
             if (_qualify)
             {
                 Game1.HighScore.BeginEdit(_score);
+                _hasNewEntry = true;
                 return;
             }
+            _editEnded.Occure(ticks);
         }
 
         if (ticks > 3 && _qualify)
@@ -81,16 +83,12 @@ public class HighScoreScene : TextAndKeyboardScene
         {
             MediaPlayer.Stop();
 
-            _newEntry = Game1.HighScore.TypedName;
+            var update = _hasNewEntry && !string.IsNullOrWhiteSpace(Game1.HighScore.TypedName)
+                ? Game1.HighscoreService.SaveGlobalHighscoreEntry(_score, Game1.HighScore.TypedName)
+                : Game1.HighscoreService.GetGlobalHighscores();
 
-            if (!string.IsNullOrWhiteSpace(_newEntry) && !_newEntrySaved)
-            {
-                _newEntrySaved = true;
-                var highscoreServices = new HighscoreServices();
-                _ = highscoreServices.SaveGlobalHighscoreEntry(_score, _newEntry);
-            }
-
-            Parent.CurrentScene = new StartScene(Parent, _score, Game1.TodaysBestScore);
+            Parent.CurrentScene = new StartScene(Parent, _score, Game1.TodaysBestScore, update);
+            return;
         }
 
         switch (_gameOverReason)

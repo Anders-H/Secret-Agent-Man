@@ -9,9 +9,9 @@ public class Player : Character
 {
     public const int PlayerStartX = 30;
     public const int PlayerStartY = 250;
-    private readonly ushort[] _walkRight = [0, 1, 2, 3];
-    private readonly ushort[] _walkLeft = [4, 5, 6, 7];
-    private readonly ushort[] _die = [20, 21, 20, 21];
+    private static readonly ushort[] _walkRight = [0, 1, 2, 3];
+    private static readonly ushort[] _walkLeft = [4, 5, 6, 7];
+    private static readonly ushort[] _die = [20, 21, 20, 21];
     private bool _changeAnimationCells;
     private bool _isMoving;
     private int _speed;
@@ -34,6 +34,9 @@ public class Player : Character
     public void Reset()
     {
         ForceRestoreToLookRight();
+        AliveStatus = StatusAlive;
+        _isMoving = false;
+        _changeAnimationCells = false;
         X = PlayerStartX;
         Y = PlayerStartY;
     }
@@ -102,60 +105,7 @@ public class Player : Character
 
     public void PlayerControl(ulong ticks, KeyboardStateChecker keyboard, int currentRoomIndex, out bool nextRoom, out bool previousRoom, RoomList rooms)
     {
-        nextRoom = false;
-        previousRoom = false;
-
-        if (keyboard.MoveRightWasd())
-        {
-            MoveRight();
-
-            if (X > 615)
-            {
-                if (currentRoomIndex < rooms.Count - 1)
-                {
-                    nextRoom = true;
-                    X = 0;
-                }
-                else
-                {
-                    X = 615;
-                }
-            }
-        }
-        else if (keyboard.MoveLeftWasd())
-        {
-            MoveLeft();
-
-            if (X < 0)
-            {
-                if (currentRoomIndex > 0)
-                {
-                    previousRoom = true;
-                    X = 615;
-                }
-                else
-                {
-                    X = 0;
-                }
-            }
-        }
-
-        if (keyboard.MoveUpWasd())
-        {
-            _isMoving = true;
-            Y -= _speed;
-
-            if (Y < IngameScene.SpriteUpperLimit)
-                Y = IngameScene.SpriteUpperLimit;
-        }
-        else if (keyboard.MoveDownWasd())
-        {
-            _isMoving = true;
-            Y += _speed;
-
-            if (Y > IngameScene.PlayerSpriteLowerLimit)
-                Y = IngameScene.PlayerSpriteLowerLimit;
-        }
+        MoveFromInput(keyboard, IngameScene.SpriteUpperLimit, currentRoomIndex, rooms.Count, out nextRoom, out previousRoom);
 
         if (keyboard.IsFirePressed() && ticks > 2)
         {
@@ -176,19 +126,7 @@ public class Player : Character
             }
         }
 
-        if (_changeAnimationCells)
-        {
-            CurrentAnimation = FaceRight ? _walkRight : _walkLeft;
-            _changeAnimationCells = false;
-        }
-
-        if (_isMoving)
-        {
-            Tick(ticks);
-
-            if (AliveStatus == StatusAlive)
-                _isMoving = false;
-        }
+        AnimateMovement(ticks);
     }
 
     public void CutSceneFire()
@@ -198,50 +136,56 @@ public class Player : Character
 
     public void PlayerControlBonusRound(ulong ticks, KeyboardStateChecker keyboard)
     {
+        MoveFromInput(keyboard, 0, 0, 1, out _, out _);
+        if (keyboard.IsFirePressed() && ticks > 2)
+            Fire(true);
+        AnimateMovement(ticks);
+    }
+
+    private void MoveFromInput(KeyboardStateChecker keyboard, int minimumY, int roomIndex, int roomCount,
+        out bool nextRoom, out bool previousRoom)
+    {
+        nextRoom = false;
+        previousRoom = false;
         if (keyboard.MoveRightWasd())
         {
             MoveRight();
-
             if (X > 615)
-                X = 615;
+            {
+                nextRoom = roomIndex < roomCount - 1;
+                X = nextRoom ? 0 : 615;
+            }
         }
         else if (keyboard.MoveLeftWasd())
         {
             MoveLeft();
-
             if (X < 0)
-                X = 0;
+            {
+                previousRoom = roomIndex > 0;
+                X = previousRoom ? 615 : 0;
+            }
         }
-
         if (keyboard.MoveUpWasd())
         {
             _isMoving = true;
-            Y -= _speed;
-
-            if (Y < 0)
-                Y = 0;
+            Y = System.Math.Max(minimumY, Y - _speed);
         }
         else if (keyboard.MoveDownWasd())
         {
             _isMoving = true;
-            Y += _speed;
-
-            if (Y > IngameScene.PlayerSpriteLowerLimit)
-                Y = IngameScene.PlayerSpriteLowerLimit;
+            Y = System.Math.Min(IngameScene.PlayerSpriteLowerLimit, Y + _speed);
         }
+    }
 
-        if (keyboard.IsFirePressed() && ticks > 2)
-            Fire(true);
-
+    private void AnimateMovement(ulong ticks)
+    {
         if (_changeAnimationCells)
         {
             CurrentAnimation = FaceRight ? _walkRight : _walkLeft;
             _changeAnimationCells = false;
         }
-
         if (_isMoving)
             Tick(ticks);
-
         _isMoving = false;
     }
 

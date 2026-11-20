@@ -9,8 +9,8 @@ namespace SecretAgentMan.Sprites;
 public class Fire : Sprite, IRetroActor
 {
     private const int Speed = 3;
-    private readonly int[] _player = [16, 17];
-    private readonly int[] _enemy = [18, 19];
+    private static readonly int[] _player = [16, 17];
+    private static readonly int[] _enemy = [18, 19];
     private readonly int[] _currentAnimation;
     private int _currentAnimationIndex;
     private readonly bool _faceRight;

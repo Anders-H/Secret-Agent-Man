@@ -13,11 +13,11 @@ public class Npc : Character, IRetroActor
     private int _ticksSinceDirectionChange;
     private int _ticksSinceGunToggle;
     private int _ticksSinceLastFire;
-    private readonly ushort[] _walkRight = [24, 25, 26, 27];
-    private readonly ushort[] _walkLeft = [28, 29, 30, 31];
-    private readonly ushort[] _die = [22, 23, 22, 23];
-    private readonly ushort[] _walkRightWithGun = [8, 9, 10, 11];
-    private readonly ushort[] _walkLeftWithGun = [12, 13, 14, 15];
+    private static readonly ushort[] _walkRight = [24, 25, 26, 27];
+    private static readonly ushort[] _walkLeft = [28, 29, 30, 31];
+    private static readonly ushort[] _die = [22, 23, 22, 23];
+    private static readonly ushort[] _walkRightWithGun = [8, 9, 10, 11];
+    private static readonly ushort[] _walkLeftWithGun = [12, 13, 14, 15];
     private static readonly ushort[] Speeds = [1, 2, 1, 1, 2, 2, 3, 3, 3, 4, 5, 4, 5, 7, 7, 1, 7, 2, 6, 3, 5, 4, 8, 4, 8];
     private bool _gunUp;
     private bool _isMovingUp;
@@ -75,65 +75,28 @@ public class Npc : Character, IRetroActor
         }
     }
 
-    public void Act(ulong ticks)
+    public void Act(ulong ticks) => ActCore(ticks, false);
+
+    public void ActBonus(ulong ticks) => ActCore(ticks, true);
+
+    private void ActCore(ulong ticks, bool bonus)
     {
         if (IsGraveStone)
         {
             if (ticks % 6 == 0 && _graveStoneCellIndex < 12)
                 _graveStoneCellIndex++;
-
             return;
         }
-
         if (InFullView)
             _ticksSinceDirectionChange++;
-
         if (AliveStatus == StatusAlive)
         {
-            if (ticks % 3 == 0)
+            if (!bonus && ticks % 3 == 0)
                 PerhapsToggleGunDrawn();
-
             if (ticks % (_speed + 1) == 0)
             {
-                if (_isMovingUp)
-                {
-                    Y -= 1;
-
-                    if (Y < IngameScene.SpriteUpperLimit)
-                        Y = IngameScene.SpriteUpperLimit;
-                }
-                else if (_isMovingDown)
-                {
-                    Y += 1;
-
-                    if (Y > IngameScene.SpriteLowerLimit)
-                        Y = IngameScene.SpriteLowerLimit;
-                }
-
-                if (FaceRight)
-                {
-                    X += 1;
-
-                    if (X > 615)
-                    {
-                        _ticksSinceDirectionChange = 0;
-                        FaceRight = false;
-                        CurrentAnimation = _gunUp ? _walkLeftWithGun : _walkLeft;
-                    }
-                }
-                else
-                {
-                    X -= 1;
-
-                    if (X < 0)
-                    {
-                        _ticksSinceDirectionChange = 0;
-                        FaceRight = true;
-                        CurrentAnimation = _gunUp ? _walkRightWithGun : _walkRight;
-                    }
-                }
-
-                if (_gunUp)
+                MoveWithinBounds(bonus ? 0 : IngameScene.SpriteUpperLimit);
+                if (!bonus && _gunUp)
                 {
                     if (_ticksSinceLastFire > 7 && Game1.Random.Next(6) == 4 && InPositionToShootPlayer())
                     {
@@ -141,27 +104,36 @@ public class Npc : Character, IRetroActor
                         _ticksSinceLastFire = 0;
                     }
                     else
-                    {
                         _ticksSinceLastFire++;
-                    }
                 }
             }
-
             if (ticks % (_speed + 9) == 0)
                 CurrentAnimationIndex++;
-
             if (_ticksSinceDirectionChange > 60)
                 PerhapsChangeDirection();
         }
-        else if (AliveStatus == StatusDying)
+        else if (AliveStatus == StatusDying && ticks % 10 == 0)
         {
-            if (ticks % 10 == 0)
-            {
-                CurrentAnimationIndex++;
+            CurrentAnimationIndex++;
+            if (ticks - DieAtTicks > 40)
+                AliveStatus = StatusDead;
+        }
+    }
 
-                if (ticks - DieAtTicks > 40)
-                    AliveStatus = StatusDead;
-            }
+    private void MoveWithinBounds(int minimumY)
+    {
+        if (_isMovingUp)
+            Y = Math.Max(minimumY, Y - 1);
+        else if (_isMovingDown)
+            Y = Math.Min(IngameScene.SpriteLowerLimit, Y + 1);
+        X += FaceRight ? 1 : -1;
+        if ((FaceRight && X > 615) || (!FaceRight && X < 0))
+        {
+            _ticksSinceDirectionChange = 0;
+            FaceRight = !FaceRight;
+            CurrentAnimation = FaceRight
+                ? (_gunUp ? _walkRightWithGun : _walkRight)
+                : (_gunUp ? _walkLeftWithGun : _walkLeft);
         }
     }
 
@@ -172,72 +144,6 @@ public class Npc : Character, IRetroActor
 
         if (ticks % (_speed + 9) == 0)
             CurrentAnimationIndex++;
-    }
-
-    public void ActBonus(ulong ticks)
-    {
-        if (InFullView)
-            _ticksSinceDirectionChange++;
-
-        if (AliveStatus == StatusAlive)
-        {
-            if (ticks % (_speed + 1) == 0)
-            {
-                if (_isMovingUp)
-                {
-                    Y -= 1;
-
-                    if (Y < 0)
-                        Y = 0;
-                }
-                else if (_isMovingDown)
-                {
-                    Y += 1;
-
-                    if (Y > IngameScene.SpriteLowerLimit)
-                        Y = IngameScene.SpriteLowerLimit;
-                }
-
-                if (FaceRight)
-                {
-                    X += 1;
-
-                    if (X > 615)
-                    {
-                        _ticksSinceDirectionChange = 0;
-                        FaceRight = false;
-                        CurrentAnimation = _walkLeftWithGun;
-                    }
-                }
-                else
-                {
-                    X -= 1;
-
-                    if (X < 0)
-                    {
-                        _ticksSinceDirectionChange = 0;
-                        FaceRight = true;
-                        CurrentAnimation = _walkRightWithGun;
-                    }
-                }
-            }
-
-            if (ticks % (_speed + 9) == 0)
-                CurrentAnimationIndex++;
-
-            if (_ticksSinceDirectionChange > 60)
-                PerhapsChangeDirectionBonus();
-        }
-        else if (AliveStatus == StatusDying)
-        {
-            if (ticks % 10 == 0)
-            {
-                CurrentAnimationIndex++;
-
-                if (ticks - DieAtTicks > 40)
-                    AliveStatus = StatusDead;
-            }
-        }
     }
 
     private void PerhapsChangeDirection()
@@ -292,63 +198,11 @@ public class Npc : Character, IRetroActor
         }
     }
 
-    private void PerhapsChangeDirectionBonus()
-    {
-        var newDirection = Game1.Random.Next(300);
-
-        switch (newDirection)
-        {
-            case 6:
-            case 7:
-                if (!_isMovingUp)
-                {
-                    _isMovingUp = true;
-                    _isMovingDown = false;
-                    _ticksSinceDirectionChange = 0;
-                }
-                break;
-            case 8:
-            case 9:
-                if (_isMovingUp || _isMovingDown)
-                {
-                    _isMovingUp = false;
-                    _isMovingDown = false;
-                    _ticksSinceDirectionChange = 0;
-                }
-                break;
-            case 10:
-            case 11:
-                if (!_isMovingDown)
-                {
-                    _isMovingUp = false;
-                    _isMovingDown = true;
-                    _ticksSinceDirectionChange = 0;
-                }
-                break;
-            case 12:
-                if (FaceRight)
-                {
-                    FaceRight = false;
-                    CurrentAnimation = _walkLeftWithGun;
-                    _ticksSinceDirectionChange = 0;
-                }
-                break;
-            case 13:
-                if (!FaceRight)
-                {
-                    FaceRight = true;
-                    CurrentAnimation = _walkRightWithGun;
-                    _ticksSinceDirectionChange = 0;
-                }
-                break;
-        }
-    }
-
     private void PerhapsToggleGunDrawn()
     {
         _ticksSinceGunToggle++;
 
-        if (Status != StatusInnocent & _ticksSinceGunToggle > 150)
+        if (Status != StatusInnocent && _ticksSinceGunToggle > 150)
         {
             if (Game1.Random.Next(_gunUp ? 550 : 110) == 100)
             {
@@ -403,44 +257,17 @@ public class Npc : Character, IRetroActor
     private bool InFullView =>
         X >= 0 && X <= 615;
 
-    public static Npc CreateInnocent(FireList enemyFireList, int index)
-    {
-        ulong speed;
+    private static ulong GetSpeed(int index) =>
+        index < Speeds.Length ? Speeds[index] : (ulong)Game1.Random.Next(1, 9);
 
-        if (index < Speeds.Length)
-            speed = Speeds[index];
-        else
-            speed = (ulong)Game1.Random.Next(1, 9);
+    public static Npc CreateInnocent(FireList enemyFireList, int index) =>
+        new(StatusInnocent, null, enemyFireList, GetSpeed(index));
 
-        var n = new Npc(StatusInnocent, null, enemyFireList, speed);
-        return n;
-    }
+    public static Npc CreateSpy(Player player, FireList enemyFireList, int index) =>
+        new(StatusSpyUndetected, player, enemyFireList, GetSpeed(index));
 
-    public static Npc CreateSpy(Player player, FireList enemyFireList, int index)
-    {
-        ulong speed;
-
-        if (index < Speeds.Length)
-            speed = Speeds[index];
-        else
-            speed = (ulong)Game1.Random.Next(1, 9);
-
-        var n = new Npc(StatusSpyUndetected, player, enemyFireList, speed);
-        return n;
-    }
-
-    public static Npc CreateBonus(int index)
-    {
-        ulong speed;
-
-        if (index < Speeds.Length)
-            speed = Speeds[index];
-        else
-            speed = (ulong)Game1.Random.Next(1, 9);
-
-        var n = new Npc(StatusBonus, null, [], speed);
-        return n;
-    }
+    public static Npc CreateBonus(int index) =>
+        new(StatusBonus, null, [], GetSpeed(index));
 
     public bool PlayerMayNotKill() =>
         Status == StatusInnocent || Status == StatusSpyUndetected;

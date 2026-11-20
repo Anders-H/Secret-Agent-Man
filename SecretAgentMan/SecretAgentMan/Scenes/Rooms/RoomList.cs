@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using RetroGame.Text;
 using SecretAgentMan.Sprites;
@@ -11,133 +12,35 @@ public class RoomList
     private List<Room> Rooms { get; }
     public readonly int SpyCount;
 
-    public RoomList(Player player, FireList enemyFireList, int zeroBasedLevel)
+    public RoomList(Player player, FireList enemyFireList, int zeroBasedLevel) : this(player, enemyFireList, zeroBasedLevel, static (index, name) => new Room(index, name))
+    {
+    }
+
+    internal RoomList(Player player, FireList enemyFireList, int zeroBasedLevel, Func<int, string, Room> createRoom)
     {
         Rooms = [];
-        var spyCount = new int[10];
-        var innocentCount = new int[10];
-        var names = new string[10];
+        var level = LevelConfiguration.Load(zeroBasedLevel,
+            key => Game1.Settings?.HasSetting(key) == true ? Game1.Settings.GetValue(key) : null, Game1.Random);
 
-        switch (zeroBasedLevel)
-        {
-            case 0:
-                if (Game1.Settings != null)
-                {
-                    // Overwrite names.
-                    var namesInConfig = Game1.Settings.GetValue("Level1RoomNames");
-                    var parts = namesInConfig.Split(';');
+        var decoration = new AirPlaneDecorationService(zeroBasedLevel);
 
-                    for (var i = 0; i < names.Length; i++)
-                        names[i] = parts[i].ToLower().Trim();
-
-                    // Overwrite NPC count.
-                    var npcsInConfig = Game1.Settings.GetValue("Level1InnocentNpcCount");
-                    parts = npcsInConfig.Split(',');
-
-                    for (var i = 0; i < innocentCount.Length; i++)
-                        innocentCount[i] = int.Parse(parts[i]);
-
-                    // Overwrite spy count.
-                    var spysInConfig = Game1.Settings.GetValue("Level1SpyCount");
-                    parts = spysInConfig.Split(',');
-
-                    for (var i = 0; i < spyCount.Length; i++)
-                        spyCount[i] = int.Parse(parts[i]);
-                }
-
-                break;
-            case 1:
-                if (Game1.Settings != null)
-                {
-                    // Overwrite names.
-                    var namesInConfig = Game1.Settings.GetValue("Level2RoomNames");
-                    var parts = namesInConfig.Split(';');
-
-                    for (var i = 0; i < names.Length; i++)
-                        names[i] = parts[i].ToLower().Trim();
-
-                    // Overwrite NPC count.
-                    var npcsInConfig = Game1.Settings.GetValue("Level2InnocentNpcCount");
-                    parts = npcsInConfig.Split(',');
-
-                    for (var i = 0; i < innocentCount.Length; i++)
-                        innocentCount[i] = int.Parse(parts[i]);
-
-                    // Overwrite spy count.
-                    var spysInConfig = Game1.Settings.GetValue("Level2SpyCount");
-                    parts = spysInConfig.Split(',');
-
-                    for (var i = 0; i < spyCount.Length; i++)
-                        spyCount[i] = int.Parse(parts[i]);
-                }
-
-                break;
-            case 2:
-                if (Game1.Settings != null)
-                {
-                    // Overwrite names.
-                    var namesInConfig = Game1.Settings.GetValue("Level3RoomNames");
-                    var parts = namesInConfig.Split(';');
-
-                    for (var i = 0; i < names.Length; i++)
-                        names[i] = parts[i].ToLower().Trim();
-
-                    // Overwrite NPC count.
-                    var npcsInConfig = Game1.Settings.GetValue("Level3InnocentNpcCount");
-                    parts = npcsInConfig.Split(',');
-
-                    for (var i = 0; i < innocentCount.Length; i++)
-                        innocentCount[i] = int.Parse(parts[i]);
-
-                    // Overwrite spy count.
-                    var spysInConfig = Game1.Settings.GetValue("Level3SpyCount");
-                    parts = spysInConfig.Split(',');
-
-                    for (var i = 0; i < spyCount.Length; i++)
-                        spyCount[i] = int.Parse(parts[i]);
-                }
-
-                break;
-            default:
-                {
-                    // Overwrite names.
-                    var fantasyNameGenerator = new FantasyGameNameGenerator.NameGenerator();
-
-                    for (var i = 0; i < names.Length; i++)
-                        names[i] = fantasyNameGenerator.GenerateName().ToLower();
-
-                    // Overwrite NPC count.
-                    for (var i = 0; i < innocentCount.Length; i++)
-                        innocentCount[i] = Game1.Random.Next(30) + 1;
-
-                    // Overwrite spy count.
-                    for (var i = 0; i < innocentCount.Length; i++)
-                        spyCount[i] = Game1.Random.Next(10 * (i * 1)) + 1;
-                }
-
-                break;
-        }
-
+        
         for (var i = 0; i < 10; i++)
         {
-            var room = new Room(i, names[i]);
+            var room = createRoom(i, level.Names[i]);
 
-            if (i == 0)
-                room.ObjectPositions.Add(new ObjectPositionPlaceholder(Player.PlayerStartX, Player.PlayerStartY));
+            AddCoins(level.Coins[i], room);
+            AddAmmos(level.Ammo[i], room);
 
-            AddCoins(zeroBasedLevel + 1, i, ref room);
-            AddAmmos(zeroBasedLevel + 1, i, ref room);
-
-            for (var j = 0; j < innocentCount[i]; j++)
+            for (var j = 0; j < level.Innocents[i]; j++)
                 room.Npcs.Add(Npc.CreateInnocent(enemyFireList, j));
 
-            for (var j = 0; j < spyCount[i]; j++)
+            for (var j = 0; j < level.Spies[i]; j++)
                 room.Npcs.Add(Npc.CreateSpy(player, enemyFireList, j));
 
-            var airPlaneDecorationService = new AirPlaneDecorationService(zeroBasedLevel);
-            airPlaneDecorationService.AddPlanes(room);
+            decoration.AddPlanes(room);
             Rooms.Add(room);
-            SpyCount += spyCount[i];
+            SpyCount += level.Spies[i];
         }
 
         AddBriefcases();
@@ -163,119 +66,52 @@ public class RoomList
 
     private void AddBriefcases()
     {
-        //FÖR ATT FIXA BUGGEN MED ATT ENDAST FÖRSTA BOMBEN DÖDAR
-        //var positionDebug = Rooms[0].ObjectPositions.GetRandomAcceptableDistanceWidthBorder();
-        //Rooms[0].Bomb = new Bomb(positionDebug.X, positionDebug.Y, 0);
-        //positionDebug = Rooms[0].ObjectPositions.GetRandomAcceptableDistanceWidthBorder();
-        //Rooms[0].Briefcase = new Briefcase(Briefcase.Silver, positionDebug.X, positionDebug.Y);
-        //SLUT: FÖR ATT FIXA BUGGEN MED ATT ENDAST FÖRSTA BOMBEN DÖDAR
+        var availableRooms = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        var rooms = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-        
-        var silverIndex = Game1.Random.Next(0, rooms.Count);
-        var silverRoom = rooms[silverIndex];
-        rooms.RemoveAt(silverIndex);
-
-        var blueIndex = Game1.Random.Next(0, rooms.Count);
-        var blueRoom = rooms[blueIndex];
-        rooms.RemoveAt(blueIndex);
-        
-        var redIndex = Game1.Random.Next(0, rooms.Count);
-        var redRoom = rooms[redIndex];
-        rooms.RemoveAt(redIndex);
-        
-        var brownIndex = Game1.Random.Next(0, rooms.Count);
-        var brownRoom = rooms[brownIndex];
-        rooms.RemoveAt(brownIndex);
-
-        var bombIndex = Game1.Random.Next(0, rooms.Count);
-        var bombRoom = rooms[bombIndex];
-        rooms.RemoveAt(bombIndex);
-
-        var position = Rooms[silverRoom].ObjectPositions.GetRandomAcceptableDistanceWidthBorder();
-        Rooms[silverRoom].ObjectPositions.Add(position);
-        Rooms[silverRoom].Briefcase = new Briefcase(Briefcase.Silver, position.X, position.Y);
-        
-        position = Rooms[blueRoom].ObjectPositions.GetRandomAcceptableDistanceWidthBorder();
-        Rooms[blueRoom].ObjectPositions.Add(position);
-        Rooms[blueRoom].Briefcase = new Briefcase(Briefcase.Blue, position.X, position.Y);
-        
-        position = Rooms[redRoom].ObjectPositions.GetRandomAcceptableDistanceWidthBorder();
-        Rooms[redRoom].ObjectPositions.Add(position);
-        Rooms[redRoom].Briefcase = new Briefcase(Briefcase.Red, position.X, position.Y);
-        
-        position = Rooms[brownIndex].ObjectPositions.GetRandomAcceptableDistanceWidthBorder();
-        Rooms[brownRoom].ObjectPositions.Add(position);
-        Rooms[brownRoom].Briefcase = new Briefcase(Briefcase.Brown, position.X, position.Y);
-
-        position = Rooms[bombIndex].ObjectPositions.GetRandomAcceptableDistanceWidthBorder();
-        Rooms[bombRoom].ObjectPositions.Add(position);
-        Rooms[bombRoom].Bomb = new Bomb(position.X, position.Y, 0);
-    }
-
-    private void AddCoins(int level, int roomIndex, ref Room room)
-    {
-        var settingName = $"Level{level}Coins";
-
-        if (Game1.Settings == null || !Game1.Settings.HasSetting(settingName))
+        for (var color = Briefcase.Silver; color <= Briefcase.Brown; color++)
         {
-            var coinsCount = Game1.Random.Next(10);
-
-            for (var j = 0; j < coinsCount; j++)
-            {
-                var position = room.ObjectPositions.GetRandomAcceptableDistance();
-                room.ObjectPositions.Add(position);
-                room.Coins.Add(new Coin(position.X, position.Y + 15, 0));
-            }
+            var room = TakeRoom();
+            var position = ReservePosition(room);
+            room.Briefcase = new Briefcase(color, position.X, position.Y);
         }
-        else
+
+        var bombRoom = TakeRoom();
+        var bombPosition = ReservePosition(bombRoom);
+        bombRoom.Bomb = new Bomb(bombPosition.X, bombPosition.Y, 0);
+
+        Room TakeRoom()
         {
-            var coinCountInConfig = Game1.Settings.GetValue($"Level{level}Coins");
-            var parts = coinCountInConfig.Split(',');
-            var coinsCount = new int[10];
-
-            for (var i = 0; i < coinsCount.Length; i++)
-                coinsCount[i] = int.Parse(parts[i]);
-
-            for (var j = 0; j < coinsCount[roomIndex]; j++)
-            {
-                var position = room.ObjectPositions.GetRandomAcceptableDistance();
-                room.ObjectPositions.Add(position);
-                room.Coins.Add(new Coin(position.X, position.Y + 15, 0));
-            }
+            var index = Game1.Random.Next(availableRooms.Count);
+            var room = Rooms[availableRooms[index]];
+            availableRooms.RemoveAt(index);
+            return room;
         }
     }
 
-    private void AddAmmos(int level, int roomIndex, ref Room room)
+    private static ObjectPositionPlaceholder ReservePosition(Room room)
     {
-        var settingName = $"Level{level}Ammo";
+        var position = room.ObjectPositions.GetRandomAcceptableDistanceWidthBorder();
+        room.ObjectPositions.Add(position);
+        return position;
+    }
 
-        if (Game1.Settings == null || !Game1.Settings.HasSetting(settingName))
+    private static void AddCoins(int count, Room room)
+    {
+        for (var i = 0; i < count; i++)
         {
-            var ammoCount = Game1.Random.Next(4);
-
-            for (var j = 0; j < ammoCount; j++)
-            {
-                var position = room.ObjectPositions.GetRandomAcceptableDistance();
-                room.ObjectPositions.Add(position);
-                room.Ammos.Add(new AmmoBox(position.X, position.Y + 15));
-            }
+            var position = room.ObjectPositions.GetRandomAcceptableDistance();
+            room.ObjectPositions.Add(position);
+            room.Coins.Add(new Coin(position.X, position.Y + 15, 0));
         }
-        else
+    }
+
+    private static void AddAmmos(int count, Room room)
+    {
+        for (var i = 0; i < count; i++)
         {
-            var ammoCountInConfig = Game1.Settings.GetValue($"Level{level}Ammo");
-            var parts = ammoCountInConfig.Split(',');
-            var ammoCount = new int[10];
-
-            for (var i = 0; i < ammoCount.Length; i++)
-                ammoCount[i] = int.Parse(parts[i]);
-
-            for (var j = 0; j < ammoCount[roomIndex]; j++)
-            {
-                var position = room.ObjectPositions.GetRandomAcceptableDistance();
-                room.ObjectPositions.Add(position);
-                room.Ammos.Add(new AmmoBox(position.X, position.Y + 15));
-            }
+            var position = room.ObjectPositions.GetRandomAcceptableDistance();
+            room.ObjectPositions.Add(position);
+            room.Ammos.Add(new AmmoBox(position.X, position.Y + 15));
         }
     }
 

@@ -34,26 +34,7 @@ public class AmmoBoxList : List<AmmoBox>
 
     public void DrawPanel(Player player, SpriteBatch spriteBatch)
     {
-        switch (player.AmmoBoxes)
-        {
-            case 4:
-                AmmoBox.AmmoBoxTexture!.Draw(spriteBatch, 0, 543, 335);
-                AmmoBox.AmmoBoxTexture.Draw(spriteBatch, 0, 564, 335);
-                AmmoBox.AmmoBoxTexture.Draw(spriteBatch, 0, 585, 335);
-                AmmoBox.AmmoBoxTexture.Draw(spriteBatch, 0, 606, 335);
-                break;
-            case 3:
-                AmmoBox.AmmoBoxTexture!.Draw(spriteBatch, 0, 543, 335);
-                AmmoBox.AmmoBoxTexture.Draw(spriteBatch, 0, 564, 335);
-                AmmoBox.AmmoBoxTexture.Draw(spriteBatch, 0, 585, 335);
-                break;
-            case 2:
-                AmmoBox.AmmoBoxTexture!.Draw(spriteBatch, 0, 543, 335);
-                AmmoBox.AmmoBoxTexture.Draw(spriteBatch, 0, 564, 335);
-                break;
-            case 1:
-                AmmoBox.AmmoBoxTexture!.Draw(spriteBatch, 0, 543, 335);
-                break;
-        }
+        for (var i = 0; i < player.AmmoBoxes; i++)
+            AmmoBox.AmmoBoxTexture!.Draw(spriteBatch, 0, 543 + i * 21, 335);
     }
 }

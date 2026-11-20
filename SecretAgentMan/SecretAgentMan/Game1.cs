@@ -39,6 +39,7 @@ public class Game1 : RetroGame.RetroGame
     public static IngameScene? CurrentIngameScene { get; set; }
     public static int BonusRoundSeconds { get; set; }
     public static GlobalHighscoreList GlobalHighscores { get; set; }
+    public static HighscoreServices HighscoreService { get; } = new();
 
     static Game1()
     {
@@ -94,6 +95,5 @@ public class Game1 : RetroGame.RetroGame
 #else
         CurrentScene = new IntroScene(this);
 #endif
-        base.LoadContent();
     }
 }

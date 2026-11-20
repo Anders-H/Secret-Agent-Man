@@ -391,3 +391,5 @@ FodyWeavers.xsd
 /SecretAgentMan/sam-online-highscore-toolkit/Settings.cs
 /SecretAgentMan/sam-online-highscore-toolkit/production-calls.http
 /Website/highscore/config.php
+sam_online_highscore_toolkit_tests/
+SecretAgentMan.Tests/

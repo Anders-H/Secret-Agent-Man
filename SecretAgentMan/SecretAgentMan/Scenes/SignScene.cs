@@ -29,7 +29,7 @@ public class SignScene : RetroGame.Scene.IngameScene
         if (ticks > 200)
         {
             Parent.CurrentScene = _nextScene;
-            _nextScene.BeginScene();
+            return;
         }
 
         if (ticks%2 == 0)

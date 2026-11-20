@@ -28,25 +28,10 @@ public class IngameFire
             fire.Act(ticks);
     }
 
-    public void RemoveOneDeadFire()
+    public void RemoveDeadFire()
     {
-        foreach (var fire in PlayerFire)
-        {
-            if (!fire.IsDead)
-                continue;
-
-            PlayerFire.Remove(fire);
-            return;
-        }
-
-        foreach (var fire in EnemyFire)
-        {
-            if (!fire.IsDead)
-                continue;
-
-            EnemyFire.Remove(fire);
-            return;
-        }
+        PlayerFire.RemoveAll(static fire => fire.IsDead);
+        EnemyFire.RemoveAll(static fire => fire.IsDead);
     }
 
     public void Draw(SpriteBatch spriteBatch)

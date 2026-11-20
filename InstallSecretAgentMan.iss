@@ -346,7 +346,6 @@ Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\bonuslevel.wma"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\bonuslevel.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\briefcase13x10.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
-Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\c64fontswe.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\coin10x10.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\crt.xnb"; DestDir: "{app}\Content"; Flags: ignoreversion
 Source: "D:\GitRepos\Secret-Agent-Man\SecretAgentMan\SecretAgentMan\bin\Release\net8.0-windows\win-x64\Content\cutscene.wma"; DestDir: "{app}\Content"; Flags: ignoreversion

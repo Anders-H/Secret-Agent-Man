@@ -10,6 +10,7 @@ using sam_online_highscore_toolkit;
 using SecretAgentMan.OtherResources;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SecretAgentMan.Scenes.IntroductionScenes;
 
@@ -32,10 +33,11 @@ public class StartScene : Scene
     private int _logoImageListIndex;
     private TextBlockStaticVerticalCenter? _typeWriter;
 
-    public StartScene(RetroGame.RetroGame parent, int lastScore, int todaysBest) : base(parent)
+    private Task<GlobalHighscoreList>? _highscoreUpdate;
+
+    public StartScene(RetroGame.RetroGame parent, int lastScore, int todaysBest, Task<GlobalHighscoreList>? highscoreUpdate = null) : base(parent)
     {
-        var highscoreService = new HighscoreServices();
-        Game1.GlobalHighscores = highscoreService.GetGlobalHighscoresSync();
+        _highscoreUpdate = highscoreUpdate ?? Game1.HighscoreService.GetGlobalHighscores();
         _gunX = 610;
 
         _logoImageList =
@@ -57,12 +59,21 @@ public class StartScene : Scene
         AddToAutoUpdate(Keyboard);
         Game1.HighScore.ResetVisuals(Game1.HighScoreViewY);
 
-        if (MediaPlayer.State != MediaState.Playing)
+        if (Songs.LoaderSong != null && MediaPlayer.State != MediaState.Playing)
             MediaPlayer.Play(Songs.LoaderSong!);
     }
 
     public override void Update(GameTime gameTime, ulong ticks)
     {
+        if (_highscoreUpdate?.IsCompleted == true)
+        {
+            Game1.GlobalHighscores = _highscoreUpdate.IsCompletedSuccessfully
+                ? _highscoreUpdate.GetAwaiter().GetResult()
+                : GlobalHighscoreList.CreateSubtitleMessage("failed to update global highscore list");
+
+            _highscoreUpdate = null;
+        }
+
         if (ticks <= 10)
         {
             Keyboard.ClearState();
@@ -158,6 +169,9 @@ public class StartScene : Scene
             default:
                 throw new ArgumentOutOfRangeException();
         }
+
+        if (_state == StartSceneState.HighScore)
+            Game1.HighScore.Act(ticks);
 
         base.Update(gameTime, ticks);
     }

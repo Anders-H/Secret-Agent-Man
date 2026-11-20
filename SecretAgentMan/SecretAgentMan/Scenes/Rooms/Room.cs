@@ -20,10 +20,14 @@ public class Room
     public ObjectPositionPlaceholderList ObjectPositions = [];
     public Bomb? Bomb { get; set; }
 
-    public Room(int roomIndex, string districtName)
+    public Room(int roomIndex, string districtName) : this(roomIndex, districtName, new RoomBackgroundBuilder().Build())
+    {
+    }
+
+    internal Room(int roomIndex, string districtName, RoomBackground background)
     {
         RoomIndex = roomIndex;
-        _roomBackground = new RoomBackgroundBuilder().Build();
+        _roomBackground = background;
         Airplanes = [];
         DistrictName = districtName;
         Npcs = [];

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
@@ -11,7 +10,7 @@ namespace SecretAgentMan.Scenes;
 
 public class BonusLevelScene : RetroGame.Scene.IngameScene
 {
-    private readonly DateTime _bonusLevelStartTime;
+    private TimeSpan _elapsed;
     private readonly IngameFire _fire = new();
     private readonly Player _player;
     private NpcList Npcs { get; }
@@ -31,18 +30,21 @@ public class BonusLevelScene : RetroGame.Scene.IngameScene
             Npcs.Add(Npc.CreateBonus(x));
 
         Coins.CreateBonusRoundSquare();
-        _bonusLevelStartTime = DateTime.Now;
         MediaPlayer.Stop();
     }
 
     public override void BeginScene()
     {
-        MediaPlayer.Play(Songs.BonusLevelSong!);
+        _elapsed = TimeSpan.Zero;
+        _secondsPassed = 0;
+        if (Songs.BonusLevelSong != null)
+            MediaPlayer.Play(Songs.BonusLevelSong);
     }
 
     public override void Update(GameTime gameTime, ulong ticks)
     {
-        _secondsPassed = (int)Math.Ceiling(DateTime.Now.Subtract(_bonusLevelStartTime).TotalSeconds);
+        _elapsed += gameTime.ElapsedGameTime;
+        _secondsPassed = (int)_elapsed.TotalSeconds;
 
         if (_secondsPassed >= Game1.BonusRoundSeconds)
         {
@@ -54,33 +56,11 @@ public class BonusLevelScene : RetroGame.Scene.IngameScene
         foreach (var npc in Npcs)
             npc.ActBonus(ticks);
 
-        foreach (var coin in Coins)
-        {
-            coin.Act(ticks);
-
-            if (coin.Collide(_player))
-            {
-                SoundEffects.PlayerCoin!.PlayRandom();
-                Coins.Remove(coin);
-                _addScore(50);
-                Score += 50;
-                break;
-            }
-
-            foreach (var npc in Npcs)
-            {
-                if (!coin.Collide(npc))
-                    continue;
-
-                SoundEffects.EnemyCoin!.PlayRandom();
-                Coins.Remove(coin);
-                goto OuterBail;
-            }
-        }
-
-        OuterBail:;
+        if (Coins.Act(ticks, _player, Npcs))
+            Score = _addScore(50);
 
         _fire.Act(ticks);
+        _fire.RemoveDeadFire();
 
         foreach (var npc in Npcs)
         {
@@ -94,7 +74,6 @@ public class BonusLevelScene : RetroGame.Scene.IngameScene
                 if (npc.AliveStatus == Character.StatusAlive)
                 {
                     npc.Die(ticks, true);
-                    SoundEffects.EnemyDie!.PlayRandom();
                     Score = _addScore(5);
                 }
 
@@ -102,11 +81,7 @@ public class BonusLevelScene : RetroGame.Scene.IngameScene
             }
         }
 
-        foreach (var npc in Npcs.Where(npc => npc.AliveStatus == Character.StatusDead && !npc.IsGraveStone))
-        {
-            Npcs.Remove(npc);
-            break;
-        }
+        Npcs.RemoveAll(static npc => npc.AliveStatus == Character.StatusDead);
 
         _player.PlayerControlBonusRound(ticks, Keyboard);
         base.Update(gameTime, ticks);
@@ -117,7 +92,7 @@ public class BonusLevelScene : RetroGame.Scene.IngameScene
         var playerIsDrawn = false;
         var lastY = IngameScene.SpriteUpperLimit - 1;
 
-        foreach (var t in Npcs.OrderBy(x => x.IntYForYSort))
+        foreach (var t in Npcs.YSorted())
         {
             if (!playerIsDrawn && _player.Y >= lastY && _player.Y <= t.IntYForYSort)
             {
